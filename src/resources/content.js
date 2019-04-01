@@ -1,4 +1,9 @@
 export const content = {
+  legends: {
+    title: 'Legends',
+    url: '',
+    info: '',
+  },
   legendMustKnow: {
     title: 'Personal must know',
     url: '',
