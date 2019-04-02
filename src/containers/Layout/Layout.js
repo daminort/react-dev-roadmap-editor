@@ -17,6 +17,7 @@ import { SIZE_CONTROL_IDS } from '../../constants/layout';
 import MathUtils from '../../utils/MathUtils';
 
 import Box from '../Box';
+import Toolbar from '../Toolbar';
 import { Wrapper } from './Layout.style';
 
 const observedIDs = ['layout'].concat(SIZE_CONTROL_IDS);
@@ -110,11 +111,8 @@ class Layout extends PureComponent {
     });
   }
 
-  onClickShape(id, { target }) {
+  onClickShape(id) {
     const { isResize, activeItemSet, resizeComplete } = this.props;
-    if (target.id !== id) {
-      //return;
-    }
     if (isResize) {
       resizeComplete();
       return;
@@ -153,13 +151,16 @@ class Layout extends PureComponent {
     });
 
     return (
-      <Wrapper
-        id="layout"
-        onClick={this.onClick}
-        onMouseMove={this.onMouseMove}
-      >
-        {items}
-      </Wrapper>
+      <>
+        <Wrapper
+          id="layout"
+          onClick={this.onClick}
+          onMouseMove={this.onMouseMove}
+        >
+          {items}
+        </Wrapper>
+        <Toolbar />
+      </>
     );
   }
 }

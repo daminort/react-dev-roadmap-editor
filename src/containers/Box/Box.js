@@ -50,9 +50,9 @@ class Box extends PureComponent {
     dndComplete(currentOffset);
   }
 
-  onClick(event) {
+  onClick() {
     const { id, onClick } = this.props;
-    onClick(id, event);
+    onClick(id);
   }
 
   // Renders ------------------------------------------------------------------
