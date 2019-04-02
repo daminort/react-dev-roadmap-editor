@@ -7,14 +7,10 @@ import { DragSource } from 'react-dnd';
 import { content } from '../../resources';
 
 import appActions from '../../redux/app/actions';
-import diagramActions from '../../redux/diagram/actions';
 import { selectActiveItemID, selectResizeData } from '../../redux/app/selectors';
 import { selectDiagramItem } from '../../redux/diagram/selectors';
 import { ALIGN } from '../../constants/editor';
 import { DND_TYPES } from '../../constants/dnd';
-import { SIZE_CONTROL_IDS } from '../../constants/layout';
-
-import MathUtils from '../../utils/MathUtils';
 
 import { SizeControls } from '../../components';
 import { boxSource, collect } from './dnd';
@@ -22,7 +18,8 @@ import { boxSource, collect } from './dnd';
 class Box extends PureComponent {
 
   static propTypes = {
-    id: PropTypes.string.isRequired,
+    id      : PropTypes.string.isRequired,
+    onClick : PropTypes.func.isRequired,
     // Redux
     pos: PropTypes.shape({
       x        : PropTypes.number,
@@ -34,11 +31,8 @@ class Box extends PureComponent {
       noBorder : PropTypes.bool,
     }).isRequired,
     isSelected        : PropTypes.bool.isRequired,
-    isResize          : PropTypes.bool.isRequired,
     activeControl     : PropTypes.string.isRequired,
-    activeItemSet     : PropTypes.func.isRequired,
-    resizeComplete    : PropTypes.func.isRequired,
-    itemSet           : PropTypes.func.isRequired,
+    dndComplete       : PropTypes.func.isRequired,
     // DnD
     isDragging        : PropTypes.bool.isRequired,
     connectDragSource : PropTypes.func.isRequired,
@@ -52,26 +46,13 @@ class Box extends PureComponent {
 
   // Events -------------------------------------------------------------------
   onEndDrag({ currentOffset }) {
-    const { id, pos, itemSet } = this.props;
-    const { x, y } = currentOffset;
-
-    pos.x = MathUtils.roundCoord(x);
-    pos.y = MathUtils.roundCoord(y);
-
-    itemSet(id, pos);
+    const { dndComplete } = this.props;
+    dndComplete(currentOffset);
   }
 
-  onClick({ target }) {
-    const { id, isResize, activeItemSet, resizeComplete } = this.props;
-    if (SIZE_CONTROL_IDS.includes(target.id)) {
-      return;
-    }
-    if (isResize) {
-      resizeComplete();
-      return;
-    }
-
-    activeItemSet(id);
+  onClick(event) {
+    const { id, onClick } = this.props;
+    onClick(id, event);
   }
 
   // Renders ------------------------------------------------------------------
@@ -126,15 +107,12 @@ const mapState = (state, props) => {
   return {
     pos,
     isSelected    : (id === activeItemID),
-    isResize      : (id === resize.shapeID),
     activeControl : resize.controlID,
   };
 };
 
 const mapActions = {
-  activeItemSet  : appActions.activeItemSet,
-  resizeComplete : appActions.resizeComplete,
-  itemSet        : diagramActions.itemSet,
+  dndComplete: appActions.dndComplete,
 };
 
 const dndWrapped = DragSource(DND_TYPES.box, boxSource, collect)(Box);

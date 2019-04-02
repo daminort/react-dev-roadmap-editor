@@ -8,6 +8,8 @@ const TYPES = {
   RESIZE_DATA_SET   : `${prefix}resizeDataSet`,
   RESIZE_DATA_RESET : `${prefix}resizeDataReset`,
   RESIZE_COMPLETE   : `${prefix}resizeComplete`,
+
+  DND_COMPLETE      : `${prefix}dndComplete`,
 };
 
 const actions = {
@@ -18,6 +20,8 @@ const actions = {
   resizeDataSet   : makeActionCreator(TYPES.RESIZE_DATA_SET, 'resizeData'),
   resizeDataReset : makeActionCreator(TYPES.RESIZE_DATA_RESET),
   resizeComplete  : makeActionCreator(TYPES.RESIZE_COMPLETE),
+
+  dndComplete     : makeActionCreator(TYPES.DND_COMPLETE, 'position'),
 };
 
 export default actions;

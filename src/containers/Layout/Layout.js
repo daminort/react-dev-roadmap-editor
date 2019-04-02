@@ -35,6 +35,7 @@ class Layout extends PureComponent {
     resizeDataSet   : PropTypes.func.isRequired,
     resizeDataReset : PropTypes.func.isRequired,
     resizeComplete  : PropTypes.func.isRequired,
+    diagramRestore  : PropTypes.func.isRequired,
     itemSet         : PropTypes.func.isRequired,
   };
 
@@ -47,7 +48,13 @@ class Layout extends PureComponent {
     this.onClick            = this.onClick.bind(this);
     this.onClickLayout      = this.onClickLayout.bind(this);
     this.onClickSizeControl = this.onClickSizeControl.bind(this);
+    this.onClickShape       = this.onClickShape.bind(this);
     this.onMouseMove        = this.onMouseMove.bind(this);
+  }
+
+  componentDidMount() {
+    const { diagramRestore } = this.props;
+    diagramRestore();
   }
 
   // Events -------------------------------------------------------------------
@@ -103,6 +110,19 @@ class Layout extends PureComponent {
     });
   }
 
+  onClickShape(id, { target }) {
+    const { isResize, activeItemSet, resizeComplete } = this.props;
+    if (target.id !== id) {
+      //return;
+    }
+    if (isResize) {
+      resizeComplete();
+      return;
+    }
+
+    activeItemSet(id);
+  }
+
   onMouseMove(event) {
     const { isResize, activeItemID, activeItem, resizeControlID, itemSet } = this.props;
     if (!activeItem || !isResize) {
@@ -124,7 +144,11 @@ class Layout extends PureComponent {
     const { diagramIDs } = this.props;
     const items = diagramIDs.map(id => {
       return (
-        <Box key={id} id={id} />
+        <Box
+          key={id}
+          id={id}
+          onClick={this.onClickShape}
+        />
       );
     });
 
@@ -160,6 +184,7 @@ const mapActions = {
   resizeDataSet   : appActions.resizeDataSet,
   resizeDataReset : appActions.resizeDataReset,
   resizeComplete  : appActions.resizeComplete,
+  diagramRestore  : diagramActions.diagramRestore,
   itemSet         : diagramActions.itemSet,
 };
 

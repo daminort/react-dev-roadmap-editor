@@ -36,12 +36,33 @@ function* resizeComplete() {
     };
 
     yield put(diagramActions.itemSet(activeItemID, resItem));
+    yield put(diagramActions.diagramStore());
     yield put(appActions.resizeDataReset());
+  });
+}
+
+function* dndComplete() {
+
+  yield takeEvery(appActions.DND_COMPLETE, function* ({ payload }) {
+
+    const { activeItemID, activeItem } = yield select(selectState);
+    const { position } = payload;
+    const { x, y } = position;
+
+    const resItem = {
+      ...activeItem,
+      x : MathUtils.roundCoord(x),
+      y : MathUtils.roundCoord(y),
+    };
+
+    yield put(diagramActions.itemSet(activeItemID, resItem));
+    yield put(diagramActions.diagramStore());
   });
 }
 
 export default function* appSaga() {
   yield all([
     fork(resizeComplete),
+    fork(dndComplete),
   ]);
 }
