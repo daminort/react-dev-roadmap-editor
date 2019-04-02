@@ -37,6 +37,7 @@ class Box extends PureComponent {
     isResize          : PropTypes.bool.isRequired,
     activeControl     : PropTypes.string.isRequired,
     activeItemSet     : PropTypes.func.isRequired,
+    resizeComplete    : PropTypes.func.isRequired,
     itemSet           : PropTypes.func.isRequired,
     // DnD
     isDragging        : PropTypes.bool.isRequired,
@@ -61,15 +62,16 @@ class Box extends PureComponent {
   }
 
   onClick({ target }) {
-    const { id, isResize, activeItemSet } = this.props;
+    const { id, isResize, activeItemSet, resizeComplete } = this.props;
     if (SIZE_CONTROL_IDS.includes(target.id)) {
       return;
     }
-
-    if (!isResize) {
-      activeItemSet(id);
-      //return;
+    if (isResize) {
+      resizeComplete();
+      return;
     }
+
+    activeItemSet(id);
   }
 
   // Renders ------------------------------------------------------------------
@@ -130,8 +132,9 @@ const mapState = (state, props) => {
 };
 
 const mapActions = {
-  activeItemSet : appActions.activeItemSet,
-  itemSet       : diagramActions.itemSet,
+  activeItemSet  : appActions.activeItemSet,
+  resizeComplete : appActions.resizeComplete,
+  itemSet        : diagramActions.itemSet,
 };
 
 const dndWrapped = DragSource(DND_TYPES.box, boxSource, collect)(Box);

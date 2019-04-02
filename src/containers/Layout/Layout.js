@@ -4,8 +4,6 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
 
-import { gridStep } from '../../config';
-
 import appActions from '../../redux/app/actions';
 import diagramActions from '../../redux/diagram/actions';
 import {
@@ -22,7 +20,6 @@ import Box from '../Box';
 import { Wrapper } from './Layout.style';
 
 const observedIDs = ['layout'].concat(SIZE_CONTROL_IDS);
-const minCellWH   = gridStep * 2;
 
 class Layout extends PureComponent {
 
@@ -37,6 +34,7 @@ class Layout extends PureComponent {
     activeItemSet   : PropTypes.func.isRequired,
     resizeDataSet   : PropTypes.func.isRequired,
     resizeDataReset : PropTypes.func.isRequired,
+    resizeComplete  : PropTypes.func.isRequired,
     itemSet         : PropTypes.func.isRequired,
   };
 
@@ -71,21 +69,14 @@ class Layout extends PureComponent {
   }
 
   onClickLayout() {
-    const {
-      //activeItemID,
-      isResize,
-      activeItemSet,
-      //resizeDataSet,
-      resizeDataReset,
-    } = this.props;
-
-    if (!isResize) {
-      activeItemSet('');
-      resizeDataReset();
-    } else {
-      activeItemSet('');
-      resizeDataReset();
+    const { isResize, activeItemSet, resizeDataReset, resizeComplete } = this.props;
+    if (isResize) {
+      resizeComplete();
+      return;
     }
+
+    activeItemSet('');
+    resizeDataReset();
   }
 
   onClickSizeControl(id) {
@@ -93,34 +84,23 @@ class Layout extends PureComponent {
       isResize,
       activeItemID,
       activeItem,
-      itemSet,
       resizeDataSet,
-      resizeDataReset,
+      resizeComplete,
     } = this.props;
 
-    if (!isResize) {
-      resizeDataSet({
-        shapeID    : activeItemID,
-        controlID  : id,
-        initX      : activeItem.x,
-        initY      : activeItem.y,
-        initWidth  : activeItem.width,
-        initHeight : activeItem.height,
-      });
-
+    if (isResize) {
+      resizeComplete();
       return;
     }
 
-    const { x, y, width, height } = activeItem;
-    const newPosition = {
-      ...activeItem,
-      x      : MathUtils.roundCoord(x),
-      y      : MathUtils.roundCoord(y),
-      width  : MathUtils.roundCoord(width, minCellWH),
-      height : MathUtils.roundCoord(height, minCellWH),
-    };
-    itemSet(newPosition);
-    resizeDataReset();
+    resizeDataSet({
+      shapeID    : activeItemID,
+      controlID  : id,
+      initX      : activeItem.x,
+      initY      : activeItem.y,
+      initWidth  : activeItem.width,
+      initHeight : activeItem.height,
+    });
   }
 
   onMouseMove(event) {
@@ -179,6 +159,7 @@ const mapActions = {
   activeItemSet   : appActions.activeItemSet,
   resizeDataSet   : appActions.resizeDataSet,
   resizeDataReset : appActions.resizeDataReset,
+  resizeComplete  : appActions.resizeComplete,
   itemSet         : diagramActions.itemSet,
 };
 
