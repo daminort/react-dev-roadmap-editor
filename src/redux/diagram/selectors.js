@@ -1,20 +1,20 @@
 import { createSelector } from 'reselect';
 
-const diagram = (state) => state.Diagram;
+const shapes = (state) => state.Diagram;
 
-export const selectDiagram = createSelector(
-  [diagram],
-  (diagram) => diagram,
+export const selectShapes = createSelector(
+  [shapes],
+  (shapes) => shapes,
 );
 
 export const selectDiagramIDs = createSelector(
-  [selectDiagram],
-  (diagram) => Object.keys(diagram),
+  [selectShapes],
+  (shapes) => Object.keys(shapes),
 );
 
 export const selectDiagramShape = (id) => {
   return createSelector(
-    [selectDiagram],
-    (diagram) => diagram[id],
+    [selectShapes],
+    (shapes) => shapes[id],
   );
 };

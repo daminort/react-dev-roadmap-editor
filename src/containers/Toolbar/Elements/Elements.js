@@ -5,9 +5,14 @@ import { connect } from 'react-redux';
 import ToolbarButton from '../../../components/ToolbarButton';
 import { NewBox, NewLine, Trash } from '../../../icons';
 
+import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
 
-const Elements = ({ isShapeSelected }) => {
+const Elements = ({ activeShapeID, isShapeSelected, shapeRemove }) => {
+
+  const onClickRemove = () => {
+    shapeRemove(activeShapeID);
+  };
 
   return (
     <div className="left-right">
@@ -31,6 +36,7 @@ const Elements = ({ isShapeSelected }) => {
             id="removeShape"
             title="Remove diagram item"
             className="last red"
+            onClick={onClickRemove}
           >
             <Trash />
           </ToolbarButton>
@@ -41,8 +47,9 @@ const Elements = ({ isShapeSelected }) => {
 };
 
 Elements.propTypes = {
-  //activeShapeID   : PropTypes.string.isRequired,
+  activeShapeID   : PropTypes.string.isRequired,
   isShapeSelected : PropTypes.bool.isRequired,
+  shapeRemove     : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
@@ -54,4 +61,8 @@ const mapState = (state) => {
   };
 };
 
-export default connect(mapState)(Elements);
+const mapActions = {
+  shapeRemove: diagramActions.shapeRemove,
+};
+
+export default connect(mapState, mapActions)(Elements);
