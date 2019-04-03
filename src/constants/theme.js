@@ -23,4 +23,10 @@ export const THEME = {
   color: {
     red: '#cd0000',
   },
+  font: {
+    main  : '12px',
+    label : '13px',
+    title : '14px',
+    hint  : '11px',
+  },
 };

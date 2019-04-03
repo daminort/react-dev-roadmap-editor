@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import { Wrapper } from './ToolbarRow.style';
 
-const ToolbarRow = ({ noBorder, children }) => {
+const ToolbarRow = ({ title, noBorder, children }) => {
 
   const className = classnames({
     noBorder,
@@ -12,22 +12,27 @@ const ToolbarRow = ({ noBorder, children }) => {
 
   return (
     <Wrapper className={className}>
-      {children}
+      {title && <div className="title">{title}</div>}
+      <div className="content">
+        {children}
+      </div>
     </Wrapper>
   );
 };
 
 ToolbarRow.propTypes = {
+  title   : PropTypes.string,
   noBorder: PropTypes.bool,
-  children: PropTypes.oneOfType(
+  children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
-  ),
+  ]),
 };
 
 ToolbarRow.defaultProps = {
-  noBorder: false,
-  children: null,
+  title    : null,
+  noBorder : false,
+  children : null,
 };
 
 export default ToolbarRow;

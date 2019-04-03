@@ -25,13 +25,6 @@ export const Wrapper = styled.div`
       display: flex;
       justify-content: flex-start;
       align-items: center;
-
-      .label {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        margin-right: 8px;
-      }
     }
     .right {
       display: flex;

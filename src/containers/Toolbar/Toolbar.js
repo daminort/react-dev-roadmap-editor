@@ -18,7 +18,7 @@ class Toolbar extends PureComponent {
 
     return (
       <Wrapper>
-        <ToolbarRow>
+        <ToolbarRow title="Elements">
           <SectionCreate />
         </ToolbarRow>
       </Wrapper>

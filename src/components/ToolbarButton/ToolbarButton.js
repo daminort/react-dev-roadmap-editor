@@ -18,10 +18,10 @@ const ToolbarButton = ({ id, title, className, children, onClick }) => {
 
 ToolbarButton.propTypes = {
   id      : PropTypes.PropTypes.string.isRequired,
-  children: PropTypes.oneOfType(
+  children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
-  ).isRequired,
+  ]),
   title     : PropTypes.string,
   className : PropTypes.string,
   onClick   : PropTypes.func,
@@ -30,6 +30,7 @@ ToolbarButton.propTypes = {
 ToolbarButton.defaultProps = {
   title     : '',
   className : '',
+  children  : null,
   onClick   : () => {},
 };
 
