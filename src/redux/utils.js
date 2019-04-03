@@ -1,3 +1,6 @@
+import { get, keys } from '../utils/lodash';
+import { store } from './store';
+
 export function makeActionCreator(type, ...argNames) {
 
   return function creator(...args) {
@@ -18,4 +21,17 @@ export function makeActionCreator(type, ...argNames) {
 
     return action;
   };
+}
+
+export function select(path = null) {
+  if (!path) {
+    return store;
+  }
+
+  return get(store, path);
+}
+
+export function getShapesCount() {
+  const shapes = select('Diagram');
+  return keys(shapes).length;
 }

@@ -5,13 +5,19 @@ import { connect } from 'react-redux';
 import ToolbarButton from '../../../components/ToolbarButton';
 import { NewBox, NewLine, Trash } from '../../../icons';
 
+import DiagramUtils from '../../../utils/DiagramUtils';
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
 
-const Elements = ({ activeShapeID, isShapeSelected, shapeRemove }) => {
+const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeRemove }) => {
 
   const onClickRemove = () => {
     shapeRemove(activeShapeID);
+  };
+
+  const onClickNewBox = () => {
+    const newShape = DiagramUtils.createBox();
+    shapeSet(newShape.id, newShape);
   };
 
   return (
@@ -20,6 +26,7 @@ const Elements = ({ activeShapeID, isShapeSelected, shapeRemove }) => {
         <ToolbarButton
           id="newBox"
           title="Add new Box"
+          onClick={onClickNewBox}
         >
           <NewBox />
         </ToolbarButton>
@@ -49,6 +56,7 @@ const Elements = ({ activeShapeID, isShapeSelected, shapeRemove }) => {
 Elements.propTypes = {
   activeShapeID   : PropTypes.string.isRequired,
   isShapeSelected : PropTypes.bool.isRequired,
+  shapeSet        : PropTypes.func.isRequired,
   shapeRemove     : PropTypes.func.isRequired,
 };
 
@@ -62,7 +70,8 @@ const mapState = (state) => {
 };
 
 const mapActions = {
-  shapeRemove: diagramActions.shapeRemove,
+  shapeSet    : diagramActions.shapeSet,
+  shapeRemove : diagramActions.shapeRemove,
 };
 
 export default connect(mapState, mapActions)(Elements);

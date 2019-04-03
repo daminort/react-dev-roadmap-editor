@@ -76,7 +76,10 @@ class Layout extends PureComponent {
   }
 
   onClickLayout() {
-    const { isResize, activeShapeIDSet, resizeDataReset, resizeComplete } = this.props;
+    const { isResize, activeShapeID, activeShapeIDSet, resizeDataReset, resizeComplete } = this.props;
+    if (!activeShapeID) {
+      return;
+    }
     if (isResize) {
       resizeComplete();
       return;
