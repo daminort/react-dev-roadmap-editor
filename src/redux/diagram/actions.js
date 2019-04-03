@@ -5,9 +5,13 @@ const TYPES = {
   DIAGRAM_STORE   : `${prefix}diagramStore`,
   DIAGRAM_RESTORE : `${prefix}diagramRestore`,
 
-  ITEMS_SET       : `${prefix}itemsSet`,
-  ITEMS_RESET     : `${prefix}itemsReset`,
-  ITEM_SET        : `${prefix}itemSet`,
+  SHAPES_SET      : `${prefix}shapesSet`,
+  SHAPES_RESET    : `${prefix}shapesReset`,
+
+  SHAPE_SET       : `${prefix}shapeSet`,
+  SHAPE_UPDATE    : `${prefix}shapeUpdate`,
+
+  SHAPE_SET_COLOR : `${prefix}shapeSetColor`,
 };
 
 const actions = {
@@ -15,9 +19,13 @@ const actions = {
   diagramStore   : makeActionCreator(TYPES.DIAGRAM_STORE),
   diagramRestore : makeActionCreator(TYPES.DIAGRAM_RESTORE),
 
-  itemsSet       : makeActionCreator(TYPES.ITEMS_SET, 'items'),
-  itemsReset     : makeActionCreator(TYPES.ITEMS_RESET),
-  itemSet        : makeActionCreator(TYPES.ITEM_SET, 'id', 'item'),
+  shapesSet      : makeActionCreator(TYPES.SHAPES_SET, 'shapes'),
+  shapesReset    : makeActionCreator(TYPES.SHAPES_RESET),
+
+  shapeSet       : makeActionCreator(TYPES.SHAPE_SET, 'id', 'shape'),
+  shapeUpdate    : makeActionCreator(TYPES.SHAPE_UPDATE, 'id', 'shape'),
+
+  shapeSetColor  : makeActionCreator(TYPES.SHAPE_SET_COLOR, 'id', 'color'),
 };
 
 export default actions;

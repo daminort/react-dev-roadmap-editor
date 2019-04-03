@@ -7,8 +7,8 @@ import { DragSource } from 'react-dnd';
 import { content } from '../../resources';
 
 import appActions from '../../redux/app/actions';
-import { selectActiveItemID, selectResizeData } from '../../redux/app/selectors';
-import { selectDiagramItem } from '../../redux/diagram/selectors';
+import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
+import { selectDiagramShape } from '../../redux/diagram/selectors';
 import { ALIGN } from '../../constants/editor';
 import { DND_TYPES } from '../../constants/dnd';
 
@@ -21,7 +21,7 @@ class Box extends PureComponent {
     id      : PropTypes.string.isRequired,
     onClick : PropTypes.func.isRequired,
     // Redux
-    pos: PropTypes.shape({
+    shape: PropTypes.shape({
       x        : PropTypes.number,
       y        : PropTypes.number,
       width    : PropTypes.number,
@@ -40,8 +40,37 @@ class Box extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.onEndDrag = this.onEndDrag.bind(this);
-    this.onClick   = this.onClick.bind(this);
+    this.createStyle     = this.createStyle.bind(this);
+    this.createClassName = this.createClassName.bind(this);
+    this.onEndDrag       = this.onEndDrag.bind(this);
+    this.onClick         = this.onClick.bind(this);
+  }
+
+  // Service ------------------------------------------------------------------
+  createStyle() {
+    const { shape } = this.props;
+    const style = {
+      left            : shape.x,
+      top             : shape.y,
+      width           : shape.width,
+      height          : shape.height,
+      backgroundColor : shape.bg,
+    };
+
+    return style;
+  }
+
+  createClassName() {
+    const { shape, isSelected, isDragging } = this.props;
+    const className = classnames('box', {
+      'box-no-border' : shape.noBorder,
+      'box-left'      : shape.align === ALIGN.left,
+      'box-right'     : shape.align === ALIGN.right,
+      'selected'      : isSelected,
+      'dragging'      : isDragging,
+    });
+
+    return className;
   }
 
   // Events -------------------------------------------------------------------
@@ -59,28 +88,14 @@ class Box extends PureComponent {
   render() {
     const {
       id,
-      pos,
       isSelected,
       activeControl,
-      isDragging,
       connectDragSource,
     } = this.props;
 
-    const txt = content[id];
-    const style = {
-      left            : pos.x,
-      top             : pos.y,
-      width           : pos.width,
-      height          : pos.height,
-      backgroundColor : pos.bg,
-    };
-    const className = classnames('box', {
-      'box-no-border' : pos.noBorder,
-      'box-left'      : pos.align === ALIGN.left,
-      'box-right'     : pos.align === ALIGN.right,
-      'selected'      : isSelected,
-      'dragging'      : isDragging,
-    });
+    const txt       = content[id];
+    const style     = this.createStyle();
+    const className = this.createClassName();
 
     return connectDragSource(
       <div
@@ -100,13 +115,13 @@ class Box extends PureComponent {
 
 const mapState = (state, props) => {
   const { id } = props;
-  const pos          = selectDiagramItem(id)(state);
-  const activeItemID = selectActiveItemID(state);
-  const resize       = selectResizeData(state);
+  const shape         = selectDiagramShape(id)(state);
+  const activeShapeID = selectActiveShapeID(state);
+  const resize        = selectResizeData(state);
 
   return {
-    pos,
-    isSelected    : (id === activeItemID),
+    shape,
+    isSelected    : (id === activeShapeID),
     activeControl : resize.controlID,
   };
 };

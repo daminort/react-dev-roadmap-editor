@@ -1,5 +1,6 @@
-import actions from './actions';
+import CommonUtils from '../../utils/CommonUtils';
 import { diagram } from '../../resources';
+import actions from './actions';
 
 const initState = {
   ...diagram,
@@ -8,19 +9,27 @@ const initState = {
 export default function diagramReducer(state = initState, { type, payload }) {
 
   switch (type) {
-    case actions.ITEMS_SET: {
+    case actions.SHAPES_SET: {
       return {
-        ...payload.items,
+        ...payload.shapes,
       };
     }
-    case actions.ITEMS_RESET: {
+    case actions.SHAPES_RESET: {
       return {};
     }
-    case actions.ITEM_SET: {
-      const { id, item } = payload;
+    case actions.SHAPE_SET: {
+      const { id, shape } = payload;
       return {
         ...state,
-        [id]: item,
+        [id]: shape,
+      };
+    }
+    case actions.SHAPE_UPDATE: {
+      const { id, shape } = payload;
+      const initShape = state[id];
+      return {
+        ...state,
+        [id]: CommonUtils.safeMerge(initShape, shape),
       };
     }
     default: {

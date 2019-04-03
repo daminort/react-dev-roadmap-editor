@@ -13,6 +13,7 @@ export const Wrapper = styled.div`
   border-radius: ${border.smallRadius};
   margin-right: 8px;
   cursor: pointer;
+  background-color: ${bg.white};
 
   &:hover {
     border-color: ${bg.blue};
@@ -29,5 +30,15 @@ export const Wrapper = styled.div`
     &:hover {
       border-color: ${color.red};
     }
+  }
+
+  &.bg-yellow {
+    background-color: ${bg.yellow};
+  }
+  &.bg-red {
+    background-color: ${bg.red};
+  }
+  &.bg-grey {
+    background-color: ${bg.grey};
   }
 `;

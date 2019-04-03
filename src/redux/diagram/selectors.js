@@ -12,7 +12,7 @@ export const selectDiagramIDs = createSelector(
   (diagram) => Object.keys(diagram),
 );
 
-export const selectDiagramItem = (id) => {
+export const selectDiagramShape = (id) => {
   return createSelector(
     [selectDiagram],
     (diagram) => diagram[id],

@@ -2,8 +2,8 @@ import CommonUtils from '../../utils/CommonUtils';
 import actions from './actions';
 
 const initState = {
-  loading      : false,
-  activeItemID : '',
+  loading       : false,
+  activeShapeID : '',
 
   resize: {
     shapeID    : '',
@@ -24,10 +24,10 @@ export default function appReducer(state = initState, { type, payload }) {
         loading: payload.loading,
       };
     }
-    case actions.ACTIVE_ITEM_SET: {
+    case actions.ACTIVE_SHAPE_ID_SET: {
       return {
         ...state,
-        activeItemID: payload.itemID,
+        activeShapeID: payload.shapeID,
       };
     }
     case actions.RESIZE_DATA_SET: {

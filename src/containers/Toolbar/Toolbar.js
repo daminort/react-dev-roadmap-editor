@@ -2,16 +2,17 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import ToolbarRow from '../../components/ToolbarRow';
-import { selectActiveItemID } from '../../redux/app/selectors';
+import { selectActiveShapeID } from '../../redux/app/selectors';
 
-import SectionCreate from './SectionCreate';
+import Elements from './Elements';
+import Colors from './Colors';
 import { Wrapper } from './Toolbar.style';
 
 class Toolbar extends PureComponent {
 
   static propTypes = {
-    //activeItemID   : PropTypes.string.isRequired,
-    //isItemSelected : PropTypes.bool.isRequired,
+    //activeShapeID   : PropTypes.string.isRequired,
+    //isShapeSelected : PropTypes.bool.isRequired,
   }
 
   render() {
@@ -19,7 +20,10 @@ class Toolbar extends PureComponent {
     return (
       <Wrapper>
         <ToolbarRow title="Elements">
-          <SectionCreate />
+          <Elements />
+        </ToolbarRow>
+        <ToolbarRow title="Colors">
+          <Colors />
         </ToolbarRow>
       </Wrapper>
     );
@@ -27,11 +31,11 @@ class Toolbar extends PureComponent {
 }
 
 const mapState = (state) => {
-  const activeItemID = selectActiveItemID(state);
+  const activeShapeID = selectActiveShapeID(state);
 
   return {
-    activeItemID,
-    isItemSelected: Boolean(activeItemID),
+    activeShapeID,
+    isShapeSelected: Boolean(activeShapeID),
   };
 };
 

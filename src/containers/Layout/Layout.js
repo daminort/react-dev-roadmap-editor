@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 import appActions from '../../redux/app/actions';
 import diagramActions from '../../redux/diagram/actions';
 import {
-  selectActiveItemID,
+  selectActiveShapeID,
   selectResizeData,
   selectIsResize,
 } from '../../redux/app/selectors';
-import { selectDiagramIDs, selectDiagramItem } from '../../redux/diagram/selectors';
+import { selectDiagramIDs, selectDiagramShape } from '../../redux/diagram/selectors';
 import { SIZE_CONTROL_IDS } from '../../constants/layout';
 
 import MathUtils from '../../utils/MathUtils';
@@ -25,23 +25,22 @@ const observedIDs = ['layout'].concat(SIZE_CONTROL_IDS);
 class Layout extends PureComponent {
 
   static propTypes = {
-    activeItemID    : PropTypes.string.isRequired,
-    diagramIDs      : PropTypes.arrayOf(PropTypes.string).isRequired,
-    isResize        : PropTypes.bool.isRequired,
-    //resizeShapeID   : PropTypes.string.isRequired,
-    resizeControlID : PropTypes.string.isRequired,
-    activeItem      : PropTypes.object,
+    activeShapeID    : PropTypes.string.isRequired,
+    diagramIDs       : PropTypes.arrayOf(PropTypes.string).isRequired,
+    isResize         : PropTypes.bool.isRequired,
+    resizeControlID  : PropTypes.string.isRequired,
+    activeShape      : PropTypes.object,
 
-    activeItemSet   : PropTypes.func.isRequired,
-    resizeDataSet   : PropTypes.func.isRequired,
-    resizeDataReset : PropTypes.func.isRequired,
-    resizeComplete  : PropTypes.func.isRequired,
-    diagramRestore  : PropTypes.func.isRequired,
-    itemSet         : PropTypes.func.isRequired,
+    activeShapeIDSet : PropTypes.func.isRequired,
+    resizeDataSet    : PropTypes.func.isRequired,
+    resizeDataReset  : PropTypes.func.isRequired,
+    resizeComplete   : PropTypes.func.isRequired,
+    diagramRestore   : PropTypes.func.isRequired,
+    shapeUpdate      : PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    activeItem: {},
+    activeShape: {},
   }
 
   constructor(props) {
@@ -77,21 +76,21 @@ class Layout extends PureComponent {
   }
 
   onClickLayout() {
-    const { isResize, activeItemSet, resizeDataReset, resizeComplete } = this.props;
+    const { isResize, activeShapeIDSet, resizeDataReset, resizeComplete } = this.props;
     if (isResize) {
       resizeComplete();
       return;
     }
 
-    activeItemSet('');
+    activeShapeIDSet('');
     resizeDataReset();
   }
 
   onClickSizeControl(id) {
     const {
       isResize,
-      activeItemID,
-      activeItem,
+      activeShapeID,
+      activeShape,
       resizeDataSet,
       resizeComplete,
     } = this.props;
@@ -102,39 +101,34 @@ class Layout extends PureComponent {
     }
 
     resizeDataSet({
-      shapeID    : activeItemID,
+      shapeID    : activeShapeID,
       controlID  : id,
-      initX      : activeItem.x,
-      initY      : activeItem.y,
-      initWidth  : activeItem.width,
-      initHeight : activeItem.height,
+      initX      : activeShape.x,
+      initY      : activeShape.y,
+      initWidth  : activeShape.width,
+      initHeight : activeShape.height,
     });
   }
 
   onClickShape(id) {
-    const { isResize, activeItemSet, resizeComplete } = this.props;
+    const { isResize, activeShapeIDSet, resizeComplete } = this.props;
     if (isResize) {
       resizeComplete();
       return;
     }
 
-    activeItemSet(id);
+    activeShapeIDSet(id);
   }
 
   onMouseMove(event) {
-    const { isResize, activeItemID, activeItem, resizeControlID, itemSet } = this.props;
-    if (!activeItem || !isResize) {
+    const { isResize, activeShapeID, activeShape, resizeControlID, shapeUpdate } = this.props;
+    if (!activeShape || !isResize) {
       return;
     }
     const { clientX, clientY } = event;
-    const newPosition = MathUtils.calculateResize(activeItem, clientX, clientY, resizeControlID);
+    const newPosition = MathUtils.calculateResize(activeShape, clientX, clientY, resizeControlID);
 
-    const resItem = {
-      ...activeItem,
-      ...newPosition,
-    };
-
-    itemSet(activeItemID, resItem);
+    shapeUpdate(activeShapeID, newPosition);
   }
 
   // Renders ------------------------------------------------------------------
@@ -166,13 +160,13 @@ class Layout extends PureComponent {
 }
 
 const mapState = (state) => {
-  const resizeData   = selectResizeData(state);
-  const activeItemID = selectActiveItemID(state);
-  const activeItem   = selectDiagramItem(activeItemID)(state) || null;
+  const resizeData    = selectResizeData(state);
+  const activeShapeID = selectActiveShapeID(state);
+  const activeShape   = selectDiagramShape(activeShapeID)(state) || null;
 
   return {
-    activeItemID,
-    activeItem,
+    activeShapeID,
+    activeShape,
     isResize        : selectIsResize(state),
     diagramIDs      : selectDiagramIDs(state),
     resizeShapeID   : resizeData.shapeID,
@@ -181,12 +175,12 @@ const mapState = (state) => {
 };
 
 const mapActions = {
-  activeItemSet   : appActions.activeItemSet,
-  resizeDataSet   : appActions.resizeDataSet,
-  resizeDataReset : appActions.resizeDataReset,
-  resizeComplete  : appActions.resizeComplete,
-  diagramRestore  : diagramActions.diagramRestore,
-  itemSet         : diagramActions.itemSet,
+  activeShapeIDSet : appActions.activeShapeIDSet,
+  resizeDataSet    : appActions.resizeDataSet,
+  resizeDataReset  : appActions.resizeDataReset,
+  resizeComplete   : appActions.resizeComplete,
+  diagramRestore   : diagramActions.diagramRestore,
+  shapeUpdate      : diagramActions.shapeUpdate,
 };
 
 const connected = connect(

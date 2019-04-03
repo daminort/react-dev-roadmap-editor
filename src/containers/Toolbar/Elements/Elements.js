@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import ToolbarButton from '../../../components/ToolbarButton';
 import { NewBox, NewLine, Trash } from '../../../icons';
 
-import { selectActiveItemID } from '../../../redux/app/selectors';
+import { selectActiveShapeID } from '../../../redux/app/selectors';
 
-const SectionCreate = ({ isItemSelected }) => {
+const Elements = ({ isShapeSelected }) => {
 
   return (
     <div className="left-right">
@@ -25,7 +25,7 @@ const SectionCreate = ({ isItemSelected }) => {
           <NewLine />
         </ToolbarButton>
       </div>
-      {isItemSelected && (
+      {isShapeSelected && (
         <div className="right">
           <ToolbarButton
             id="removeShape"
@@ -40,18 +40,18 @@ const SectionCreate = ({ isItemSelected }) => {
   );
 };
 
-SectionCreate.propTypes = {
-  //activeItemID   : PropTypes.string.isRequired,
-  isItemSelected : PropTypes.bool.isRequired,
+Elements.propTypes = {
+  //activeShapeID   : PropTypes.string.isRequired,
+  isShapeSelected : PropTypes.bool.isRequired,
 };
 
 const mapState = (state) => {
-  const activeItemID = selectActiveItemID(state);
+  const activeShapeID = selectActiveShapeID(state);
 
   return {
-    activeItemID,
-    isItemSelected: Boolean(activeItemID),
+    activeShapeID,
+    isShapeSelected: Boolean(activeShapeID),
   };
 };
 
-export default connect(mapState)(SectionCreate);
+export default connect(mapState)(Elements);

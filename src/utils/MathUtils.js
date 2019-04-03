@@ -8,8 +8,8 @@ class MathUtils {
     return rounded >= minValue ? rounded : minValue;
   }
 
-  calculateResize = (currentPos, clientX, clientY, controlID)  => {
-    let { x, y, width, height } = currentPos;
+  calculateResize = (shape, clientX, clientY, controlID)  => {
+    let { x, y, width, height } = shape;
     switch (controlID) {
       case SIZE_CONTROLS.top: {
         const delta = y - clientY;

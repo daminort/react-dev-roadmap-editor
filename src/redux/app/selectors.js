@@ -13,9 +13,9 @@ export const selectLoading = createSelector(
   (app) => app.loading,
 );
 
-export const selectActiveItemID = createSelector(
+export const selectActiveShapeID = createSelector(
   [selectApp],
-  (app) => app.activeItemID,
+  (app) => app.activeShapeID,
 );
 
 export const selectResizeData = createSelector(
