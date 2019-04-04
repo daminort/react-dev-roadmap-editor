@@ -13,6 +13,7 @@ const TYPES = {
   SHAPE_REMOVE         : `${prefix}shapeRemove`,
 
   SHAPE_SET_COLOR      : `${prefix}shapeSetColor`,
+  SHAPE_SET_ALIGNMENT  : `${prefix}shapeSetAlignment`,
 
   CONTENT_SET          : `${prefix}contentSet`,
   CONTENT_RESET        : `${prefix}contentReset`,
@@ -35,6 +36,7 @@ const actions = {
   shapeRemove        : makeActionCreator(TYPES.SHAPE_REMOVE, 'id'),
 
   shapeSetColor      : makeActionCreator(TYPES.SHAPE_SET_COLOR, 'id', 'color'),
+  shapeSetAlignment  : makeActionCreator(TYPES.SHAPE_SET_ALIGNMENT, 'id', 'align'),
 
   contentSet         : makeActionCreator(TYPES.CONTENT_SET, 'content'),
   contentReset       : makeActionCreator(TYPES.CONTENT_RESET),

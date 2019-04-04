@@ -22,6 +22,8 @@ export const shapes = {
     width    : 160,
     height   : 30,
     bg       : bg.yellow,
+    align    : ALIGN.center,
+    noBorder : false,
   },
   legendGoodKnow: {
     type     : TYPES.box,
@@ -30,6 +32,8 @@ export const shapes = {
     width    : 160,
     height   : 30,
     bg       : bg.red,
+    align    : ALIGN.center,
+    noBorder : false,
   },
   legendPossibilities: {
     type     : TYPES.box,
@@ -38,5 +42,7 @@ export const shapes = {
     width    : 160,
     height   : 30,
     bg       : bg.grey,
+    align    : ALIGN.center,
+    noBorder : false,
   },
 };

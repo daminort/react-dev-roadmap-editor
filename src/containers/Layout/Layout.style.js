@@ -18,6 +18,7 @@ export const Wrapper = styled.div`
     border-radius: ${border.radius};
     box-sizing: border-box;
     cursor: pointer;
+    padding: 0 8px;
 
     &.box-no-border {
       border: none;

@@ -6,6 +6,7 @@ import { selectActiveShapeID } from '../../redux/app/selectors';
 
 import Elements from './Elements';
 import Colors from './Colors';
+import Alignment from './Alignment';
 import { Wrapper } from './Toolbar.style';
 
 class Toolbar extends PureComponent {
@@ -24,6 +25,9 @@ class Toolbar extends PureComponent {
         </ToolbarRow>
         <ToolbarRow title="Colors">
           <Colors />
+        </ToolbarRow>
+        <ToolbarRow title="Alignment">
+          <Alignment />
         </ToolbarRow>
       </Wrapper>
     );

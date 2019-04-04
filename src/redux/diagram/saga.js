@@ -54,6 +54,18 @@ function* shapeSetColor() {
   });
 }
 
+function* shapeSetAlignment() {
+
+  yield takeEvery(diagramActions.SHAPE_SET_ALIGNMENT, function* ({ payload }) {
+
+    const { id, align } = payload;
+    const resShape = { align };
+
+    yield put(diagramActions.shapeUpdate(id, resShape));
+    yield put(diagramActions.diagramStore());
+  });
+}
+
 function* shapeRemove() {
 
   yield takeEvery(diagramActions.SHAPE_REMOVE, function* ({ payload }) {
@@ -78,6 +90,7 @@ export default function* diagramSaga() {
     fork(diagramStore),
     fork(diagramRestore),
     fork(shapeSetColor),
+    fork(shapeSetAlignment),
     fork(shapeRemove),
   ]);
 }
