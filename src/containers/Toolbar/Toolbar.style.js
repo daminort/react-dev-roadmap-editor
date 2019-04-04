@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   position: fixed;
   top: 0px;
   right: 0px;
-  width: 320px;
+  width: 280px;
   height: 100vh;
   display: block;
   padding: 0 8px;
