@@ -1,7 +1,7 @@
-import { diagram } from './diagram';
+import { shapes } from './shapes';
 import { content } from './content';
 
 export {
-  diagram,
+  shapes,
   content,
 };

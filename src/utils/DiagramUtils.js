@@ -9,7 +9,7 @@ class DiagramUtils {
 
   generateShapeID = () => {
     const shapesCount = getShapesCount();
-    return `Shape-${shapesCount}`;
+    return `shape-${shapesCount}`;
   }
 
   createBox = (x, y) => {
@@ -23,6 +23,14 @@ class DiagramUtils {
       bg       : bg.grey,
       align    : ALIGN.center,
       noBorder : false,
+    };
+  }
+
+  createShapeContent = (id, title = '') => {
+    return {
+      title : title || id,
+      url   : '',
+      info  : '',
     };
   }
 }

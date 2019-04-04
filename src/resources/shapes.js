@@ -4,7 +4,7 @@ import { ALIGN } from '../constants/editor';
 
 const { bg } = THEME;
 
-export const diagram = {
+export const shapes = {
   legends: {
     type     : TYPES.box,
     x        : 600,

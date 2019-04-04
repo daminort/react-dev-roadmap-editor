@@ -9,7 +9,7 @@ import DiagramUtils from '../../../utils/DiagramUtils';
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
 
-const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeRemove }) => {
+const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeContentSet, shapeRemove }) => {
 
   const onClickRemove = () => {
     shapeRemove(activeShapeID);
@@ -17,7 +17,12 @@ const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeRemove }) => 
 
   const onClickNewBox = () => {
     const newShape = DiagramUtils.createBox();
-    shapeSet(newShape.id, newShape);
+    const { id } = newShape;
+
+    const shapeContent = DiagramUtils.createShapeContent(id);
+
+    shapeContentSet(id, shapeContent);
+    shapeSet(id, newShape);
   };
 
   return (
@@ -57,6 +62,7 @@ Elements.propTypes = {
   activeShapeID   : PropTypes.string.isRequired,
   isShapeSelected : PropTypes.bool.isRequired,
   shapeSet        : PropTypes.func.isRequired,
+  shapeContentSet : PropTypes.func.isRequired,
   shapeRemove     : PropTypes.func.isRequired,
 };
 
@@ -70,8 +76,9 @@ const mapState = (state) => {
 };
 
 const mapActions = {
-  shapeSet    : diagramActions.shapeSet,
-  shapeRemove : diagramActions.shapeRemove,
+  shapeSet        : diagramActions.shapeSet,
+  shapeContentSet : diagramActions.shapeContentSet,
+  shapeRemove     : diagramActions.shapeRemove,
 };
 
 export default connect(mapState, mapActions)(Elements);

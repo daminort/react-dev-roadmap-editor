@@ -4,5 +4,6 @@ export const TYPES = {
 };
 
 export const STORAGE_NAMES = {
-  diargam: 'diagram',
+  shapes  : 'shapes',
+  content : 'content',
 };

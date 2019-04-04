@@ -4,11 +4,9 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { DragSource } from 'react-dnd';
 
-import { content } from '../../resources';
-
 import appActions from '../../redux/app/actions';
 import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
-import { selectDiagramShape } from '../../redux/diagram/selectors';
+import { selectShape, selectShapeContent } from '../../redux/diagram/selectors';
 import { ALIGN } from '../../constants/editor';
 import { DND_TYPES } from '../../constants/dnd';
 
@@ -20,6 +18,7 @@ class Box extends PureComponent {
   static propTypes = {
     id      : PropTypes.string.isRequired,
     onClick : PropTypes.func.isRequired,
+
     // Redux
     shape: PropTypes.shape({
       x        : PropTypes.number,
@@ -30,6 +29,13 @@ class Box extends PureComponent {
       align    : PropTypes.string,
       noBorder : PropTypes.bool,
     }).isRequired,
+
+    shapeContent: PropTypes.shape({
+      title : PropTypes.string,
+      url   : PropTypes.string,
+      info  : PropTypes.string,
+    }).isRequired,
+
     isSelected        : PropTypes.bool.isRequired,
     activeControl     : PropTypes.string.isRequired,
     dndComplete       : PropTypes.func.isRequired,
@@ -42,6 +48,7 @@ class Box extends PureComponent {
     super(props);
     this.createStyle     = this.createStyle.bind(this);
     this.createClassName = this.createClassName.bind(this);
+    this.createTitle     = this.createTitle.bind(this);
     this.onEndDrag       = this.onEndDrag.bind(this);
     this.onClick         = this.onClick.bind(this);
   }
@@ -73,6 +80,16 @@ class Box extends PureComponent {
     return className;
   }
 
+  createTitle() {
+    const { shapeContent } = this.props;
+    const { title, url } = shapeContent;
+    if (!url) {
+      return title;
+    }
+
+    return (<a href={url} target="_blank" rel="noopener noreferrer">{title}</a>);
+  }
+
   // Events -------------------------------------------------------------------
   onEndDrag({ currentOffset }) {
     const { dndComplete } = this.props;
@@ -93,7 +110,7 @@ class Box extends PureComponent {
       connectDragSource,
     } = this.props;
 
-    const txt       = content[id];
+    const title     = this.createTitle();
     const style     = this.createStyle();
     const className = this.createClassName();
 
@@ -104,7 +121,7 @@ class Box extends PureComponent {
         style={style}
         onClick={this.onClick}
       >
-        <p>{txt.title}</p>
+        <p>{title}</p>
         {isSelected && (
           <SizeControls activeControl={activeControl} />
         )}
@@ -115,12 +132,14 @@ class Box extends PureComponent {
 
 const mapState = (state, props) => {
   const { id } = props;
-  const shape         = selectDiagramShape(id)(state);
+  const shape         = selectShape(id)(state);
+  const shapeContent  = selectShapeContent(id)(state);
   const activeShapeID = selectActiveShapeID(state);
   const resize        = selectResizeData(state);
 
   return {
     shape,
+    shapeContent,
     isSelected    : (id === activeShapeID),
     activeControl : resize.controlID,
   };

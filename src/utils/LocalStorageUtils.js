@@ -26,12 +26,22 @@ class LocalStorageUtils {
   }
 
   // Custom -------------------------------------------------------------------
-  storeDiagram = (diagram) => {
-    this.storeValue(STORAGE_NAMES.diargam, diagram);
+  storeDiagram = (shapes, content) => {
+    this.storeValue(STORAGE_NAMES.shapes, shapes);
+    this.storeValue(STORAGE_NAMES.content, content);
   }
 
   restoreDiagram = () => {
-    return this.restoreValue(STORAGE_NAMES.diargam);
+    const shapes = this.restoreValue(STORAGE_NAMES.shapes);
+    if (!shapes) {
+      return null;
+    }
+    const content = this.restoreValue(STORAGE_NAMES.content);
+
+    return {
+      shapes,
+      content,
+    };
   }
 }
 

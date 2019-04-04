@@ -6,7 +6,7 @@ import MathUtils from '../../utils/MathUtils';
 import diagramActions from '../diagram/actions';
 import appActions from './actions';
 
-import { selectDiagramShape } from '../diagram/selectors';
+import { selectShape } from '../diagram/selectors';
 
 const minCellWH = gridStep * 2;
 
@@ -16,7 +16,7 @@ function selectState(state) {
 
   return {
     activeShapeID,
-    activeShape: selectDiagramShape(activeShapeID)(state),
+    activeShape: selectShape(activeShapeID)(state),
   };
 }
 

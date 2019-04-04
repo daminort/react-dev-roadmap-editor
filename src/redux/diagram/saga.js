@@ -1,35 +1,41 @@
 import { all, takeEvery, put, call, fork, select } from 'redux-saga/effects';
 
-import { diagram as defaultDiagram } from '../../resources';
+import {
+  shapes as defaultShapes,
+  content as defaultContent,
+} from '../../resources';
 
 import LocalStorageUtils from '../../utils/LocalStorageUtils';
 import { cloneDeep, unset } from '../../utils/lodash';
 
 import diagramActions from './actions';
-import { selectShapes } from './selectors';
+import { selectShapes, selectContent } from './selectors';
 
 function selectState(state) {
 
   return {
-    shapes: selectShapes(state),
+    shapes  : selectShapes(state),
+    content : selectContent(state),
   };
 }
 
 function* diagramStore() {
 
   yield takeEvery(diagramActions.DIAGRAM_STORE, function* () {
-    const { shapes } = yield select(selectState);
-    yield call(LocalStorageUtils.storeDiagram, shapes);
+    const { shapes, content } = yield select(selectState);
+    yield call(LocalStorageUtils.storeDiagram, shapes, content);
   });
 }
 
 function* diagramRestore() {
 
   yield takeEvery(diagramActions.DIAGRAM_RESTORE, function* () {
-    let shapes = yield call(LocalStorageUtils.restoreDiagram);
-    if (!shapes) {
-      shapes = defaultDiagram;
-    }
+
+    const diagram = yield call(LocalStorageUtils.restoreDiagram);
+    const shapes  = diagram ? diagram.shapes  : defaultShapes;
+    const content = diagram ? diagram.content : defaultContent;
+
+    yield put(diagramActions.contentSet(content));
     yield put(diagramActions.shapesSet(shapes));
   });
 }
@@ -53,12 +59,16 @@ function* shapeRemove() {
   yield takeEvery(diagramActions.SHAPE_REMOVE, function* ({ payload }) {
 
     const { id } = payload;
-    const { shapes } = yield select(selectState);
+    const { shapes, content } = yield select(selectState);
 
-    const resShapes = cloneDeep(shapes);
+    const resShapes   = cloneDeep(shapes);
+    const resContent = cloneDeep(content);
+
     unset(resShapes, id);
+    unset(resContent, id);
 
     yield put(diagramActions.shapesSet(resShapes));
+    yield put(diagramActions.contentSet(resContent));
     yield put(diagramActions.diagramStore());
   });
 }

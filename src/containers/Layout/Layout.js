@@ -11,7 +11,7 @@ import {
   selectResizeData,
   selectIsResize,
 } from '../../redux/app/selectors';
-import { selectDiagramIDs, selectDiagramShape } from '../../redux/diagram/selectors';
+import { selectDiagramIDs, selectShape } from '../../redux/diagram/selectors';
 import { SIZE_CONTROL_IDS } from '../../constants/layout';
 
 import MathUtils from '../../utils/MathUtils';
@@ -165,7 +165,7 @@ class Layout extends PureComponent {
 const mapState = (state) => {
   const resizeData    = selectResizeData(state);
   const activeShapeID = selectActiveShapeID(state);
-  const activeShape   = selectDiagramShape(activeShapeID)(state) || null;
+  const activeShape   = selectShape(activeShapeID)(state) || null;
 
   return {
     activeShapeID,
