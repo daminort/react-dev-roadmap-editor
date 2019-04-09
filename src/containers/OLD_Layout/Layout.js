@@ -16,7 +16,7 @@ import { SIZE_CONTROL_IDS } from '../../constants/layout';
 
 import MathUtils from '../../utils/MathUtils';
 
-import Box from '../Box';
+import Box from '../OLD_Box';
 import Toolbar from '../Toolbar';
 import { Wrapper } from './Layout.style';
 

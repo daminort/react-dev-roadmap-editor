@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ToolbarRow from '../../components/ToolbarRow';
 import { selectActiveShapeID } from '../../redux/app/selectors';
 
+import Page from './Page';
 import Elements from './Elements';
 import Colors from './Colors';
 import Alignment from './Alignment';
@@ -26,6 +27,7 @@ class Toolbar extends PureComponent {
 
     return (
       <Wrapper>
+        <ToolbarRow title="Page"><Page /></ToolbarRow>
         <ToolbarRow title="Elements"><Elements /></ToolbarRow>
         {showColors && (<ToolbarRow title="Colors"><Colors /></ToolbarRow>)}
         {showAlignment && (<ToolbarRow title="Alignment"><Alignment /></ToolbarRow>)}

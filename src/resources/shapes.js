@@ -6,6 +6,7 @@ const { bg } = THEME;
 
 export const shapes = {
   legends: {
+    id       : 'legends',
     type     : TYPES.box,
     x        : 600,
     y        : 60,
@@ -16,6 +17,7 @@ export const shapes = {
     noBorder : true,
   },
   legendMustKnow: {
+    id       : 'legendMustKnow',
     type     : TYPES.box,
     x        : 600,
     y        : 100,
@@ -26,6 +28,7 @@ export const shapes = {
     noBorder : false,
   },
   legendGoodKnow: {
+    id       : 'legendGoodKnow',
     type     : TYPES.box,
     x        : 600,
     y        : 140,
@@ -36,6 +39,7 @@ export const shapes = {
     noBorder : false,
   },
   legendPossibilities: {
+    id       : 'legendPossibilities',
     type     : TYPES.box,
     x        : 600,
     y        : 180,

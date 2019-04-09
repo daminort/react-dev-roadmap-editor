@@ -1,12 +1,13 @@
 export const THEME = {
   bg: {
+		black       : '#000000',
     white       : '#ffffff',
     yellow      : '#ffff66',
     red         : '#ffcc99',
     grey        : '#cccccc',
     blue        : '#008fba',
     transparent : 'transparent',
-    layout      : '#f0f8ff',
+    layout      : '#f1eee8',
   },
   border: {
     main        : '1px solid rgba(0, 0, 0, 0.6)',
