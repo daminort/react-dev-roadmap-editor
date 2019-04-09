@@ -6,6 +6,7 @@ export const THEME = {
     grey        : '#cccccc',
     blue        : '#008fba',
     transparent : 'transparent',
+    layout      : '#f0f8ff',
   },
   border: {
     main        : '1px solid rgba(0, 0, 0, 0.6)',
@@ -28,5 +29,8 @@ export const THEME = {
     label : '13px',
     title : '14px',
     hint  : '11px',
+  },
+  size: {
+    toolbar: '280px',
   },
 };

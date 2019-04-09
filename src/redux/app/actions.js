@@ -10,6 +10,9 @@ const TYPES = {
   RESIZE_COMPLETE     : `${prefix}resizeComplete`,
 
   DND_COMPLETE        : `${prefix}dndComplete`,
+
+  PAGE_DATA_SET       : `${prefix}pageDataSet`,
+  PAGE_DATA_RESET     : `${prefix}pageDataReset`,
 };
 
 const actions = {
@@ -22,6 +25,9 @@ const actions = {
   resizeComplete   : makeActionCreator(TYPES.RESIZE_COMPLETE),
 
   dndComplete      : makeActionCreator(TYPES.DND_COMPLETE, 'position'),
+
+  pageDataSet      : makeActionCreator(TYPES.PAGE_DATA_SET, 'pageData'),
+  pageDataReset    : makeActionCreator(TYPES.PAGE_DATA_RESET),
 };
 
 export default actions;
