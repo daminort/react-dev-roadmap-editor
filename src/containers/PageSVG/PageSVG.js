@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import appActions from '../../redux/app/actions';
 import { selectBoxes, selectCurves } from '../../redux/diagram/selectors';
 
 import Box from '../Box';
@@ -16,7 +17,9 @@ const staticPageStyle = {
   backgroundImage : 'none',
 };
 
-const PageSVG = ({ width, height, boxes }) => {
+const excludedIDs = ['page'];
+
+const PageSVG = ({ width, height, boxes, activeShapeIDSet }) => {
 
   const style = {
     ...staticPageStyle,
@@ -37,7 +40,13 @@ const PageSVG = ({ width, height, boxes }) => {
 
   const onClick = (event) => {
     const { target } = event;
-    console.log('id: ', target.id);
+    const { id } = target;
+    if (excludedIDs.includes(id)) {
+      activeShapeIDSet('');
+      return;
+    }
+
+    activeShapeIDSet(id);
   };
 
   return (
@@ -48,8 +57,9 @@ const PageSVG = ({ width, height, boxes }) => {
 };
 
 PageSVG.propTypes = {
-  boxes  : PropTypes.array.isRequired,
-  curves : PropTypes.array.isRequired,
+  boxes            : PropTypes.array.isRequired,
+  curves           : PropTypes.array.isRequired,
+  activeShapeIDSet : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
@@ -62,7 +72,11 @@ const mapState = (state) => {
   };
 };
 
-const Connected = connect(mapState)(PageSVG);
+const mapActions = {
+  activeShapeIDSet: appActions.activeShapeIDSet,
+};
+
+const Connected = connect(mapState, mapActions)(PageSVG);
 Connected.defaultProps = PageSVG.defaultProps;
 
 export default Connected;

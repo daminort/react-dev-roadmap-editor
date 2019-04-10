@@ -1,27 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import DiagramUtils from '../../utils/DiagramUtils';
 import { THEME } from '../../constants/theme';
+import { selectShape, selectShapeContent } from '../../redux/diagram/selectors';
+import { selectActiveShapeID } from '../../redux/app/selectors';
 
-const strokeColor = THEME.bg.black;
+const colorInert  = THEME.bg.black;
+const colorActive = THEME.bg.blue;
 
 const Box = (props) => {
   const {
     id,
     shape,
     shapeContent,
+    isSelected,
   } = props;
 
   const { x, y, width, height, bg } = shape;
   const { title } = shapeContent;
 
-  const radius = DiagramUtils.calculateBorderRadius(width, height);
-  const textX  = x + width / 2;
-  const textY  = y + height / 2;
+  const radius      = DiagramUtils.calculateBorderRadius(width, height);
+  const textX       = x + width / 2;
+  const textY       = y + height / 2;
+  const strokeColor = isSelected ? colorActive : colorInert;
+  const style = {
+    cursor: isSelected ? 'pointer' : 'default',
+  };
 
   return (
-    <g transform="translate(0.5,0.5)" id={id}>
+    <g transform="translate(0.5, 0.5)" id={id}>
       <rect
         id={id}
         x={x}
@@ -32,9 +41,17 @@ const Box = (props) => {
         stroke={strokeColor}
         rx={radius}
         ry={radius}
+        style={style}
         pointerEvents="all"
       />
-      <text x={textX} y={textY} alignmentBaseline="middle" textAnchor="middle">
+      <text
+        id={id}
+        x={textX}
+        y={textY}
+        style={style}
+        alignmentBaseline="middle"
+        textAnchor="middle"
+      >
         {title}
       </text>
     </g>
@@ -65,8 +82,20 @@ Box.propTypes = {
   //dndComplete       : PropTypes.func.isRequired,
 };
 
-Box.defaultProps = {
+const mapState = (state, props) => {
+  const { id } = props;
+  const shape         = selectShape(id)(state);
+  const shapeContent  = selectShapeContent(id)(state);
+  const activeShapeID = selectActiveShapeID(state);
 
+  return {
+    shape,
+    shapeContent,
+    isSelected: (id === activeShapeID),
+  };
 };
 
-export default Box;
+const Connected = connect(mapState)(Box);
+Connected.defaultProps = Box.defaultProps;
+
+export default Connected;

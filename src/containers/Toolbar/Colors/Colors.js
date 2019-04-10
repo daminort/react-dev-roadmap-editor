@@ -13,6 +13,8 @@ const classes = {
   colorYellow      : 'bg-yellow',
   colorRed         : 'bg-red',
   colorGrey        : 'bg-grey',
+  colorBlue        : 'bg-softBlue',
+  colorGreen       : 'bg-green',
 };
 
 const { bg } = THEME;
@@ -21,6 +23,8 @@ const bgColors = {
   colorYellow      : bg.yellow,
   colorRed         : bg.red,
   colorGrey        : bg.grey,
+  colorBlue        : bg.softBlue,
+  colorGreen       : bg.green,
 };
 
 const Colors = ({ isShapeSelected, activeShapeID, shapeSetColor }) => {
@@ -51,6 +55,18 @@ const Colors = ({ isShapeSelected, activeShapeID, shapeSetColor }) => {
           id="colorRed"
           title="Red"
           className={classes.colorRed}
+          onClick={onClick}
+        />
+        <ToolbarButton
+          id="colorBlue"
+          title="Blue"
+          className={classes.colorBlue}
+          onClick={onClick}
+        />
+        <ToolbarButton
+          id="colorGreen"
+          title="Green"
+          className={classes.colorGreen}
           onClick={onClick}
         />
         <ToolbarButton

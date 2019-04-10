@@ -5,10 +5,19 @@ export const Wrapper = styled.div`
   
   #pageWidth,
   #pageHeight {
-  	width: 40%;
-  	margin-right: 8px;
+  	width: 100px;
+  	margin-right: 12px;
   	.p-spinner {
   		width: 100%;
+  		.p-inputtext {
+  			width: 100px;
+  		}
   	} 
   }
+`;
+
+export const Label = styled.div`
+	display: flex;
+	align-items: center;
+	margin-right: 8px;
 `;

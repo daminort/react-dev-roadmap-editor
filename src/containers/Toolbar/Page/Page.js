@@ -6,7 +6,7 @@ import InputNumber from '../../../components/Prime/InputNumber';
 
 import appActions from '../../../redux/app/actions';
 import { selectPageData } from '../../../redux/app/selectors';
-import { Wrapper } from './Page.style';
+import { Wrapper, Label } from './Page.style';
 
 const Page = ({ width, height, pageDataSet /*, pageDataReset*/ }) => {
 
@@ -18,6 +18,7 @@ const Page = ({ width, height, pageDataSet /*, pageDataReset*/ }) => {
 
   return (
     <Wrapper>
+      <Label>W:</Label>
       <div id="pageWidth">
         <InputNumber
           name="pageWidth"
@@ -27,6 +28,7 @@ const Page = ({ width, height, pageDataSet /*, pageDataReset*/ }) => {
           onChange={({ target }) => onChangeSize(target.value, 'width')}
         />
       </div>
+      <Label>H:</Label>
       <div id="pageHeight">
         <InputNumber
           name="pageHeight"
