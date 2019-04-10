@@ -1,9 +1,16 @@
 import CommonUtils from '../../utils/CommonUtils';
+import { PAGE } from '../../constants/editor';
 import actions from './actions';
 
 const initState = {
   loading       : false,
   activeShapeID : '',
+
+  page: {
+    width  : PAGE.width,
+    height : PAGE.height,
+    scale  : PAGE.scale,
+  },
 
   resize: {
     shapeID    : '',
@@ -42,6 +49,20 @@ export default function appReducer(state = initState, { type, payload }) {
       return {
         ...state,
         resize: initState.resize,
+      };
+    }
+    case actions.PAGE_DATA_SET: {
+      const { page } = state;
+      const { pageData } = payload;
+      return {
+        ...state,
+        page: CommonUtils.safeMerge(page, pageData),
+      };
+    }
+    case actions.PAGE_DATA_RESET: {
+      return {
+        ...state,
+        page: initState.page,
       };
     }
     default: {

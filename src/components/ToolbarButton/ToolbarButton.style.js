@@ -7,8 +7,8 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border: ${border.button};
   border-radius: ${border.smallRadius};
   margin-right: 8px;
@@ -40,5 +40,11 @@ export const Wrapper = styled.div`
   }
   &.bg-grey {
     background-color: ${bg.grey};
+  }
+  &.bg-softBlue {
+    background-color: ${bg.softBlue};
+  }
+  &.bg-green {
+    background-color: ${bg.green};
   }
 `;

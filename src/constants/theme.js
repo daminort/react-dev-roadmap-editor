@@ -1,11 +1,15 @@
 export const THEME = {
   bg: {
+		black       : '#000000',
     white       : '#ffffff',
     yellow      : '#ffff66',
     red         : '#ffcc99',
     grey        : '#cccccc',
+    green       : '#b3d89d',
     blue        : '#008fba',
+    softBlue    : '#dae8fc',
     transparent : 'transparent',
+    layout      : '#f1eee8',
   },
   border: {
     main        : '1px solid rgba(0, 0, 0, 0.6)',
@@ -28,5 +32,8 @@ export const THEME = {
     label : '13px',
     title : '14px',
     hint  : '11px',
+  },
+  size: {
+    toolbar: '280px',
   },
 };

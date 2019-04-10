@@ -1,157 +1,101 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { DragSource } from 'react-dnd';
 
-import appActions from '../../redux/app/actions';
-import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
+import DiagramUtils from '../../utils/DiagramUtils';
+import { THEME } from '../../constants/theme';
 import { selectShape, selectShapeContent } from '../../redux/diagram/selectors';
-import { ALIGN } from '../../constants/editor';
-import { DND_TYPES } from '../../constants/dnd';
+import { selectActiveShapeID } from '../../redux/app/selectors';
 
-import { SizeControls } from '../../components';
-import { boxSource, collect } from './dnd';
+const colorInert  = THEME.bg.black;
+const colorActive = THEME.bg.blue;
 
-class Box extends PureComponent {
+const Box = (props) => {
+  const {
+    id,
+    shape,
+    shapeContent,
+    isSelected,
+  } = props;
 
-  static propTypes = {
-    id      : PropTypes.string.isRequired,
-    onClick : PropTypes.func.isRequired,
+  const { x, y, width, height, bg } = shape;
+  const { title } = shapeContent;
 
-    // Redux
-    shape: PropTypes.shape({
-      x        : PropTypes.number,
-      y        : PropTypes.number,
-      width    : PropTypes.number,
-      height   : PropTypes.number,
-      bg       : PropTypes.string,
-      align    : PropTypes.string,
-      noBorder : PropTypes.bool,
-    }).isRequired,
+  const radius      = DiagramUtils.calculateBorderRadius(width, height);
+  const textX       = x + width / 2;
+  const textY       = y + height / 2;
+  const strokeColor = isSelected ? colorActive : colorInert;
+  const style = {
+    cursor: isSelected ? 'pointer' : 'default',
+  };
 
-    shapeContent: PropTypes.shape({
-      title : PropTypes.string,
-      url   : PropTypes.string,
-      info  : PropTypes.string,
-    }).isRequired,
-
-    isSelected        : PropTypes.bool.isRequired,
-    activeControl     : PropTypes.string.isRequired,
-    dndComplete       : PropTypes.func.isRequired,
-    // DnD
-    isDragging        : PropTypes.bool.isRequired,
-    connectDragSource : PropTypes.func.isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-    this.createStyle     = this.createStyle.bind(this);
-    this.createClassName = this.createClassName.bind(this);
-    this.createTitle     = this.createTitle.bind(this);
-    this.onEndDrag       = this.onEndDrag.bind(this);
-    this.onClick         = this.onClick.bind(this);
-  }
-
-  // Service ------------------------------------------------------------------
-  createStyle() {
-    const { shape } = this.props;
-    const style = {
-      left            : shape.x,
-      top             : shape.y,
-      width           : shape.width,
-      height          : shape.height,
-      backgroundColor : shape.bg,
-    };
-
-    return style;
-  }
-
-  createClassName() {
-    const { shape, isSelected, isDragging } = this.props;
-    const className = classnames('box', {
-      'box-no-border' : shape.noBorder,
-      'box-left'      : shape.align === ALIGN.left,
-      'box-right'     : shape.align === ALIGN.right,
-      'selected'      : isSelected,
-      'dragging'      : isDragging,
-    });
-
-    return className;
-  }
-
-  createTitle() {
-    const { shapeContent } = this.props;
-    const { title, url } = shapeContent;
-    if (!url) {
-      return title;
-    }
-
-    return (<a href={url} target="_blank" rel="noopener noreferrer">{title}</a>);
-  }
-
-  // Events -------------------------------------------------------------------
-  onEndDrag({ currentOffset }) {
-    const { dndComplete } = this.props;
-    dndComplete(currentOffset);
-  }
-
-  onClick() {
-    const { id, onClick } = this.props;
-    onClick(id);
-  }
-
-  // Renders ------------------------------------------------------------------
-  render() {
-    const {
-      id,
-      isSelected,
-      activeControl,
-      connectDragSource,
-    } = this.props;
-
-    const title     = this.createTitle();
-    const style     = this.createStyle();
-    const className = this.createClassName();
-
-    return connectDragSource(
-      <div
+  return (
+    <g transform="translate(0.5, 0.5)" id={id}>
+      <rect
         id={id}
-        className={className}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        fill={bg}
+        stroke={strokeColor}
+        rx={radius}
+        ry={radius}
         style={style}
-        onClick={this.onClick}
+        pointerEvents="all"
+      />
+      <text
+        id={id}
+        x={textX}
+        y={textY}
+        style={style}
+        alignmentBaseline="middle"
+        textAnchor="middle"
       >
-        <p>{title}</p>
-        {isSelected && (
-          <SizeControls activeControl={activeControl} />
-        )}
-      </div>,
-    );
-  }
-}
+        {title}
+      </text>
+    </g>
+  );
+};
+
+Box.propTypes = {
+  id      : PropTypes.string.isRequired,
+  onClick : PropTypes.func.isRequired,
+  shape: PropTypes.shape({
+    x        : PropTypes.number,
+    y        : PropTypes.number,
+    width    : PropTypes.number,
+    height   : PropTypes.number,
+    bg       : PropTypes.string,
+    align    : PropTypes.string,
+    noBorder : PropTypes.bool,
+  }).isRequired,
+
+  shapeContent: PropTypes.shape({
+    title : PropTypes.string,
+    url   : PropTypes.string,
+    info  : PropTypes.string,
+  }).isRequired,
+
+  isSelected : PropTypes.bool.isRequired,
+  //activeControl     : PropTypes.string.isRequired,
+  //dndComplete       : PropTypes.func.isRequired,
+};
 
 const mapState = (state, props) => {
   const { id } = props;
   const shape         = selectShape(id)(state);
   const shapeContent  = selectShapeContent(id)(state);
   const activeShapeID = selectActiveShapeID(state);
-  const resize        = selectResizeData(state);
 
   return {
     shape,
     shapeContent,
-    isSelected    : (id === activeShapeID),
-    activeControl : resize.controlID,
+    isSelected: (id === activeShapeID),
   };
 };
 
-const mapActions = {
-  dndComplete: appActions.dndComplete,
-};
+const Connected = connect(mapState)(Box);
+Connected.defaultProps = Box.defaultProps;
 
-const dndWrapped = DragSource(DND_TYPES.box, boxSource, collect)(Box);
-
-export default connect(
-  mapState,
-  mapActions,
-)(dndWrapped);
+export default Connected;
