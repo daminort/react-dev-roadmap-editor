@@ -8,29 +8,25 @@ class MathUtils {
     return rounded >= minValue ? rounded : minValue;
   }
 
-  calculateResize = (shape, clientX, clientY, controlID)  => {
+  calculateResize = (shape, movementX, movementY, controlID)  => {
     let { x, y, width, height } = shape;
     switch (controlID) {
       case SIZE_CONTROLS.top: {
-        const delta = y - clientY;
-        y = clientY;
-        height += delta;
+        y += movementY;
+        height += movementY * (-1);
         break;
       }
       case SIZE_CONTROLS.bottom: {
-        const delta = clientY - (y + height);
-        height += delta;
+        height += movementY;
         break;
       }
       case SIZE_CONTROLS.left: {
-        const delta = x - clientX;
-        x = clientX;
-        width += delta;
+        x += movementX;
+        width += movementX * (-1);
         break;
       }
       case SIZE_CONTROLS.right: {
-        const delta = clientX - (x + width);
-        width += delta;
+        width += movementX;
         break;
       }
       default:

@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { TYPES } from '../../constants/common';
 import { values, sortBy } from '../../utils/lodash';
 
-
 const shapes  = (state) => state.Diagram.shapes;
 const content = (state) => state.Diagram.content;
 

@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import DiagramUtils from '../../utils/DiagramUtils';
 import { THEME } from '../../constants/theme';
 import { selectShape, selectShapeContent } from '../../redux/diagram/selectors';
-import { selectActiveShapeID } from '../../redux/app/selectors';
+import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
+
+import SizeControls from '../../components/SizeControls';
 
 const colorInert  = THEME.bg.black;
 const colorActive = THEME.bg.blue;
@@ -16,6 +18,7 @@ const Box = (props) => {
     shape,
     shapeContent,
     isSelected,
+    activeControl,
   } = props;
 
   const { x, y, width, height, bg } = shape;
@@ -54,13 +57,18 @@ const Box = (props) => {
       >
         {title}
       </text>
+      {isSelected && (
+        <SizeControls
+          shape={shape}
+          activeControl={activeControl}
+        />
+      )}
     </g>
   );
 };
 
 Box.propTypes = {
-  id      : PropTypes.string.isRequired,
-  onClick : PropTypes.func.isRequired,
+  id   : PropTypes.string.isRequired,
   shape: PropTypes.shape({
     x        : PropTypes.number,
     y        : PropTypes.number,
@@ -77,8 +85,8 @@ Box.propTypes = {
     info  : PropTypes.string,
   }).isRequired,
 
-  isSelected : PropTypes.bool.isRequired,
-  //activeControl     : PropTypes.string.isRequired,
+  isSelected    : PropTypes.bool.isRequired,
+  activeControl : PropTypes.string.isRequired,
   //dndComplete       : PropTypes.func.isRequired,
 };
 
@@ -86,12 +94,14 @@ const mapState = (state, props) => {
   const { id } = props;
   const shape         = selectShape(id)(state);
   const shapeContent  = selectShapeContent(id)(state);
+  const resize        = selectResizeData(state);
   const activeShapeID = selectActiveShapeID(state);
 
   return {
     shape,
     shapeContent,
     isSelected: (id === activeShapeID),
+    activeControl: resize.controlID,
   };
 };
 

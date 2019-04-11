@@ -6,9 +6,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.8);
-  background-size: 10px 10px;
-  background-image: linear-gradient(to right, rgb(216, 216, 216) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgb(216, 216, 216) 1px, transparent 1px);
 }
 
 code {

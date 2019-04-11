@@ -1,12 +1,14 @@
 import { all, takeEvery, put, fork, select } from 'redux-saga/effects';
 
 import { gridStep } from '../../config';
+import { SIZE_CONTROLS } from '../../constants/layout';
 import MathUtils from '../../utils/MathUtils';
 
 import diagramActions from '../diagram/actions';
 import appActions from './actions';
 
 import { selectShape } from '../diagram/selectors';
+import { selectResizeData } from './selectors';
 
 const minCellWH = gridStep * 2;
 
@@ -16,7 +18,8 @@ function selectState(state) {
 
   return {
     activeShapeID,
-    activeShape: selectShape(activeShapeID)(state),
+    activeShape : selectShape(activeShapeID)(state),
+    resizeData  : selectResizeData(state),
   };
 }
 
@@ -24,14 +27,20 @@ function* resizeComplete() {
 
   yield takeEvery(appActions.RESIZE_COMPLETE, function* () {
 
-    const { activeShapeID, activeShape } = yield select(selectState);
+    const { activeShapeID, activeShape, resizeData } = yield select(selectState);
     const { x, y, width, height } = activeShape;
+    const { controlID } = resizeData;
+
+    const isTop    = (controlID === SIZE_CONTROLS.top);
+    const isBottom = (controlID === SIZE_CONTROLS.bottom);
+    const isLeft   = (controlID === SIZE_CONTROLS.left);
+    const isRight  = (controlID === SIZE_CONTROLS.right);
 
     const resShape = {
-      x      : MathUtils.roundCoord(x),
-      y      : MathUtils.roundCoord(y),
-      width  : MathUtils.roundCoord(width, minCellWH),
-      height : MathUtils.roundCoord(height, minCellWH),
+      x      : isLeft ? MathUtils.roundCoord(x) : x,
+      y      : isTop  ? MathUtils.roundCoord(y) : y,
+      width  : (isLeft || isRight) ? MathUtils.roundCoord(width, minCellWH) : width,
+      height : (isTop || isBottom) ? MathUtils.roundCoord(height, minCellWH) : height,
     };
 
     yield put(diagramActions.shapeUpdate(activeShapeID, resShape));
