@@ -5,11 +5,17 @@ import { connect } from 'react-redux';
 import appActions from '../../redux/app/actions';
 import diagramActions from '../../redux/diagram/actions';
 import { selectBoxes, selectCurves, selectShape } from '../../redux/diagram/selectors';
-import { selectActiveShapeID, selectIsResize, selectResizeData } from '../../redux/app/selectors';
+import {
+  selectActiveShapeID,
+  selectIsResize,
+  selectResizeData,
+  selectIsCreate,
+} from '../../redux/app/selectors';
 import { SIZE_CONTROLS } from '../../constants/layout';
 
 import Box from '../Box';
 import MathUtils from '../../utils/MathUtils';
+import DOMUtils from '../../utils/DOMUtils';
 
 const staticPageStyle = {
   display         : 'block',
@@ -36,11 +42,13 @@ const PageSVG = (props) => {
     activeShapeID,
     activeShape,
     isResize,
+    isCreate,
     resizeControlID,
     activeShapeIDSet,
     resizeDataSet,
     resizeComplete,
     dndComplete,
+    createComplete,
     shapeUpdate,
   } = props;
 
@@ -51,13 +59,25 @@ const PageSVG = (props) => {
     const { target } = event;
     const { id } = target;
 
-    // 1. Exit from resize mode
+    // 1. Exit from creating mode
+    if (isCreate) {
+      if (id !== 'page') {
+        return;
+      }
+      const { clientX, clientY } = event;
+      const position = DOMUtils.calculateLayoutClickPosition(clientX, clientY);
+
+      createComplete(position);
+      return;
+    }
+
+    // 2. Exit from resize mode
     if (isResize) {
       resizeComplete();
       return;
     }
 
-    // 2. Enter to resize mode
+    // 3. Enter to resize mode
     if (isSizeContol(id) && !isResize) {
       resizeDataSet({
         shapeID    : activeShapeID,
@@ -70,13 +90,13 @@ const PageSVG = (props) => {
       return;
     }
 
-    // 3. Exit from select mode
+    // 4. Exit from select mode
     if (excludedIDs.includes(id)) {
       activeShapeIDSet('');
       return;
     }
 
-    // 4. Enter to select mode
+    // 5. Enter to select mode
     activeShapeIDSet(id);
   };
 
@@ -120,6 +140,7 @@ const PageSVG = (props) => {
     ...staticPageStyle,
     minWidth  : width,
     minHeight : height,
+    cursor    : isCreate ? 'crosshair' : 'default',
   };
 
   const renderBoxes = boxes.map(box => (
@@ -145,15 +166,20 @@ const PageSVG = (props) => {
 PageSVG.propTypes = {
   boxes            : PropTypes.array.isRequired,
   curves           : PropTypes.array.isRequired,
+  width            : PropTypes.number.isRequired,
+  height           : PropTypes.number.isRequired,
+
   activeShapeIDSet : PropTypes.func.isRequired,
   resizeDataSet    : PropTypes.func.isRequired,
   resizeComplete   : PropTypes.func.isRequired,
   dndComplete      : PropTypes.func.isRequired,
+  createComplete   : PropTypes.func.isRequired,
   shapeUpdate      : PropTypes.func.isRequired,
 
   activeShapeID    : PropTypes.string,
   resizeControlID  : PropTypes.string,
   isResize         : PropTypes.bool,
+  isCreate         : PropTypes.bool,
 
   activeShape: PropTypes.shape({
     x      : PropTypes.number,
@@ -166,6 +192,8 @@ PageSVG.propTypes = {
 PageSVG.defaultProps = {
   activeShapeID   : '',
   resizeControlID : '',
+  isResize        : false,
+  isCreate        : false,
   activeShape     : {},
 };
 
@@ -182,6 +210,7 @@ const mapState = (state) => {
     activeShape     : selectShape(activeShapeID)(state),
     isResize        : selectIsResize(state),
     resizeControlID : resizeData.controlID,
+    isCreate        : selectIsCreate(state),
   };
 };
 
@@ -190,6 +219,7 @@ const mapActions = {
   resizeDataSet    : appActions.resizeDataSet,
   resizeComplete   : appActions.resizeComplete,
   dndComplete      : appActions.dndComplete,
+  createComplete   : appActions.createComplete,
   shapeUpdate      : diagramActions.shapeUpdate,
 };
 

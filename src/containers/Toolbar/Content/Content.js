@@ -95,7 +95,7 @@ const mapState = (state) => {
 
   return {
     activeShapeID,
-    shapeContent: selectShapeContent(activeShapeID)(state),
+    shapeContent: selectShapeContent(activeShapeID)(state) || {},
   };
 };
 

@@ -8,6 +8,7 @@ import {
 import LocalStorageUtils from '../../utils/LocalStorageUtils';
 import { cloneDeep, unset } from '../../utils/lodash';
 
+import appActions from '../app/actions';
 import diagramActions from './actions';
 import { selectShapes, selectContent } from './selectors';
 
@@ -73,7 +74,7 @@ function* shapeRemove() {
     const { id } = payload;
     const { shapes, content } = yield select(selectState);
 
-    const resShapes   = cloneDeep(shapes);
+    const resShapes  = cloneDeep(shapes);
     const resContent = cloneDeep(content);
 
     unset(resShapes, id);
@@ -82,6 +83,7 @@ function* shapeRemove() {
     yield put(diagramActions.shapesSet(resShapes));
     yield put(diagramActions.contentSet(resContent));
     yield put(diagramActions.diagramStore());
+    yield put(appActions.activeShapeIDSet(''));
   });
 }
 

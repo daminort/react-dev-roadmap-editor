@@ -46,7 +46,6 @@ Page.propTypes = {
   width         : PropTypes.number.isRequired,
   height        : PropTypes.number.isRequired,
   pageDataSet   : PropTypes.func.isRequired,
-  pageDataReset : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
@@ -59,8 +58,7 @@ const mapState = (state) => {
 };
 
 const mapActions = {
-  pageDataSet   : appActions.pageDataSet,
-  pageDataReset : appActions.pageDataReset,
+  pageDataSet: appActions.pageDataSet,
 };
 
 export default connect(mapState, mapActions)(Page);

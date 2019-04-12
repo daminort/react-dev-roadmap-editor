@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
 
 const app    = (state) => state.App;
-const resize = (state) => state.App.resize;
 const page   = (state) => state.App.page;
+const resize = (state) => state.App.resize;
+const create = (state) => state.App.create;
 
 // App --------------------------------------------------------------------------------------------
 export const selectApp = createSelector(
@@ -35,4 +36,15 @@ export const selectIsResize = createSelector(
 export const selectPageData = createSelector(
   [page],
   (page) => page,
+);
+
+// Create -----------------------------------------------------------------------------------------
+export const selectCreateData = createSelector(
+  [create],
+  (create) => create,
+);
+
+export const selectIsCreate = createSelector(
+  [selectCreateData],
+  (create) => Boolean(create.shapeType),
 );

@@ -20,6 +20,10 @@ const initState = {
     initWidth  : 0,
     initHeight : 0,
   },
+
+  create: {
+    shapeType: null,
+  },
 };
 
 export default function appReducer(state = initState, { type, payload }) {
@@ -49,6 +53,20 @@ export default function appReducer(state = initState, { type, payload }) {
       return {
         ...state,
         resize: initState.resize,
+      };
+    }
+    case actions.CREATE_DATA_SET: {
+      const { create } = state;
+      const { createData } = payload;
+      return {
+        ...state,
+        create: CommonUtils.safeMerge(create, createData),
+      };
+    }
+    case actions.CREATE_DATA_RESET: {
+      return {
+        ...state,
+        create: initState.create,
       };
     }
     case actions.PAGE_DATA_SET: {

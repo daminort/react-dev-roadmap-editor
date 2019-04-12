@@ -4,25 +4,26 @@ import { connect } from 'react-redux';
 
 import ToolbarButton from '../../../components/ToolbarButton';
 import { NewBox, NewLine, Trash } from '../../../icons';
+import { TYPES } from '../../../constants/common';
 
-import DiagramUtils from '../../../utils/DiagramUtils';
+import appActions from '../../../redux/app/actions';
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
 
-const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeContentSet, shapeRemove }) => {
+const Elements = (props) => {
+  const {
+    activeShapeID,
+    isShapeSelected,
+    createDataSet,
+    shapeRemove,
+  } = props;
 
   const onClickRemove = () => {
     shapeRemove(activeShapeID);
   };
 
-  const onClickNewBox = () => {
-    const newShape = DiagramUtils.createBox();
-    const { id } = newShape;
-
-    const shapeContent = DiagramUtils.createShapeContent(id);
-
-    shapeContentSet(id, shapeContent);
-    shapeSet(id, newShape);
+  const onClickCreate = (shapeType) => {
+    createDataSet({ shapeType });
   };
 
   return (
@@ -31,13 +32,14 @@ const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeContentSet, s
         <ToolbarButton
           id="newBox"
           title="Add new Box"
-          onClick={onClickNewBox}
+          onClick={() => onClickCreate(TYPES.box)}
         >
           <NewBox />
         </ToolbarButton>
         <ToolbarButton
           id="newCurve"
           title="Add new Line"
+          onClick={() => onClickCreate(TYPES.curve)}
         >
           <NewLine />
         </ToolbarButton>
@@ -61,8 +63,7 @@ const Elements = ({ activeShapeID, isShapeSelected, shapeSet, shapeContentSet, s
 Elements.propTypes = {
   activeShapeID   : PropTypes.string.isRequired,
   isShapeSelected : PropTypes.bool.isRequired,
-  shapeSet        : PropTypes.func.isRequired,
-  shapeContentSet : PropTypes.func.isRequired,
+  createDataSet   : PropTypes.func.isRequired,
   shapeRemove     : PropTypes.func.isRequired,
 };
 
@@ -76,9 +77,8 @@ const mapState = (state) => {
 };
 
 const mapActions = {
-  shapeSet        : diagramActions.shapeSet,
-  shapeContentSet : diagramActions.shapeContentSet,
-  shapeRemove     : diagramActions.shapeRemove,
+  createDataSet : appActions.createDataSet,
+  shapeRemove   : diagramActions.shapeRemove,
 };
 
 export default connect(mapState, mapActions)(Elements);

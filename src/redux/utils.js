@@ -24,14 +24,15 @@ export function makeActionCreator(type, ...argNames) {
 }
 
 export function select(path = null) {
+  const state = store.getState();
   if (!path) {
-    return store;
+    return state;
   }
 
-  return get(store, path);
+  return get(state, path);
 }
 
 export function getShapesCount() {
-  const shapes = select('Diagram');
+  const shapes = select('Diagram.shapes');
   return keys(shapes).length;
 }

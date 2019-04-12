@@ -11,7 +11,6 @@ class DiagramUtils {
 
   constructor() {
     this.radiuses = {};
-    this.sides    = {};
   }
 
   generateShapeID = () => {
@@ -35,6 +34,7 @@ class DiagramUtils {
 
   createShapeContent = (id, title = '') => {
     return {
+      id,
       title : title || id,
       url   : '',
       info  : '',
@@ -49,12 +49,7 @@ class DiagramUtils {
       return this[sidesKey];
     }
 
-    const min = Math.min(roundedWidth, roundedHeight);
-    if (this.radiuses[min]) {
-      this[sidesKey] = this.radiuses[min];
-      return this.radiuses[min];
-    }
-
+    const min          = Math.min(roundedWidth, roundedHeight);
     const radius       = (min / 10) * 1.5;
     this.radiuses[min] = radius;
     this[sidesKey]     = radius;

@@ -9,6 +9,10 @@ const TYPES = {
   RESIZE_DATA_RESET   : `${prefix}resizeDataReset`,
   RESIZE_COMPLETE     : `${prefix}resizeComplete`,
 
+  CREATE_DATA_SET     : `${prefix}createDataSet`,
+  CREATE_DATA_RESET   : `${prefix}createDataReset`,
+  CREATE_COMPLETE     : `${prefix}createComplete`,
+
   DND_COMPLETE        : `${prefix}dndComplete`,
 
   PAGE_DATA_SET       : `${prefix}pageDataSet`,
@@ -23,6 +27,10 @@ const actions = {
   resizeDataSet    : makeActionCreator(TYPES.RESIZE_DATA_SET, 'resizeData'),
   resizeDataReset  : makeActionCreator(TYPES.RESIZE_DATA_RESET),
   resizeComplete   : makeActionCreator(TYPES.RESIZE_COMPLETE),
+
+  createDataSet    : makeActionCreator(TYPES.CREATE_DATA_SET, 'createData'),
+  createDataReset  : makeActionCreator(TYPES.CREATE_DATA_RESET),
+  createComplete   : makeActionCreator(TYPES.CREATE_COMPLETE, 'position'),
 
   dndComplete      : makeActionCreator(TYPES.DND_COMPLETE, 'position'),
 
