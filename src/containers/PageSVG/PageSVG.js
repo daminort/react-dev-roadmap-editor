@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -40,22 +40,13 @@ const PageSVG = (props) => {
     activeShapeIDSet,
     resizeDataSet,
     resizeComplete,
+    dndComplete,
     shapeUpdate,
   } = props;
 
-  const style = {
-    ...staticPageStyle,
-    minWidth  : width,
-    minHeight : height,
-  };
+  const [isDragging, setDraggingMode] = useState(false);
 
-  const renderBoxes = boxes.map(box => (
-    <Box
-      key={box.id}
-      id={box.id}
-    />
-  ));
-
+  // Events ---------------------------------------------------------------------------------------
   const onClick = (event) => {
     const { target } = event;
     const { id } = target;
@@ -90,14 +81,53 @@ const PageSVG = (props) => {
   };
 
   const onMouseMove = (event) => {
-    if (!activeShape || !isResize) {
+    if (!activeShape) {
       return;
     }
-    const { movementX, movementY } = event;
-    const newPosition = MathUtils.calculateResize(activeShape, movementX, movementY, resizeControlID);
 
-    shapeUpdate(activeShapeID, newPosition);
+    // 1. Resize
+    if (isResize) {
+      const { movementX, movementY } = event;
+      const newPosition = MathUtils.calculateResize(activeShape, movementX, movementY, resizeControlID);
+
+      shapeUpdate(activeShapeID, newPosition);
+      return;
+    }
+
+    // 2. Moving
+    if (event.buttons && event.buttons === 1) {
+      if (!isDragging) {
+        setDraggingMode(true);
+      }
+      const { movementX, movementY } = event;
+      const newPosition = MathUtils.calculateMoving(activeShape, movementX, movementY);
+
+      shapeUpdate(activeShapeID, newPosition);
+    }
   };
+
+  const onMouseUp = () => {
+    if (!isDragging) {
+      return;
+    }
+
+    setDraggingMode(false);
+    dndComplete(activeShape);
+  };
+
+  // Renders --------------------------------------------------------------------------------------
+  const style = {
+    ...staticPageStyle,
+    minWidth  : width,
+    minHeight : height,
+  };
+
+  const renderBoxes = boxes.map(box => (
+    <Box
+      key={box.id}
+      id={box.id}
+    />
+  ));
 
   return (
     <svg
@@ -105,6 +135,7 @@ const PageSVG = (props) => {
       style={style}
       onClick={onClick}
       onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
     >
       {renderBoxes}
     </svg>
@@ -117,6 +148,7 @@ PageSVG.propTypes = {
   activeShapeIDSet : PropTypes.func.isRequired,
   resizeDataSet    : PropTypes.func.isRequired,
   resizeComplete   : PropTypes.func.isRequired,
+  dndComplete      : PropTypes.func.isRequired,
   shapeUpdate      : PropTypes.func.isRequired,
 
   activeShapeID    : PropTypes.string,
@@ -157,6 +189,7 @@ const mapActions = {
   activeShapeIDSet : appActions.activeShapeIDSet,
   resizeDataSet    : appActions.resizeDataSet,
   resizeComplete   : appActions.resizeComplete,
+  dndComplete      : appActions.dndComplete,
   shapeUpdate      : diagramActions.shapeUpdate,
 };
 

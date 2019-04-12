@@ -39,6 +39,14 @@ class MathUtils {
       height,
     };
   }
+
+  calculateMoving = (shape, movementX, movementY) => {
+
+    return {
+      x: shape.x + movementX,
+      y: shape.y + movementY,
+    };
+  }
 }
 
 export default new MathUtils();
