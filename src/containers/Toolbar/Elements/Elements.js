@@ -15,6 +15,7 @@ const Elements = (props) => {
     activeShapeID,
     isShapeSelected,
     createDataSet,
+    activeShapeIDSet,
     shapeRemove,
   } = props;
 
@@ -23,6 +24,7 @@ const Elements = (props) => {
   };
 
   const onClickCreate = (shapeType) => {
+    activeShapeIDSet('');
     createDataSet({ shapeType });
   };
 
@@ -61,10 +63,11 @@ const Elements = (props) => {
 };
 
 Elements.propTypes = {
-  activeShapeID   : PropTypes.string.isRequired,
-  isShapeSelected : PropTypes.bool.isRequired,
-  createDataSet   : PropTypes.func.isRequired,
-  shapeRemove     : PropTypes.func.isRequired,
+  activeShapeID    : PropTypes.string.isRequired,
+  isShapeSelected  : PropTypes.bool.isRequired,
+  createDataSet    : PropTypes.func.isRequired,
+  activeShapeIDSet : PropTypes.func.isRequired,
+  shapeRemove      : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
@@ -77,8 +80,9 @@ const mapState = (state) => {
 };
 
 const mapActions = {
-  createDataSet : appActions.createDataSet,
-  shapeRemove   : diagramActions.shapeRemove,
+  createDataSet    : appActions.createDataSet,
+  activeShapeIDSet : appActions.activeShapeIDSet,
+  shapeRemove      : diagramActions.shapeRemove,
 };
 
 export default connect(mapState, mapActions)(Elements);

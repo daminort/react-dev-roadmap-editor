@@ -21,7 +21,7 @@ const Layout = ({ width, height, diagramRestore }) => {
   }, []);
 
   return (
-    <Wrapper style={style}>
+    <Wrapper id="page-holder" style={style}>
       <PageSVG width={width} height={height} />
     </Wrapper>
   );

@@ -71,6 +71,7 @@ function* createComplete() {
 
       yield put(diagramActions.shapeContentSet(shape.id, shapeContent));
       yield put(diagramActions.shapeSet(shape.id, shape));
+      yield put(appActions.activeShapeIDSet(shape.id));
     }
 
     yield put(diagramActions.diagramStore());
