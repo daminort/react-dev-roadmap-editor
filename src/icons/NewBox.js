@@ -5,7 +5,7 @@ import Icon from '@daminort/react-feather-icons';
 const NewBox = ({ size }) => {
   return (
     <Icon
-      name="type"
+      name="square"
       size={size}
     />
   );

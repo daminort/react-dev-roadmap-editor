@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '@daminort/react-feather-icons';
 
-const NewLine = ({ size }) => {
+const NewCircle = ({ size }) => {
   return (
     <Icon
-      name="trendingUp"
+      name="circle"
       size={size}
     />
   );
 };
 
-NewLine.propTypes = {
+NewCircle.propTypes = {
   size: PropTypes.number,
 };
 
-NewLine.defaultProps = {
+NewCircle.defaultProps = {
   size: 16,
 };
 
-export default NewLine;
+export default NewCircle;

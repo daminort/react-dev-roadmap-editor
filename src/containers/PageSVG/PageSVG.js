@@ -16,6 +16,8 @@ import {
 import { EVENTS } from '../../constants/machines';
 
 import Box from '../Box';
+import Curve from '../Curve';
+import { curves } from './curves';
 
 const staticPageStyle = {
   display         : 'block',
@@ -67,9 +69,10 @@ class PageSVG extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
-    this.onMouseUp   = this.onMouseUp.bind(this);
+    this.onMouseDown  = this.onMouseDown.bind(this);
+    this.onMouseMove  = this.onMouseMove.bind(this);
+    this.onMouseUp    = this.onMouseUp.bind(this);
+    this.renderCurves = this.renderCurves.bind(this);
 
     this.machine = new PageMachine(props.actions);
   }
@@ -104,6 +107,47 @@ class PageSVG extends PureComponent {
     machine.dispatch(EVENTS.onMouseUp, [event, activeShape]);
   }
 
+  renderCurves() {
+
+    return curves.map(item => {
+      const startX = item.x1;
+      const startY = item.y1;
+      const endX = item.x2;
+      const endY = item.y2;
+      const distanceX = Math.abs(endX - startX);
+      const distanceY = Math.abs(endY - startY);
+
+      const middleX = Math.min(startX, endX) + (distanceX) / 2;
+      const middleY = Math.min(startY, endY) + (distanceY) / 2;
+
+      const isVertical = (distanceY >= distanceX);
+
+      const cpx1 = isVertical ? startX : middleX;
+      const cpx2 = isVertical ? endX : middleX;
+      const cpy1 = isVertical ? middleY : startY;
+      const cpy2 = isVertical ? middleY : endY;
+
+      const shape = {
+        x1: startX,
+        y1: startY,
+        x2: endX,
+        y2: endY,
+        cpx1: cpx1,
+        cpy1: cpy1,
+        cpx2: cpx2,
+        cpy2: cpy2,
+      };
+
+      return (
+        <Curve
+          id={item.id}
+          key={item.id}
+          shape={shape}
+        />
+      );
+    });
+  }
+
   render() {
     const { machine } = this;
     const {
@@ -126,6 +170,8 @@ class PageSVG extends PureComponent {
       />
     ));
 
+    const curves = this.renderCurves();
+
     return (
       <svg
         id="page"
@@ -135,6 +181,7 @@ class PageSVG extends PureComponent {
         onMouseUp={this.onMouseUp}
       >
         {renderBoxes}
+        {curves}
       </svg>
     );
   }

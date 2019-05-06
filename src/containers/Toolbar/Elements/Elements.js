@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ToolbarButton from '../../../components/ToolbarButton';
-import { NewBox, NewLine, Trash } from '../../../icons';
+import { NewBox, NewCircle, NewLine, Trash } from '../../../icons';
 import { TYPES } from '../../../constants/common';
 
 import appActions from '../../../redux/app/actions';
@@ -44,6 +44,13 @@ const Elements = (props) => {
           onClick={() => onClickCreate(TYPES.curve)}
         >
           <NewLine />
+        </ToolbarButton>
+        <ToolbarButton
+          id="newCircle"
+          title="Add new Circle"
+          onClick={() => onClickCreate(TYPES.circle)}
+        >
+          <NewCircle />
         </ToolbarButton>
       </div>
       {isShapeSelected && (
