@@ -9,4 +9,5 @@ export const EVENTS = {
   onMouseDown : 'onMouseDown',
   onMouseUp   : 'onMouseUp',
   onMouseMove : 'onMouseMove',
+  onClickCreate: 'onClickCreate',
 };

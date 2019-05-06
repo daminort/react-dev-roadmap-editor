@@ -13,7 +13,7 @@ import {
   selectResizeData,
   selectIsCreate,
 } from '../../redux/app/selectors';
-import { STATES, EVENTS } from '../../constants/machines';
+import { EVENTS } from '../../constants/machines';
 
 import Box from '../Box';
 
@@ -74,6 +74,15 @@ class PageSVG extends PureComponent {
     this.machine = new PageMachine(props.actions);
   }
 
+  componentDidUpdate(prevProps) {
+    const { machine } = this;
+    const { isCreate } = this.props;
+    if (isCreate && !prevProps.isCreate) {
+      machine.dispatch(EVENTS.onClickCreate);
+      this.forceUpdate();
+    }
+  }
+
   onMouseDown(event) {
     const { machine } = this;
     const { activeShape } = this.props;
@@ -107,7 +116,7 @@ class PageSVG extends PureComponent {
       ...staticPageStyle,
       minWidth  : width,
       minHeight : height,
-      cursor    : (machine.state === STATES.creating) ? 'crosshair' : 'default',
+      cursor    : machine.isCreating() ? 'crosshair' : 'default',
     };
 
     const renderBoxes = boxes.map(box => (

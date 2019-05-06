@@ -1,7 +1,7 @@
-
 import { STATES, EVENTS } from '../../constants/machines';
 import { HTML_IDS, SIZE_CONTROL_IDS } from '../../constants/layout';
 import MathUtils from '../MathUtils';
+import DOMUtils from '../DOMUtils';
 
 class PageMachine {
 
@@ -20,7 +20,7 @@ class PageMachine {
   init() {
     const { actions } = this;
     return {
-      // Calmness: onMouseDown
+      // Calmness: onMouseDown, onClickCreate
       [STATES.calmness]: {
         [EVENTS.onMouseDown]: (event) => {
           const { target } = event;
@@ -31,7 +31,10 @@ class PageMachine {
 
           actions.activeShapeIDSet(id);
           this.setState(STATES.shapeSelected);
-        }
+        },
+        [EVENTS.onClickCreate]: () => {
+          this.setState(STATES.creating);
+        },
       },
       // shapeSelected: onMouseDown, onMouseMove, onMouseUp
       [STATES.shapeSelected]: {
@@ -72,6 +75,9 @@ class PageMachine {
         [EVENTS.onMouseUp]: (event, activeShape) => {
           actions.dndComplete(activeShape);
         },
+        [EVENTS.onClickCreate]: () => {
+          this.setState(STATES.creating);
+        },
       },
       // resizing: onMouseMove, onMouseUp
       [STATES.resizing]: {
@@ -86,6 +92,22 @@ class PageMachine {
           this.setState(STATES.shapeSelected);
         }
       },
+      // creating: onMouseDown
+      [STATES.creating]: {
+        [EVENTS.onMouseDown]: (event) => {
+          const { target } = event;
+          const { id } = target;
+          if (id !== HTML_IDS.page) {
+            return;
+          }
+
+          const { clientX, clientY } = event;
+          const position = DOMUtils.calculateLayoutClickPosition(clientX, clientY);
+
+          actions.createComplete(position);
+          this.setState(STATES.shapeSelected);
+        },
+      }
     };
   }
 
@@ -101,20 +123,11 @@ class PageMachine {
   setState(newState) {
     this.state = newState;
   }
+
+  // Service
+  isCreating() {
+    return (this.state === STATES.creating);
+  }
 };
 
 export default PageMachine;
-
-/*
-Exit from creating mode
-  if (isCreate) {
-    if (id !== 'page') {
-      return;
-    }
-    const { clientX, clientY } = event;
-    const position = DOMUtils.calculateLayoutClickPosition(clientX, clientY);
-
-    createComplete(position);
-    return;
-  }
- */
