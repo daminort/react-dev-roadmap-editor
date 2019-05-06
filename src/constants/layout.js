@@ -11,3 +11,8 @@ export const SIZE_CONTROL_IDS = [
   SIZE_CONTROLS.left,
   SIZE_CONTROLS.right,
 ];
+
+export const HTML_IDS = {
+  ...SIZE_CONTROLS,
+  page: 'page',
+};
