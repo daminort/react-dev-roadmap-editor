@@ -56,6 +56,32 @@ class DiagramUtils {
 
     return radius;
   }
+
+  calculateBezier = (startX, startY, endX, endY) => {
+
+    const distanceX = Math.abs(endX - startX);
+    const distanceY = Math.abs(endY - startY);
+    const middleX   = Math.min(startX, endX) + (distanceX) / 2;
+    const middleY   = Math.min(startY, endY) + (distanceY) / 2;
+
+    const isVertical = (distanceY >= distanceX);
+
+    const cpx1 = isVertical ? startX  : middleX;
+    const cpx2 = isVertical ? endX    : middleX;
+    const cpy1 = isVertical ? middleY : startY;
+    const cpy2 = isVertical ? middleY : endY;
+
+    return {
+      x1   : startX,
+      y1   : startY,
+      x2   : endX,
+      y2   : endY,
+      cpx1 : cpx1,
+      cpy1 : cpy1,
+      cpx2 : cpx2,
+      cpy2 : cpy2,
+    };
+  }
 }
 
 export default new DiagramUtils();
