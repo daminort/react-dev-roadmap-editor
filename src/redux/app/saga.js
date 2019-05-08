@@ -15,7 +15,7 @@ import { selectResizeData, selectCreateData } from './selectors';
 const minCellWH = gridStep * 2;
 
 function selectState(state) {
-  const { App } = state;
+  const { App, Diagram } = state;
   const { activeShapeID } = App;
 
   return {
@@ -23,6 +23,7 @@ function selectState(state) {
     activeShape : selectShape(activeShapeID)(state),
     resizeData  : selectResizeData(state),
     createData  : selectCreateData(state),
+    shapes      : Diagram.shapes,
   };
 }
 
@@ -74,11 +75,32 @@ function* createComplete() {
       yield put(appActions.activeShapeIDSet(shape.id));
     }
 
-    // Curve
-    if (shapeType === TYPES.curve) {
-      console.log('Curve created! :)');
-    }
+    yield put(diagramActions.diagramStore());
+    yield put(appActions.createDataReset());
+  });
+}
 
+function* createCurveComplete() {
+
+  yield takeEvery(appActions.CREATE_CURVE_COMPLETE, function* ({ payload }) {
+
+    const { shapes } = yield select(selectState);
+    const { startShapeID, endShapeID } = payload;
+
+    const startShape = shapes[startShapeID];
+    const endShape   = shapes[endShapeID];
+
+    const distanceVector = MathUtils.calculateDistance(startShape, endShape);
+    const start = MathUtils.determineIntersection(startShape, distanceVector);
+    const end = MathUtils.determineIntersection(endShape, distanceVector);
+
+    start.id = startShapeID;
+    end.id   = endShapeID;
+
+    const curve = DiagramUtils.createCurve(start, end);
+
+    yield put(diagramActions.shapeSet(curve.id, curve));
+    yield put(appActions.activeShapeIDSet(''));
     yield put(diagramActions.diagramStore());
     yield put(appActions.createDataReset());
   });
@@ -107,5 +129,6 @@ export default function* appSaga() {
     fork(resizeComplete),
     fork(dndComplete),
     fork(createComplete),
+    fork(createCurveComplete),
   ]);
 }

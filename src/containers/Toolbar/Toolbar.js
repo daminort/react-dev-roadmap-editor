@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import ToolbarRow from '../../components/ToolbarRow';
 import { selectActiveShapeID } from '../../redux/app/selectors';
+import { selectShape } from '../../redux/diagram/selectors';
 
 import Page from './Page';
 import Elements from './Elements';
@@ -11,19 +12,23 @@ import Colors from './Colors';
 import Alignment from './Alignment';
 import Content from './Content';
 import { Wrapper } from './Toolbar.style';
+import { TYPES } from '../../constants/common';
 
 class Toolbar extends PureComponent {
 
   static propTypes = {
     isShapeSelected : PropTypes.bool.isRequired,
+    isBox           : PropTypes.bool.isRequired,
+    isCircle        : PropTypes.bool.isRequired,
+    isCurve         : PropTypes.bool.isRequired,
   }
 
   render() {
-    const { isShapeSelected } = this.props;
+    const { isShapeSelected, isBox } = this.props;
 
-    const showColors    = (isShapeSelected);
-    const showAlignment = (isShapeSelected);
-    const showContent   = (isShapeSelected);
+    const showColors    = (isShapeSelected && isBox);
+    const showAlignment = (isShapeSelected && isBox);
+    const showContent   = (isShapeSelected && isBox);
 
     return (
       <Wrapper>
@@ -39,10 +44,15 @@ class Toolbar extends PureComponent {
 
 const mapState = (state) => {
   const activeShapeID = selectActiveShapeID(state);
+  const activeShape     = selectShape(activeShapeID)(state) || null;
+  const activeShapeType = (activeShape && activeShape.type);
 
   return {
     activeShapeID,
-    isShapeSelected: Boolean(activeShapeID),
+    isShapeSelected : Boolean(activeShapeID),
+    isBox           : (activeShapeType === TYPES.box),
+    isCircle        : (activeShapeType === TYPES.circle),
+    isCurve         : (activeShapeType === TYPES.curve),
   };
 };
 

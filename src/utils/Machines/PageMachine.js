@@ -35,13 +35,13 @@ class PageMachine {
         },
         [EVENTS.onClickCreate]: (shapeType) => {
           if (shapeType === TYPES.curve) {
-            this.setState(STATES.creatingCurve);
             return;
           }
 
           this.setState(STATES.creating);
         },
       },
+
       // Shape is selected
       [STATES.shapeSelected]: {
         [EVENTS.onMouseDown]: (event, activeShape) => {
@@ -100,6 +100,7 @@ class PageMachine {
           this.setState(STATES.calmness);
         },
       },
+
       // Resizing
       [STATES.resizing]: {
         [EVENTS.onMouseMove]: (event, activeShape, resizeControlID) => {
@@ -118,6 +119,7 @@ class PageMachine {
           //this.setState(STATES.calmness);
         },
       },
+
       // Creating box or circle
       [STATES.creating]: {
         [EVENTS.onMouseDown]: (event) => {
@@ -138,12 +140,21 @@ class PageMachine {
           this.setState(STATES.calmness);
         },
       },
+
       // Creating curve
       [STATES.creatingCurve]: {
-        [EVENTS.onMouseDown]: (event) => {
+        [EVENTS.onMouseDown]: (event, activeShape) => {
           const { target } = event;
           const { id } = target;
-          console.log(id);
+          if (id === activeShape.id) {
+            return;
+          }
+          if (activeShape.type === TYPES.curve) {
+            return;
+          }
+
+          actions.createCurveComplete(activeShape.id, id);
+          this.setState(STATES.calmness);
         },
         [EVENTS.onPressESC]: () => {
           actions.createDataSet({ shapeType: null });

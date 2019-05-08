@@ -17,7 +17,6 @@ import { EVENTS } from '../../constants/machines';
 
 import Box from '../Box';
 import Curve from '../Curve';
-import { curves } from './curves';
 
 const staticPageStyle = {
   display         : 'block',
@@ -38,14 +37,15 @@ class PageSVG extends PureComponent {
     height           : PropTypes.number.isRequired,
 
     actions: PropTypes.shape({
-      activeShapeIDSet : PropTypes.func.isRequired,
-      resizeDataSet    : PropTypes.func.isRequired,
-      resizeComplete   : PropTypes.func.isRequired,
-      dndComplete      : PropTypes.func.isRequired,
-      createDataSet    : PropTypes.func.isRequired,
-      createComplete   : PropTypes.func.isRequired,
-      shapeUpdate      : PropTypes.func.isRequired,
-      shapeRemove      : PropTypes.func.isRequired,
+      activeShapeIDSet    : PropTypes.func.isRequired,
+      resizeDataSet       : PropTypes.func.isRequired,
+      resizeComplete      : PropTypes.func.isRequired,
+      dndComplete         : PropTypes.func.isRequired,
+      createDataSet       : PropTypes.func.isRequired,
+      createComplete      : PropTypes.func.isRequired,
+      createCurveComplete : PropTypes.func.isRequired,
+      shapeUpdate         : PropTypes.func.isRequired,
+      shapeRemove         : PropTypes.func.isRequired,
     }).isRequired,
 
     activeShapeID    : PropTypes.string,
@@ -124,8 +124,6 @@ class PageSVG extends PureComponent {
     const { activeShape } = this.props;
     const { keyCode } = event;
 
-    console.log('PageSVG.js [116]', { keyCode });
-
     // ESC
     if (keyCode === 27) {
       machine.dispatch(EVENTS.onPressESC);
@@ -148,25 +146,14 @@ class PageSVG extends PureComponent {
   }
 
   renderCurves() {
+    const { curves } = this.props;
 
-    return curves.map(item => {
-
-      const shape = {
-        startX : item.x1,
-        startY : item.y1,
-        endX   : item.x2,
-        endY   : item.y2,
-        dashed : item.dashed,
-      };
-
-      return (
-        <Curve
-          id={item.id}
-          key={item.id}
-          shape={shape}
-        />
-      );
-    });
+    return curves.map(curve => (
+      <Curve
+        id={curve.id}
+        key={curve.id}
+      />
+    ));
   }
 
   render() {
@@ -220,14 +207,15 @@ const mapActions = (dispatch) => {
 
   return {
     actions: bindActionCreators({
-      activeShapeIDSet : appActions.activeShapeIDSet,
-      resizeDataSet    : appActions.resizeDataSet,
-      resizeComplete   : appActions.resizeComplete,
-      dndComplete      : appActions.dndComplete,
-      createDataSet    : appActions.createDataSet,
-      createComplete   : appActions.createComplete,
-      shapeUpdate      : diagramActions.shapeUpdate,
-      shapeRemove      : diagramActions.shapeRemove,
+      activeShapeIDSet    : appActions.activeShapeIDSet,
+      resizeDataSet       : appActions.resizeDataSet,
+      resizeComplete      : appActions.resizeComplete,
+      dndComplete         : appActions.dndComplete,
+      createDataSet       : appActions.createDataSet,
+      createComplete      : appActions.createComplete,
+      createCurveComplete : appActions.createCurveComplete,
+      shapeUpdate         : diagramActions.shapeUpdate,
+      shapeRemove         : diagramActions.shapeRemove,
     }, dispatch),
   };
 };

@@ -28,9 +28,10 @@ const Elements = (props) => {
   };
 
   const onClickCreate = (shapeType) => {
-    console.log('Elements.js [31]', { shapeType });
-    activeShapeIDSet('');
     createDataSet({ shapeType });
+    if (shapeType !== TYPES.curve) {
+      activeShapeIDSet('');
+    }
   };
 
   return (

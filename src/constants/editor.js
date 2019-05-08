@@ -11,6 +11,12 @@ export const POSITION = {
   right  : 'right',
 };
 
+export const DIRECTION = {
+  auto       : 'auto',
+  vertical   : 'vertical',
+  horizontal : 'horizontal',
+};
+
 export const PAGE = {
   width  : 830,
   height : 1170,

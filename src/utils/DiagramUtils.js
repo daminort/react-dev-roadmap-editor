@@ -1,7 +1,7 @@
 import { getShapesCount } from '../redux/utils';
 import { THEME } from '../constants/theme';
 import { TYPES } from '../constants/common';
-import { ALIGN } from '../constants/editor';
+import { ALIGN, DIRECTION } from '../constants/editor';
 
 import MathUtils from './MathUtils';
 
@@ -13,9 +13,9 @@ class DiagramUtils {
     this.radiuses = {};
   }
 
-  generateShapeID = () => {
+  generateShapeID = (prefix = 'shape') => {
     const shapesCount = getShapesCount();
-    return `shape-${shapesCount}`;
+    return `${prefix}-${shapesCount}`;
   }
 
   createBox = (x, y) => {
@@ -29,6 +29,21 @@ class DiagramUtils {
       bg       : bg.grey,
       align    : ALIGN.center,
       noBorder : false,
+    };
+  }
+
+  createCurve = (start, end) => {
+    return {
+      id        : this.generateShapeID('curve'),
+      type      : TYPES.curve,
+      startID   : start.id,
+      endID     : end.id,
+      x1        : start.x,
+      y1        : start.y,
+      x2        : end.x,
+      y2        : end.y,
+      dashed    : false,
+      direction : DIRECTION.auto,
     };
   }
 
@@ -57,14 +72,16 @@ class DiagramUtils {
     return radius;
   }
 
-  calculateBezier = (startX, startY, endX, endY) => {
+  calculateBezier = (startX, startY, endX, endY, direction = DIRECTION.auto) => {
 
     const distanceX = Math.abs(endX - startX);
     const distanceY = Math.abs(endY - startY);
     const middleX   = Math.min(startX, endX) + (distanceX) / 2;
     const middleY   = Math.min(startY, endY) + (distanceY) / 2;
 
-    const isVertical = (distanceY >= distanceX);
+    const isVertical = (direction !== DIRECTION.auto)
+      ? (direction === DIRECTION.vertical)
+      : (distanceY >= distanceX);
 
     const cpx1 = isVertical ? startX  : middleX;
     const cpx2 = isVertical ? endX    : middleX;
