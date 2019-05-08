@@ -87,7 +87,6 @@ Box.propTypes = {
 
   isSelected    : PropTypes.bool.isRequired,
   activeControl : PropTypes.string.isRequired,
-  //dndComplete       : PropTypes.func.isRequired,
 };
 
 const mapState = (state, props) => {

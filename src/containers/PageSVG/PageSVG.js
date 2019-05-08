@@ -11,7 +11,7 @@ import {
   selectActiveShapeID,
   selectIsResize,
   selectResizeData,
-  selectIsCreate,
+  selectCreateData,
 } from '../../redux/app/selectors';
 import { EVENTS } from '../../constants/machines';
 
@@ -48,6 +48,7 @@ class PageSVG extends PureComponent {
 
     activeShapeID    : PropTypes.string,
     resizeControlID  : PropTypes.string,
+    createShapeType  : PropTypes.string,
     isResize         : PropTypes.bool,
     isCreate         : PropTypes.bool,
 
@@ -79,9 +80,9 @@ class PageSVG extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { machine } = this;
-    const { isCreate } = this.props;
+    const { isCreate, createShapeType } = this.props;
     if (isCreate && !prevProps.isCreate) {
-      machine.dispatch(EVENTS.onClickCreate);
+      machine.dispatch(EVENTS.onClickCreate, [createShapeType]);
       this.forceUpdate();
     }
   }
@@ -173,6 +174,7 @@ const mapState = (state) => {
   const curves        = selectCurves(state);
   const activeShapeID = selectActiveShapeID(state);
   const resizeData    = selectResizeData(state);
+  const createData    = selectCreateData(state);
 
   return {
     boxes,
@@ -181,7 +183,8 @@ const mapState = (state) => {
     activeShape     : selectShape(activeShapeID)(state),
     isResize        : selectIsResize(state),
     resizeControlID : resizeData.controlID,
-    isCreate        : selectIsCreate(state),
+    isCreate        : Boolean(createData.shapeType),
+    createShapeType : createData.shapeType,
   };
 };
 

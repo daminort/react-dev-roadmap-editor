@@ -1,3 +1,4 @@
+import { TYPES } from '../../constants/common';
 import { STATES, EVENTS } from '../../constants/machines';
 import { HTML_IDS, SIZE_CONTROL_IDS } from '../../constants/layout';
 import MathUtils from '../MathUtils';
@@ -32,7 +33,12 @@ class PageMachine {
           actions.activeShapeIDSet(id);
           this.setState(STATES.shapeSelected);
         },
-        [EVENTS.onClickCreate]: () => {
+        [EVENTS.onClickCreate]: (shapeType) => {
+          if (shapeType === TYPES.curve) {
+            this.setState(STATES.creatingCurve);
+            return;
+          }
+
           this.setState(STATES.creating);
         },
       },
@@ -75,7 +81,12 @@ class PageMachine {
         [EVENTS.onMouseUp]: (event, activeShape) => {
           actions.dndComplete(activeShape);
         },
-        [EVENTS.onClickCreate]: () => {
+        [EVENTS.onClickCreate]: (shapeType) => {
+          if (shapeType === TYPES.curve) {
+            this.setState(STATES.creatingCurve);
+            return;
+          }
+
           this.setState(STATES.creating);
         },
       },
@@ -107,12 +118,20 @@ class PageMachine {
           actions.createComplete(position);
           this.setState(STATES.shapeSelected);
         },
+      },
+      // creating curve: onMouseDown
+      [STATES.creatingCurve]: {
+        [EVENTS.onMouseDown]: (event) => {
+          const { target } = event;
+          const { id } = target;
+          console.log(id);
+        },
       }
     };
   }
 
   dispatch(eventName, ...payload) {
-    const events = this.transitions[this.state];
+    const events = this.transitions[this.state] || {};
     const handler = events[eventName];
 
     if (handler) {

@@ -22,7 +22,9 @@ const initState = {
   },
 
   create: {
-    shapeType: null,
+    shapeType     : null,
+    sourceShapeID : '',
+    targetShapeID : '',
   },
 };
 

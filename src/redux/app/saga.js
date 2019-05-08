@@ -74,6 +74,11 @@ function* createComplete() {
       yield put(appActions.activeShapeIDSet(shape.id));
     }
 
+    // Curve
+    if (shapeType === TYPES.curve) {
+      console.log('Curve created! :)');
+    }
+
     yield put(diagramActions.diagramStore());
     yield put(appActions.createDataReset());
   });
