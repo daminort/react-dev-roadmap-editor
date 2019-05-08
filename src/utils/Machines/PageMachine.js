@@ -21,7 +21,7 @@ class PageMachine {
   init() {
     const { actions } = this;
     return {
-      // Calmness: onMouseDown, onClickCreate
+      // Calmness
       [STATES.calmness]: {
         [EVENTS.onMouseDown]: (event) => {
           const { target } = event;
@@ -42,7 +42,7 @@ class PageMachine {
           this.setState(STATES.creating);
         },
       },
-      // shapeSelected: onMouseDown, onMouseMove, onMouseUp
+      // Shape is selected
       [STATES.shapeSelected]: {
         [EVENTS.onMouseDown]: (event, activeShape) => {
           const { target } = event;
@@ -89,8 +89,18 @@ class PageMachine {
 
           this.setState(STATES.creating);
         },
+        [EVENTS.onPressESC]: () => {
+          actions.activeShapeIDSet('');
+          this.setState(STATES.calmness);
+        },
+        [EVENTS.onPressDelete]: (activeShape) => {
+          // TODO: check shape type and make removing with appropriated curves
+          actions.activeShapeIDSet(''); // first we need to hide all relative controls in toolbar
+          actions.shapeRemove(activeShape.id);
+          this.setState(STATES.calmness);
+        },
       },
-      // resizing: onMouseMove, onMouseUp
+      // Resizing
       [STATES.resizing]: {
         [EVENTS.onMouseMove]: (event, activeShape, resizeControlID) => {
           const { movementX, movementY } = event;
@@ -101,9 +111,14 @@ class PageMachine {
         [EVENTS.onMouseUp]: () => {
           actions.resizeComplete();
           this.setState(STATES.shapeSelected);
-        }
+        },
+        [EVENTS.onPressESC]: () => {
+          // TODO: give back all to initial state before start resize
+          //actions.activeShapeIDSet('');
+          //this.setState(STATES.calmness);
+        },
       },
-      // creating: onMouseDown
+      // Creating box or circle
       [STATES.creating]: {
         [EVENTS.onMouseDown]: (event) => {
           const { target } = event;
@@ -118,13 +133,21 @@ class PageMachine {
           actions.createComplete(position);
           this.setState(STATES.shapeSelected);
         },
+        [EVENTS.onPressESC]: () => {
+          actions.createDataSet({ shapeType: null });
+          this.setState(STATES.calmness);
+        },
       },
-      // creating curve: onMouseDown
+      // Creating curve
       [STATES.creatingCurve]: {
         [EVENTS.onMouseDown]: (event) => {
           const { target } = event;
           const { id } = target;
           console.log(id);
+        },
+        [EVENTS.onPressESC]: () => {
+          actions.createDataSet({ shapeType: null });
+          this.setState(STATES.calmness);
         },
       }
     };
@@ -141,11 +164,6 @@ class PageMachine {
 
   setState(newState) {
     this.state = newState;
-  }
-
-  // Service
-  isCreating() {
-    return (this.state === STATES.creating);
   }
 };
 

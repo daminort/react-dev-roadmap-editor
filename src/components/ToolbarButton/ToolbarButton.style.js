@@ -47,4 +47,12 @@ export const Wrapper = styled.div`
   &.bg-green {
     background-color: ${bg.green};
   }
+  
+  &.disabled {
+    opacity: .5;
+    &:hover {
+      border-color: inherit;
+      color: inherit;
+    }
+  }
 `;

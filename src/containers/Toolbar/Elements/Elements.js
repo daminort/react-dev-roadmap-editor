@@ -9,11 +9,15 @@ import { TYPES } from '../../../constants/common';
 import appActions from '../../../redux/app/actions';
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
+import { selectShape } from '../../../redux/diagram/selectors';
 
 const Elements = (props) => {
   const {
     activeShapeID,
     isShapeSelected,
+    // isBox,
+    // isCircle,
+    isCurve,
     createDataSet,
     activeShapeIDSet,
     shapeRemove,
@@ -24,6 +28,7 @@ const Elements = (props) => {
   };
 
   const onClickCreate = (shapeType) => {
+    console.log('Elements.js [31]', { shapeType });
     activeShapeIDSet('');
     createDataSet({ shapeType });
   };
@@ -40,7 +45,8 @@ const Elements = (props) => {
         </ToolbarButton>
         <ToolbarButton
           id="newCurve"
-          title="Add new Line"
+          title="Concat selected shape with another one"
+          disabled={!isShapeSelected || isCurve}
           onClick={() => onClickCreate(TYPES.curve)}
         >
           <NewLine />
@@ -72,17 +78,25 @@ const Elements = (props) => {
 Elements.propTypes = {
   activeShapeID    : PropTypes.string.isRequired,
   isShapeSelected  : PropTypes.bool.isRequired,
+  isBox            : PropTypes.bool.isRequired,
+  isCircle         : PropTypes.bool.isRequired,
+  isCurve          : PropTypes.bool.isRequired,
   createDataSet    : PropTypes.func.isRequired,
   activeShapeIDSet : PropTypes.func.isRequired,
   shapeRemove      : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
-  const activeShapeID = selectActiveShapeID(state);
+  const activeShapeID   = selectActiveShapeID(state);
+  const activeShape     = selectShape(activeShapeID)(state) || null;
+  const activeShapeType = (activeShape && activeShape.type);
 
   return {
     activeShapeID,
-    isShapeSelected: Boolean(activeShapeID),
+    isShapeSelected : Boolean(activeShapeID),
+    isBox           : (activeShapeType === TYPES.box),
+    isCircle        : (activeShapeType === TYPES.circle),
+    isCurve         : (activeShapeType === TYPES.curve),
   };
 };
 

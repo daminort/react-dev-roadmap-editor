@@ -42,8 +42,10 @@ class PageSVG extends PureComponent {
       resizeDataSet    : PropTypes.func.isRequired,
       resizeComplete   : PropTypes.func.isRequired,
       dndComplete      : PropTypes.func.isRequired,
+      createDataSet    : PropTypes.func.isRequired,
       createComplete   : PropTypes.func.isRequired,
       shapeUpdate      : PropTypes.func.isRequired,
+      shapeRemove      : PropTypes.func.isRequired,
     }).isRequired,
 
     activeShapeID    : PropTypes.string,
@@ -73,9 +75,19 @@ class PageSVG extends PureComponent {
     this.onMouseDown  = this.onMouseDown.bind(this);
     this.onMouseMove  = this.onMouseMove.bind(this);
     this.onMouseUp    = this.onMouseUp.bind(this);
+    this.onKeyDown    = this.onKeyDown.bind(this);
+    this.renderBoxes  = this.renderBoxes.bind(this);
     this.renderCurves = this.renderCurves.bind(this);
 
     this.machine = new PageMachine(props.actions);
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   componentDidUpdate(prevProps) {
@@ -83,7 +95,6 @@ class PageSVG extends PureComponent {
     const { isCreate, createShapeType } = this.props;
     if (isCreate && !prevProps.isCreate) {
       machine.dispatch(EVENTS.onClickCreate, [createShapeType]);
-      this.forceUpdate();
     }
   }
 
@@ -106,6 +117,34 @@ class PageSVG extends PureComponent {
     const { activeShape } = this.props;
 
     machine.dispatch(EVENTS.onMouseUp, [event, activeShape]);
+  }
+
+  onKeyDown(event) {
+    const { machine } = this;
+    const { activeShape } = this.props;
+    const { keyCode } = event;
+
+    console.log('PageSVG.js [116]', { keyCode });
+
+    // ESC
+    if (keyCode === 27) {
+      machine.dispatch(EVENTS.onPressESC);
+
+    // Delete
+    } else if (keyCode === 46) {
+      machine.dispatch(EVENTS.onPressDelete, [activeShape]);
+    }
+  }
+
+  renderBoxes() {
+    const { boxes } = this.props;
+
+    return boxes.map(box => (
+      <Box
+        key={box.id}
+        id={box.id}
+      />
+    ));
   }
 
   renderCurves() {
@@ -131,27 +170,16 @@ class PageSVG extends PureComponent {
   }
 
   render() {
-    const { machine } = this;
-    const {
-      width,
-      height,
-      boxes,
-    } = this.props;
+    const { width, height, isCreate } = this.props;
 
     const style = {
       ...staticPageStyle,
       minWidth  : width,
       minHeight : height,
-      cursor    : machine.isCreating() ? 'crosshair' : 'default',
+      cursor    : isCreate ? 'crosshair' : 'default',
     };
 
-    const renderBoxes = boxes.map(box => (
-      <Box
-        key={box.id}
-        id={box.id}
-      />
-    ));
-
+    const boxes = this.renderBoxes();
     const curves = this.renderCurves();
 
     return (
@@ -162,7 +190,7 @@ class PageSVG extends PureComponent {
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}
       >
-        {renderBoxes}
+        {boxes}
         {curves}
       </svg>
     );
@@ -196,8 +224,10 @@ const mapActions = (dispatch) => {
       resizeDataSet    : appActions.resizeDataSet,
       resizeComplete   : appActions.resizeComplete,
       dndComplete      : appActions.dndComplete,
+      createDataSet    : appActions.createDataSet,
       createComplete   : appActions.createComplete,
       shapeUpdate      : diagramActions.shapeUpdate,
+      shapeRemove      : diagramActions.shapeRemove,
     }, dispatch),
   };
 };

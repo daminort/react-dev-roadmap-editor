@@ -11,4 +11,6 @@ export const EVENTS = {
   onMouseUp     : 'onMouseUp',
   onMouseMove   : 'onMouseMove',
   onClickCreate : 'onClickCreate',
+  onPressESC    : 'onPressESC',
+  onPressDelete : 'onPressDelete',
 };
