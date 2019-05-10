@@ -5,24 +5,21 @@ import { connect } from 'react-redux';
 import DiagramUtils from '../../utils/DiagramUtils';
 import { THEME } from '../../constants/theme';
 import { selectShape } from '../../redux/diagram/selectors';
-// import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
+import { selectActiveShapeID, /*selectResizeData*/ } from '../../redux/app/selectors';
 
-import SizeControls from '../../components/SizeControls';
-
-const colorInert  = THEME.bg.black;
-const colorActive = THEME.bg.blue;
+const colorLine     = THEME.bg.black;
+const colorControls = THEME.sizeControls.inactive;
 
 const Curve = (props) => {
   const {
     id,
     shape,
     isSelected,
-    activeControl,
+    // activeControl,
   } = props;
 
   const { x1, y1, x2, y2, dashed, direction } = shape;
 
-  const strokeColor = isSelected ? colorActive : colorInert;
   const style = {
     cursor: 'pointer',
   };
@@ -30,22 +27,37 @@ const Curve = (props) => {
   const { cpx1, cpy1, cpx2, cpy2 } = bezier;
   const path = `M ${x1} ${y1} C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${x2} ${y2}`;
 
+  const controlCoords = [
+    { x: x1, y: y1 },
+    { x: x2, y: y2 },
+  ];
+
+  const controls = controlCoords.map(item => (
+    <circle
+      key={`control:${item.x}-${item.y}`}
+      cx={item.x}
+      cy={item.y}
+      r={2}
+      stroke={colorControls}
+      fill={colorControls}
+    />
+  ));
+
   return (
     <g transform="translate(0, 0)" id={id}>
       <path
         id={id}
         d={path}
         fill="transparent"
-        stroke={strokeColor}
+        stroke={colorLine}
         strokeDasharray={dashed ? 3 : 0}
         style={style}
         pointerEvents="all"
       />
       {isSelected && (
-        <SizeControls
-          shape={shape}
-          activeControl={activeControl}
-        />
+        <>
+          {controls}
+        </>
       )}
     </g>
   );
@@ -70,11 +82,11 @@ const mapState = (state, props) => {
   const { id } = props;
   const shape         = selectShape(id)(state);
   // const resize        = selectResizeData(state);
-  // const activeShapeID = selectActiveShapeID(state);
+  const activeShapeID = selectActiveShapeID(state);
 
   return {
     shape,
-    isSelected: false, // (id === activeShapeID),
+    isSelected: (id === activeShapeID),
     activeControl: '', // resize.controlID,
   };
 };

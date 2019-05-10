@@ -108,7 +108,7 @@ function* createCurveComplete() {
     const curve = DiagramUtils.createCurve(start, end);
 
     yield put(diagramActions.shapeSet(curve.id, curve));
-    yield put(appActions.activeShapeIDSet(''));
+    yield put(appActions.activeShapeIDSet(endShapeID));
     yield put(diagramActions.diagramStore());
     yield put(appActions.createDataReset());
   });

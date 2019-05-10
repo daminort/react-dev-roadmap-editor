@@ -82,6 +82,75 @@ class MathUtils {
     };
   }
 
+  determineShapeSides = (shape) => {
+    if (this.isCircle(shape)) {
+      const { x, y, radius } = shape;
+      const top = {
+        startX : x - radius,
+        startY : y - radius,
+        endX   : x + radius,
+        endY   : y - radius,
+      };
+      const left = {
+        startX : x - radius,
+        startY : y - radius,
+        endX   : x - radius,
+        endY   : y + radius,
+      };
+      const right = {
+        startX : top.endX,
+        startY : top.endY,
+        endX   : top.endX,
+        endY   : y + radius,
+      };
+      const bottom = {
+        startX : top.startX,
+        startY : left.endY,
+        endX   : top.endX,
+        endY   : right.endY,
+      };
+
+      return {
+        top,
+        left,
+        right,
+        bottom,
+      };
+    }
+
+    const top = {
+      startX : shape.x,
+      startY : shape.y,
+      endX   : shape.x + shape.width,
+      endY   : shape.y,
+    };
+    const left = {
+      startX : shape.x,
+      startY : shape.y,
+      endX   : shape.x,
+      endY   : shape.y + shape.height,
+    };
+    const right = {
+      startX : top.endX,
+      startY : top.endY,
+      endX   : top.endX,
+      endY   : top.endY + shape.height,
+    };
+    const bottom = {
+      startX : top.startX,
+      startY : left.endY,
+      endX   : top.endX,
+      endY   : right.endY,
+    };
+
+    return {
+      top,
+      left,
+      right,
+      bottom,
+    };
+  }
+
   calculateDistance = (startShape, endShape) => {
     const startCentre = this.determineShapeCentre(startShape);
     const endCentre   = this.determineShapeCentre(endShape);
@@ -134,62 +203,26 @@ class MathUtils {
   }
 
   determineIntersection = (shape, vector) => {
-    if (this.isCircle(shape)) {
-      const { radius } = shape;
-      const vectorEndX = vector.startX !== shape.x ? vector.startX : vector.endX;
-      const vectorEndY = vector.startY !== shape.y ? vector.startY : vector.endY;
+    const sides = this.determineShapeSides(shape);
 
-      const phi = Math.atan2(vectorEndY - shape.y, vectorEndX - shape.x);
-
-      return {
-        x: shape.x + radius * Math.cos(phi),
-        y: shape.y + radius * Math.sin(phi),
-      };
-    }
-
-    const vectorTop = {
-      startX : shape.x,
-      startY : shape.y,
-      endX   : shape.x + shape.width,
-      endY   : shape.y,
-    };
-    const vectorLeft = {
-      startX : shape.x,
-      startY : shape.y,
-      endX   : shape.x,
-      endY   : shape.y + shape.height,
-    };
-    const vectorRight = {
-      startX : vectorTop.endX,
-      startY : vectorTop.endY,
-      endX   : vectorTop.endX,
-      endY   : vectorTop.endY + shape.height,
-    };
-    const vectorBottom = {
-      startX : vectorTop.startX,
-      startY : vectorLeft.endY,
-      endX   : vectorTop.endX,
-      endY   : vectorRight.endY,
-    };
-
-    const intersectionTop = this.calculateLineIntersection(vectorTop, vector);
+    const intersectionTop = this.calculateLineIntersection(sides.top, vector);
     if (intersectionTop) {
-      return this.determineLineCenter(vectorTop);
+      return this.determineLineCenter(sides.top);
     }
 
-    const intersectionLeft = this.calculateLineIntersection(vectorLeft, vector);
+    const intersectionLeft = this.calculateLineIntersection(sides.left, vector);
     if (intersectionLeft) {
-      return this.determineLineCenter(vectorLeft);
+      return this.determineLineCenter(sides.left);
     }
 
-    const intersectionRight = this.calculateLineIntersection(vectorRight, vector);
+    const intersectionRight = this.calculateLineIntersection(sides.right, vector);
     if (intersectionRight) {
-      return this.determineLineCenter(vectorRight);
+      return this.determineLineCenter(sides.right);
     }
 
-    const intersectionBottom = this.calculateLineIntersection(vectorBottom, vector);
+    const intersectionBottom = this.calculateLineIntersection(sides.bottom, vector);
     if (intersectionBottom) {
-      return this.determineLineCenter(vectorBottom);
+      return this.determineLineCenter(sides.bottom);
     }
 
     return {

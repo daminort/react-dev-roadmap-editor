@@ -154,7 +154,7 @@ class PageMachine {
           }
 
           actions.createCurveComplete(activeShape.id, id);
-          this.setState(STATES.calmness);
+          this.setState(STATES.shapeSelected);
         },
         [EVENTS.onPressESC]: () => {
           actions.createDataSet({ shapeType: null });
