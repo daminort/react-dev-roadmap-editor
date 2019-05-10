@@ -75,6 +75,14 @@ function* createComplete() {
       yield put(appActions.activeShapeIDSet(shape.id));
     }
 
+    // Circle
+    if (shapeType === TYPES.circle) {
+      const shape = DiagramUtils.createCircle(resX, resY);
+
+      yield put(diagramActions.shapeSet(shape.id, shape));
+      yield put(appActions.activeShapeIDSet(shape.id));
+    }
+
     yield put(diagramActions.diagramStore());
     yield put(appActions.createDataReset());
   });

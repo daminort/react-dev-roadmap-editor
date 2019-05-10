@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import PageMachine from '../../utils/Machines/PageMachine';
 import appActions from '../../redux/app/actions';
 import diagramActions from '../../redux/diagram/actions';
-import { selectBoxes, selectCurves, selectShape } from '../../redux/diagram/selectors';
+import { selectBoxes, selectCurves, selectCircles, selectShape } from '../../redux/diagram/selectors';
 import {
   selectActiveShapeID,
   selectIsResize,
@@ -16,6 +16,7 @@ import {
 import { EVENTS } from '../../constants/machines';
 
 import Box from '../Box';
+import Circle from '../Circle';
 import Curve from '../Curve';
 
 const staticPageStyle = {
@@ -33,6 +34,7 @@ class PageSVG extends PureComponent {
   static propTypes = {
     boxes            : PropTypes.array.isRequired,
     curves           : PropTypes.array.isRequired,
+    circles          : PropTypes.array.isRequired,
     width            : PropTypes.number.isRequired,
     height           : PropTypes.number.isRequired,
 
@@ -72,12 +74,13 @@ class PageSVG extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.onMouseDown  = this.onMouseDown.bind(this);
-    this.onMouseMove  = this.onMouseMove.bind(this);
-    this.onMouseUp    = this.onMouseUp.bind(this);
-    this.onKeyDown    = this.onKeyDown.bind(this);
-    this.renderBoxes  = this.renderBoxes.bind(this);
-    this.renderCurves = this.renderCurves.bind(this);
+    this.onMouseDown   = this.onMouseDown.bind(this);
+    this.onMouseMove   = this.onMouseMove.bind(this);
+    this.onMouseUp     = this.onMouseUp.bind(this);
+    this.onKeyDown     = this.onKeyDown.bind(this);
+    this.renderBoxes   = this.renderBoxes.bind(this);
+    this.renderCircles = this.renderCircles.bind(this);
+    this.renderCurves  = this.renderCurves.bind(this);
 
     this.machine = new PageMachine(props.actions);
   }
@@ -145,6 +148,17 @@ class PageSVG extends PureComponent {
     ));
   }
 
+  renderCircles() {
+    const { circles } = this.props;
+
+    return circles.map(circle => (
+      <Circle
+        key={circle.id}
+        id={circle.id}
+      />
+    ));
+  }
+
   renderCurves() {
     const { curves } = this.props;
 
@@ -166,8 +180,9 @@ class PageSVG extends PureComponent {
       cursor    : isCreate ? 'crosshair' : 'default',
     };
 
-    const boxes = this.renderBoxes();
-    const curves = this.renderCurves();
+    const boxes   = this.renderBoxes();
+    const circles = this.renderCircles();
+    const curves  = this.renderCurves();
 
     return (
       <svg
@@ -178,6 +193,7 @@ class PageSVG extends PureComponent {
         onMouseUp={this.onMouseUp}
       >
         {boxes}
+        {circles}
         {curves}
       </svg>
     );
@@ -186,6 +202,7 @@ class PageSVG extends PureComponent {
 
 const mapState = (state) => {
   const boxes         = selectBoxes(state);
+  const circles       = selectCircles(state);
   const curves        = selectCurves(state);
   const activeShapeID = selectActiveShapeID(state);
   const resizeData    = selectResizeData(state);
@@ -194,6 +211,7 @@ const mapState = (state) => {
   return {
     boxes,
     curves,
+    circles,
     activeShapeID,
     activeShape     : selectShape(activeShapeID)(state),
     isResize        : selectIsResize(state),

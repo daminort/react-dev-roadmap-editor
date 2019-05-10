@@ -32,6 +32,16 @@ class DiagramUtils {
     };
   }
 
+  createCircle = (x, y) => {
+    return {
+      id     : this.generateShapeID(),
+      type   : TYPES.circle,
+      x      : x || 10,
+      y      : y || 10,
+      radius : 10,
+    };
+  }
+
   createCurve = (start, end) => {
     return {
       id        : this.generateShapeID('curve'),

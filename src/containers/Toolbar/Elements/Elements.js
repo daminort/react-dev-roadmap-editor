@@ -15,8 +15,6 @@ const Elements = (props) => {
   const {
     activeShapeID,
     isShapeSelected,
-    // isBox,
-    // isCircle,
     isCurve,
     createDataSet,
     activeShapeIDSet,
@@ -79,8 +77,6 @@ const Elements = (props) => {
 Elements.propTypes = {
   activeShapeID    : PropTypes.string.isRequired,
   isShapeSelected  : PropTypes.bool.isRequired,
-  isBox            : PropTypes.bool.isRequired,
-  isCircle         : PropTypes.bool.isRequired,
   isCurve          : PropTypes.bool.isRequired,
   createDataSet    : PropTypes.func.isRequired,
   activeShapeIDSet : PropTypes.func.isRequired,
@@ -95,8 +91,6 @@ const mapState = (state) => {
   return {
     activeShapeID,
     isShapeSelected : Boolean(activeShapeID),
-    isBox           : (activeShapeType === TYPES.box),
-    isCircle        : (activeShapeType === TYPES.circle),
     isCurve         : (activeShapeType === TYPES.curve),
   };
 };
