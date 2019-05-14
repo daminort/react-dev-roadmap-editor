@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import DiagramUtils from '../../utils/DiagramUtils';
 import { THEME } from '../../constants/theme';
 import { selectShape } from '../../redux/diagram/selectors';
 import { selectActiveShapeID, /*selectResizeData*/ } from '../../redux/app/selectors';
@@ -18,14 +17,12 @@ const Curve = (props) => {
     // activeControl,
   } = props;
 
-  const { x1, y1, x2, y2, dashed, direction } = shape;
+  const { x1, y1, x2, y2, cpx1, cpy1, cpx2, cpy2, dashed } = shape;
 
   const style = { cursor: 'pointer' };
   const color = isSelected ? colorControls : colorLine;
   const thickness = isSelected ? 2 : 1;
 
-  const bezier = DiagramUtils.calculateBezier(x1, y1, x2, y2, direction);
-  const { cpx1, cpy1, cpx2, cpy2 } = bezier;
   const path = `M ${x1} ${y1} C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${x2} ${y2}`;
 
   const controlCoords = [

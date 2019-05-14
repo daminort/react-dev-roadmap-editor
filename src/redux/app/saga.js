@@ -90,12 +90,7 @@ function* createCurveComplete({ payload }) {
   const startShape = shapes[startShapeID];
   const endShape   = shapes[endShapeID];
 
-  const distanceVector = MathUtils.calculateDistance(startShape, endShape);
-  const start = MathUtils.determineIntersection(startShape, distanceVector);
-  const end = MathUtils.determineIntersection(endShape, distanceVector);
-
-  start.id = startShapeID;
-  end.id   = endShapeID;
+  const { start, end } = MathUtils.calculateCurve(startShape, endShape);
 
   const curve = DiagramUtils.createCurve(start, end);
 

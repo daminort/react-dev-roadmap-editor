@@ -10,15 +10,25 @@ const { bg } = THEME;
 class DiagramUtils {
 
   constructor() {
+    this.generateShapeID       = this.generateShapeID.bind(this);
+    this.createBox             = this.createBox.bind(this);
+    this.createCircle          = this.createCircle.bind(this);
+    this.createCurve           = this.createCurve.bind(this);
+    this.createShapeContent    = this.createShapeContent.bind(this);
+
+    this.calculateBorderRadius = this.calculateBorderRadius.bind(this);
+    this.calculateBezier       = this.calculateBezier.bind(this);
+
     this.radiuses = {};
   }
 
-  generateShapeID = (prefix = 'shape') => {
+  generateShapeID(prefix = 'shape') {
     const shapesCount = getShapesCount();
     return `${prefix}-${shapesCount}`;
   }
 
-  createBox = (x, y) => {
+  // Creating shapes -------------------------------------------------------------------------------
+  createBox(x, y) {
     return {
       id       : this.generateShapeID(),
       type     : TYPES.box,
@@ -32,7 +42,7 @@ class DiagramUtils {
     };
   }
 
-  createCircle = (x, y) => {
+  createCircle(x, y) {
     return {
       id     : this.generateShapeID(),
       type   : TYPES.circle,
@@ -42,22 +52,21 @@ class DiagramUtils {
     };
   }
 
-  createCurve = (start, end) => {
+  createCurve(start, end) {
+
+    const bezier = this.calculateBezier(start, end);
+
     return {
-      id        : this.generateShapeID('curve'),
-      type      : TYPES.curve,
-      startID   : start.id,
-      endID     : end.id,
-      x1        : start.x,
-      y1        : start.y,
-      x2        : end.x,
-      y2        : end.y,
-      dashed    : false,
-      direction : DIRECTION.auto,
+      id      : this.generateShapeID('curve'),
+      type    : TYPES.curve,
+      startID : start.id,
+      endID   : end.id,
+      dashed  : false,
+      ...bezier,
     };
   }
 
-  createShapeContent = (id, title = '') => {
+  createShapeContent(id, title = '') {
     return {
       id,
       title : title || id,
@@ -66,7 +75,8 @@ class DiagramUtils {
     };
   }
 
-  calculateBorderRadius = (width, height) => {
+  // Calculations ----------------------------------------------------------------------------------
+  calculateBorderRadius(width, height) {
     const roundedWidth  = MathUtils.roundCoord(width);
     const roundedHeight = MathUtils.roundCoord(height);
     const sidesKey = `${roundedWidth}:${roundedHeight}`;
@@ -82,27 +92,27 @@ class DiagramUtils {
     return radius;
   }
 
-  calculateBezier = (startX, startY, endX, endY, direction = DIRECTION.auto) => {
+  calculateBezier(start, end) {
 
-    const distanceX = Math.abs(endX - startX);
-    const distanceY = Math.abs(endY - startY);
-    const middleX   = Math.min(startX, endX) + (distanceX) / 2;
-    const middleY   = Math.min(startY, endY) + (distanceY) / 2;
+    const distanceX = Math.abs(end.x - start.x);
+    const distanceY = Math.abs(end.y - start.y);
+    const middleX   = Math.min(start.x, end.x) + (distanceX) / 2;
+    const middleY   = Math.min(start.y, end.y) + (distanceY) / 2;
 
-    const isVertical = (direction !== DIRECTION.auto)
-      ? (direction === DIRECTION.vertical)
-      : (distanceY >= distanceX);
+    const isStartVertical = (start.edgeDirection === DIRECTION.horizontal);
+    const isEndVertical   = (end.edgeDirection === DIRECTION.horizontal);
 
-    const cpx1 = isVertical ? startX  : middleX;
-    const cpx2 = isVertical ? endX    : middleX;
-    const cpy1 = isVertical ? middleY : startY;
-    const cpy2 = isVertical ? middleY : endY;
+    const cpx1 = isStartVertical ? start.x : middleX;
+    const cpy1 = isStartVertical ? middleY : start.y;
+
+    const cpx2 = isEndVertical ? end.x   : middleX;
+    const cpy2 = isEndVertical ? middleY : end.y;
 
     return {
-      x1   : startX,
-      y1   : startY,
-      x2   : endX,
-      y2   : endY,
+      x1   : start.x,
+      y1   : start.y,
+      x2   : end.x,
+      y2   : end.y,
       cpx1 : cpx1,
       cpy1 : cpy1,
       cpx2 : cpx2,
