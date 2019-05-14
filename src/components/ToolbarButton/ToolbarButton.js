@@ -1,15 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import { Wrapper } from './ToolbarButton.style';
 
-const ToolbarButton = ({ id, title, className, children, onClick }) => {
+const ToolbarButton = ({ id, title, className, disabled, children, onClick }) => {
+
+  const wrapperClass = classnames(className, {
+    disabled,
+  });
+
+  const onClickHandler = disabled
+    ? () => {}
+    : onClick;
 
   return (
     <Wrapper
       title={title}
-      className={className}
-      onClick={() => onClick(id)}
+      className={wrapperClass}
+      onClick={() => onClickHandler(id)}
     >
       {children}
     </Wrapper>
@@ -24,12 +33,14 @@ ToolbarButton.propTypes = {
   ]),
   title     : PropTypes.string,
   className : PropTypes.string,
+  disabled  : PropTypes.bool,
   onClick   : PropTypes.func,
 };
 
 ToolbarButton.defaultProps = {
   title     : '',
-  className : '',
+  className : null,
+  disabled  : false,
   children  : null,
   onClick   : () => {},
 };

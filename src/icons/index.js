@@ -2,6 +2,7 @@ import AlignCenter from './AlignCenter';
 import AlignLeft from './AlignLeft';
 import AlignRight from './AlignRight';
 import NewBox from './NewBox';
+import NewCircle from './NewCircle';
 import NewLine from './NewLine';
 import Trash from './Trash';
 
@@ -10,6 +11,7 @@ export {
   AlignLeft,
   AlignRight,
   NewBox,
+  NewCircle,
   NewLine,
   Trash,
 };

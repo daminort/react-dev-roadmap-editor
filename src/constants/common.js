@@ -1,6 +1,7 @@
 export const TYPES = {
-  box   : 'box',
-  curve : 'curve',
+  box    : 'box',
+  curve  : 'curve',
+  circle : 'circle',
 };
 
 export const STORAGE_NAMES = {

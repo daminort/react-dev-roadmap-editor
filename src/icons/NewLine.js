@@ -1,13 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '@daminort/react-feather-icons';
 
-const NewLine = ({ size }) => {
+const svgProps = {
+  xmlns   : 'http://www.w3.org/2000/svg',
+  viewBox : '0 0 24 24',
+  fill    : 'none',
+};
+
+const defaultProps = {
+  color     : 'currentColor',
+  thickness : 3,
+  ends      : 'round',
+  joins     : 'round',
+  className : null,
+};
+
+const iconClassName = 'feather feather-curve-new';
+
+const NewLine = ({ size, ...restProps }) => {
+
   return (
-    <Icon
-      name="shuffle"
-      size={size}
-    />
+    <svg
+      {...svgProps}
+      width={size}
+      height={size}
+      stroke={defaultProps.color}
+      strokeWidth={defaultProps.thickness}
+      strokeLinecap={defaultProps.ends}
+      strokeLinejoin={defaultProps.joins}
+      className={iconClassName}
+      {...restProps}
+    >
+      <path d="M 1 23 C 7 7, 17 17, 23 1" />
+    </svg>
   );
 };
 

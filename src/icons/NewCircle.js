@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '@daminort/react-feather-icons';
 
-const NewBox = ({ size }) => {
+const NewCircle = ({ size }) => {
   return (
     <Icon
-      name="square"
+      name="circle"
       size={size}
     />
   );
 };
 
-NewBox.propTypes = {
+NewCircle.propTypes = {
   size: PropTypes.number,
 };
 
-NewBox.defaultProps = {
+NewCircle.defaultProps = {
   size: 16,
 };
 
-export default NewBox;
+export default NewCircle;

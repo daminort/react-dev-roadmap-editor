@@ -49,3 +49,8 @@ export const selectCurves = createSelector(
   [selectShapesList],
   (shapesList) => shapesList.filter(shape => shape.type === TYPES.curve),
 );
+
+export const selectCircles = createSelector(
+  [selectShapesList],
+  (shapesList) => shapesList.filter(shape => shape.type === TYPES.circle),
+);

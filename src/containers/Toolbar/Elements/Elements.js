@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ToolbarButton from '../../../components/ToolbarButton';
-import { NewBox, NewLine, Trash } from '../../../icons';
+import { NewBox, NewCircle, NewLine, Trash } from '../../../icons';
 import { TYPES } from '../../../constants/common';
 
 import appActions from '../../../redux/app/actions';
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
+import { selectShape } from '../../../redux/diagram/selectors';
 
 const Elements = (props) => {
   const {
     activeShapeID,
     isShapeSelected,
+    isCurve,
     createDataSet,
     activeShapeIDSet,
     shapeRemove,
@@ -24,8 +26,10 @@ const Elements = (props) => {
   };
 
   const onClickCreate = (shapeType) => {
-    activeShapeIDSet('');
     createDataSet({ shapeType });
+    if (shapeType !== TYPES.curve) {
+      activeShapeIDSet('');
+    }
   };
 
   return (
@@ -40,10 +44,18 @@ const Elements = (props) => {
         </ToolbarButton>
         <ToolbarButton
           id="newCurve"
-          title="Add new Line"
+          title="Concat selected shape with another one"
+          disabled={!isShapeSelected || isCurve}
           onClick={() => onClickCreate(TYPES.curve)}
         >
           <NewLine />
+        </ToolbarButton>
+        <ToolbarButton
+          id="newCircle"
+          title="Add new Circle"
+          onClick={() => onClickCreate(TYPES.circle)}
+        >
+          <NewCircle />
         </ToolbarButton>
       </div>
       {isShapeSelected && (
@@ -65,17 +77,21 @@ const Elements = (props) => {
 Elements.propTypes = {
   activeShapeID    : PropTypes.string.isRequired,
   isShapeSelected  : PropTypes.bool.isRequired,
+  isCurve          : PropTypes.bool.isRequired,
   createDataSet    : PropTypes.func.isRequired,
   activeShapeIDSet : PropTypes.func.isRequired,
   shapeRemove      : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
-  const activeShapeID = selectActiveShapeID(state);
+  const activeShapeID   = selectActiveShapeID(state);
+  const activeShape     = selectShape(activeShapeID)(state) || null;
+  const activeShapeType = (activeShape && activeShape.type);
 
   return {
     activeShapeID,
-    isShapeSelected: Boolean(activeShapeID),
+    isShapeSelected : Boolean(activeShapeID),
+    isCurve         : (activeShapeType === TYPES.curve),
   };
 };
 
