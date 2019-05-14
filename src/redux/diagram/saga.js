@@ -1,22 +1,29 @@
-import { all, takeEvery, put, call, select } from 'redux-saga/effects';
+import { all, takeEvery, takeLatest, put, call, select } from 'redux-saga/effects';
 
+import { TYPES } from '../../constants/common';
 import {
   shapes as defaultShapes,
   content as defaultContent,
 } from '../../resources';
 
+import MathUtils from '../../utils/MathUtils';
 import LocalStorageUtils from '../../utils/LocalStorageUtils';
 import { cloneDeep, unset } from '../../utils/lodash';
 
 import appActions from '../app/actions';
 import diagramActions from './actions';
-import { selectShapes, selectContent } from './selectors';
+import { rebuildTouchedCurves } from '../generators';
+import { selectShapes, selectContent, selectShape } from './selectors';
 
 function selectState(state) {
+  const { App } = state;
+  const { activeShapeID } = App;
 
   return {
-    shapes  : selectShapes(state),
-    content : selectContent(state),
+    activeShapeID,
+    activeShape : selectShape(activeShapeID)(state),
+    shapes      : selectShapes(state),
+    content     : selectContent(state),
   };
 }
 
@@ -72,6 +79,18 @@ function* shapeRemove({ payload }) {
   yield put(appActions.activeShapeIDSet(''));
 }
 
+function* shapeMove({ payload }) {
+  const { id, movementX, movementY } = payload;
+  const { activeShape } = yield select(selectState);
+
+  const newPosition = MathUtils.calculateMoving(activeShape, movementX, movementY);
+  yield put(diagramActions.shapeUpdate(id, newPosition));
+
+  if (activeShape.type !== TYPES.curve) {
+    yield call(rebuildTouchedCurves, id);
+  }
+}
+
 export default function* diagramSaga() {
   yield all([
     takeEvery(diagramActions.DIAGRAM_STORE, diagramStore),
@@ -79,5 +98,6 @@ export default function* diagramSaga() {
     takeEvery(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
     takeEvery(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),
     takeEvery(diagramActions.SHAPE_REMOVE, shapeRemove),
+    takeLatest(diagramActions.SHAPE_MOVE, shapeMove),
   ]);
 }

@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import invert from 'lodash/invert';
 import isEqual from 'lodash/isEqual';
+import find from 'lodash/find';
 import keys from 'lodash/keys';
 import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
@@ -14,6 +15,7 @@ export {
   get,
   invert,
   isEqual,
+  find,
   keys,
   orderBy,
   sortBy,

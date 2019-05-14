@@ -25,6 +25,7 @@
     "no-console":"off",
     "no-plusplus":"off",
     "no-underscore-dangle":"off",
+    "no-use-before-define": "off",
     "class-methods-use-this":"off",
     "max-len":"off",
     "no-param-reassign":"off",

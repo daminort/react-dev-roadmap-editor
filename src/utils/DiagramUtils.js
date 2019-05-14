@@ -53,7 +53,6 @@ class DiagramUtils {
   }
 
   createCurve(start, end) {
-
     const bezier = this.calculateBezier(start, end);
 
     return {
@@ -72,6 +71,16 @@ class DiagramUtils {
       title : title || id,
       url   : '',
       info  : '',
+    };
+  }
+
+  // Updating existing shapes ----------------------------------------------------------------------
+  updateCurve(curve, start, end) {
+    const bezier = this.calculateBezier(start, end);
+
+    return {
+      ...curve,
+      ...bezier,
     };
   }
 

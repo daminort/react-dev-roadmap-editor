@@ -74,9 +74,7 @@ class PageMachine {
             return;
           }
           const { movementX, movementY } = event;
-          const newPosition = MathUtils.calculateMoving(activeShape, movementX, movementY);
-
-          actions.shapeUpdate(activeShape.id, newPosition);
+          actions.shapeMove(activeShape.id, movementX, movementY);
         },
         [EVENTS.onMouseUp]: (event, activeShape) => {
           actions.dndComplete(activeShape);

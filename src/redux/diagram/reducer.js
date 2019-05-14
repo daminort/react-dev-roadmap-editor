@@ -3,8 +3,12 @@ import { cloneDeep } from '../../utils/lodash';
 import actions from './actions';
 
 const initState = {
-  shapes  : [],
-  content : [],
+  shapes : {
+    // shapeID: { ...shapeBody },
+  },
+  content: {
+    // shapeID: { ...contentBody (only for Boxes) },
+  },
 };
 
 export default function diagramReducer(state = initState, { type, payload }) {

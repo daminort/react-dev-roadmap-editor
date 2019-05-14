@@ -1,4 +1,4 @@
-import { all, takeEvery, put, select } from 'redux-saga/effects';
+import { all, takeEvery, put, select, call } from 'redux-saga/effects';
 
 import MathUtils from '../../utils/MathUtils';
 import DiagramUtils from '../../utils/DiagramUtils';
@@ -9,8 +9,10 @@ import { SIZE_CONTROLS } from '../../constants/layout';
 import diagramActions from '../diagram/actions';
 import appActions from './actions';
 
-import { selectShape } from '../diagram/selectors';
+import { selectShape, selectCurves } from '../diagram/selectors';
 import { selectResizeData, selectCreateData } from './selectors';
+
+import { rebuildTouchedCurves } from '../generators';
 
 const minCellWH = gridStep * 2;
 
@@ -24,6 +26,7 @@ function selectState(state) {
     resizeData  : selectResizeData(state),
     createData  : selectCreateData(state),
     shapes      : Diagram.shapes,
+    curves      : selectCurves(state),
   };
 }
 
@@ -112,6 +115,8 @@ function* dndComplete({ payload }) {
   };
 
   yield put(diagramActions.shapeUpdate(activeShapeID, resPosition));
+  yield call(rebuildTouchedCurves, activeShapeID);
+
   yield put(diagramActions.diagramStore());
 }
 

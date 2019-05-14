@@ -48,6 +48,7 @@ class PageSVG extends PureComponent {
       createCurveComplete : PropTypes.func.isRequired,
       shapeUpdate         : PropTypes.func.isRequired,
       shapeRemove         : PropTypes.func.isRequired,
+      shapeMove           : PropTypes.func.isRequired,
     }).isRequired,
 
     activeShapeID    : PropTypes.string,
@@ -234,6 +235,7 @@ const mapActions = (dispatch) => {
       createCurveComplete : appActions.createCurveComplete,
       shapeUpdate         : diagramActions.shapeUpdate,
       shapeRemove         : diagramActions.shapeRemove,
+      shapeMove           : diagramActions.shapeMove,
     }, dispatch),
   };
 };
