@@ -3,8 +3,9 @@ import { createSelector } from 'reselect';
 import { TYPES } from '../../constants/common';
 import { values, sortBy } from '../../utils/lodash';
 
-const shapes  = (state) => state.Diagram.shapes;
-const content = (state) => state.Diagram.content;
+const shapes       = (state) => state.Diagram.shapes;
+const content      = (state) => state.Diagram.content;
+const downloadData = (state) => state.Diagram.downloadData;
 
 export const selectShapes = createSelector(
   [shapes],
@@ -19,11 +20,6 @@ export const selectShapesList = createSelector(
 export const selectContent = createSelector(
   [content],
   (content) => content,
-);
-
-export const selectDiagramIDs = createSelector(
-  [selectShapes],
-  (shapes) => Object.keys(shapes),
 );
 
 export const selectShape = (id) => {
@@ -53,4 +49,9 @@ export const selectCurves = createSelector(
 export const selectCircles = createSelector(
   [selectShapesList],
   (shapesList) => shapesList.filter(shape => shape.type === TYPES.circle),
+);
+
+export const selectDownloadData = createSelector(
+  [downloadData],
+  (downloadData) => downloadData,
 );

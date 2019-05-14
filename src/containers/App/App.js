@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from '../../redux/store';
 import Layout from '../Layout';
 import Toolbar from '../Toolbar';
+import Hidden from '../Hidden';
 
 import { Wrapper } from './App.style';
 
@@ -18,6 +19,7 @@ class App extends Component {
           <div className="toolbar">
             <Toolbar />
           </div>
+          <Hidden />
         </Wrapper>
       </Provider>
     );

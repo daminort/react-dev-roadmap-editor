@@ -53,7 +53,16 @@ function* diagramDownload() {
     [STORAGE_NAMES.page]    : page,
   };
 
-  yield call(DOMUtils.createDownloadLink, data);
+  yield put(diagramActions.downloadDataUpdate(data));
+}
+
+function* diagramUpload() {
+  yield call(DOMUtils.createUploadInput, diagramActions.diagramUploadComplete);
+}
+
+// Start / Finish operations -----------------------------------------------------------------------
+function* downloadStart() {
+  yield call(DOMUtils.clickDownloadLink);
 }
 
 // Shapes ------------------------------------------------------------------------------------------
@@ -108,6 +117,9 @@ export default function* diagramSaga() {
     takeLatest(diagramActions.DIAGRAM_STORE, diagramStore),
     takeLatest(diagramActions.DIAGRAM_RESTORE, diagramRestore),
     takeLatest(diagramActions.DIAGRAM_DOWNLOAD, diagramDownload),
+    takeLatest(diagramActions.DIAGRAM_UPLOAD, diagramUpload),
+
+    takeLatest(diagramActions.DOWNLOAD_START, downloadStart),
 
     takeLatest(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
     takeLatest(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),

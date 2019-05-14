@@ -1,7 +1,7 @@
 import MathUtils from './MathUtils';
 import { HTML_IDS } from '../constants/layout';
 
-const { downloadLink } = HTML_IDS;
+const { downloadLink, uploadInput } = HTML_IDS;
 
 class DOMUtils {
 
@@ -26,30 +26,34 @@ class DOMUtils {
     };
   }
 
-  createDownloadLink(downloadData) {
-    const linkID = downloadLink;
+  clickDownloadLink() {
+    const link = document.getElementById(downloadLink);
+    if (link) {
+      link.click();
+    }
+  }
+
+  createUploadInput(onFileSelect) {
+    const inputID = uploadInput;
     const holder = document.getElementById('app');
     if (!holder) {
       console.error('Cannot find main application container (id="app")');
       return;
     }
 
-    const jsonData = JSON.stringify(downloadData);
-    const blobData = new Blob([jsonData], { type: 'application/json' });
-    const dataURL  = window.URL.createObjectURL(blobData);
+    let input = holder.querySelector(`input#${inputID}`);
+    if (!input) {
+      input = document.createElement('input');
+      input.id     = inputID;
+      input.name   = inputID;
+      input.type   = 'file';
+      input.accept = 'application/json';
 
-    let a = holder.querySelector(`#${linkID}`);
-    if (!a) {
-      a = document.createElement('a');
-      a.id = linkID;
-      holder.appendChild(a);
+      holder.appendChild(input);
     }
 
-    a.href      = dataURL;
-    a.download  = 'diagram.json';
-    a.innerHTML = 'Download';
-
-    a.click();
+    input.onchange = (e) => onFileSelect(e);
+    input.select();
   }
 }
 

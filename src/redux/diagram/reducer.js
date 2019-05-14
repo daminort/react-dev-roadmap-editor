@@ -9,6 +9,8 @@ const initState = {
   content: {
     // shapeID: { ...contentBody (only for Boxes) },
   },
+
+  downloadData: null,
 };
 
 export default function diagramReducer(state = initState, { type, payload }) {
@@ -81,6 +83,15 @@ export default function diagramReducer(state = initState, { type, payload }) {
         content,
       };
     }
+
+    case actions.DOWNLOAD_DATA_UPDATE: {
+      const { downloadData } = payload;
+      return {
+        ...state,
+        downloadData,
+      };
+    }
+
     default: {
       return state;
     }

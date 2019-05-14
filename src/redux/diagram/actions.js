@@ -2,54 +2,62 @@ import { makeActionCreator } from '../utils';
 
 const prefix = 'Diagram:';
 const TYPES = {
-  DIAGRAM_STORE        : `${prefix}diagramStore`,
-  DIAGRAM_RESTORE      : `${prefix}diagramRestore`,
-  DIAGRAM_UPLOAD       : `${prefix}diagramUpload`,
-  DIAGRAM_DOWNLOAD     : `${prefix}diagramDownload`,
+  DIAGRAM_STORE           : `${prefix}diagramStore`,
+  DIAGRAM_RESTORE         : `${prefix}diagramRestore`,
+  DIAGRAM_DOWNLOAD        : `${prefix}diagramDownload`,
+  DIAGRAM_UPLOAD          : `${prefix}diagramUpload`,
+  DIAGRAM_UPLOAD_COMPLETE : `${prefix}diagramUploadComplete`,
 
-  SHAPES_SET           : `${prefix}shapesSet`,
-  SHAPES_RESET         : `${prefix}shapesReset`,
+  DOWNLOAD_DATA_UPDATE    : `${prefix}downloadDataUpdate`,
+  DOWNLOAD_START          : `${prefix}downloadStart`,
 
-  SHAPE_SET            : `${prefix}shapeSet`,
-  SHAPE_UPDATE         : `${prefix}shapeUpdate`,
-  SHAPE_REMOVE         : `${prefix}shapeRemove`,
-  SHAPE_MOVE           : `${prefix}shapeMove`,
+  SHAPES_SET              : `${prefix}shapesSet`,
+  SHAPES_RESET            : `${prefix}shapesReset`,
 
-  SHAPE_SET_COLOR      : `${prefix}shapeSetColor`,
-  SHAPE_SET_ALIGNMENT  : `${prefix}shapeSetAlignment`,
+  SHAPE_SET               : `${prefix}shapeSet`,
+  SHAPE_UPDATE            : `${prefix}shapeUpdate`,
+  SHAPE_REMOVE            : `${prefix}shapeRemove`,
+  SHAPE_MOVE              : `${prefix}shapeMove`,
 
-  CONTENT_SET          : `${prefix}contentSet`,
-  CONTENT_RESET        : `${prefix}contentReset`,
+  SHAPE_SET_COLOR         : `${prefix}shapeSetColor`,
+  SHAPE_SET_ALIGNMENT     : `${prefix}shapeSetAlignment`,
 
-  SHAPE_CONTENT_SET    : `${prefix}shapeContentSet`,
-  SHAPE_CONTENT_UPDATE : `${prefix}shapeContentUpdate`,
-  SHAPE_CONTENT_REMOVE : `${prefix}shapeContentRemove`,
+  CONTENT_SET             : `${prefix}contentSet`,
+  CONTENT_RESET           : `${prefix}contentReset`,
+
+  SHAPE_CONTENT_SET       : `${prefix}shapeContentSet`,
+  SHAPE_CONTENT_UPDATE    : `${prefix}shapeContentUpdate`,
+  SHAPE_CONTENT_REMOVE    : `${prefix}shapeContentRemove`,
 };
 
 const actions = {
   ...TYPES,
-  diagramStore       : makeActionCreator(TYPES.DIAGRAM_STORE),
-  diagramRestore     : makeActionCreator(TYPES.DIAGRAM_RESTORE),
-  diagramUpload      : makeActionCreator(TYPES.DIAGRAM_UPLOAD),
-  diagramDownload    : makeActionCreator(TYPES.DIAGRAM_DOWNLOAD),
+  diagramStore          : makeActionCreator(TYPES.DIAGRAM_STORE),
+  diagramRestore        : makeActionCreator(TYPES.DIAGRAM_RESTORE),
+  diagramDownload       : makeActionCreator(TYPES.DIAGRAM_DOWNLOAD),
+  diagramUpload         : makeActionCreator(TYPES.DIAGRAM_UPLOAD),
+  diagramUploadComplete : makeActionCreator(TYPES.DIAGRAM_UPLOAD_COMPLETE, 'uploadData'),
 
-  shapesSet          : makeActionCreator(TYPES.SHAPES_SET, 'shapes'),
-  shapesReset        : makeActionCreator(TYPES.SHAPES_RESET),
+  downloadDataUpdate    : makeActionCreator(TYPES.DOWNLOAD_DATA_UPDATE, 'downloadData'),
+  downloadStart         : makeActionCreator(TYPES.DOWNLOAD_START),
 
-  shapeSet           : makeActionCreator(TYPES.SHAPE_SET, 'id', 'shape'),
-  shapeUpdate        : makeActionCreator(TYPES.SHAPE_UPDATE, 'id', 'shape'),
-  shapeRemove        : makeActionCreator(TYPES.SHAPE_REMOVE, 'id'),
-  shapeMove          : makeActionCreator(TYPES.SHAPE_MOVE, 'id', 'movementX', 'movementY'),
+  shapesSet             : makeActionCreator(TYPES.SHAPES_SET, 'shapes'),
+  shapesReset           : makeActionCreator(TYPES.SHAPES_RESET),
 
-  shapeSetColor      : makeActionCreator(TYPES.SHAPE_SET_COLOR, 'id', 'color'),
-  shapeSetAlignment  : makeActionCreator(TYPES.SHAPE_SET_ALIGNMENT, 'id', 'align'),
+  shapeSet              : makeActionCreator(TYPES.SHAPE_SET, 'id', 'shape'),
+  shapeUpdate           : makeActionCreator(TYPES.SHAPE_UPDATE, 'id', 'shape'),
+  shapeRemove           : makeActionCreator(TYPES.SHAPE_REMOVE, 'id'),
+  shapeMove             : makeActionCreator(TYPES.SHAPE_MOVE, 'id', 'movementX', 'movementY'),
 
-  contentSet         : makeActionCreator(TYPES.CONTENT_SET, 'content'),
-  contentReset       : makeActionCreator(TYPES.CONTENT_RESET),
+  shapeSetColor         : makeActionCreator(TYPES.SHAPE_SET_COLOR, 'id', 'color'),
+  shapeSetAlignment     : makeActionCreator(TYPES.SHAPE_SET_ALIGNMENT, 'id', 'align'),
 
-  shapeContentSet    : makeActionCreator(TYPES.SHAPE_CONTENT_SET, 'id', 'shapeContent'),
-  shapeContentUpdate : makeActionCreator(TYPES.SHAPE_CONTENT_UPDATE, 'id', 'shapeContent'),
-  shapeContentRemove : makeActionCreator(TYPES.SHAPE_CONTENT_REMOVE, 'id'),
+  contentSet            : makeActionCreator(TYPES.CONTENT_SET, 'content'),
+  contentReset          : makeActionCreator(TYPES.CONTENT_RESET),
+
+  shapeContentSet       : makeActionCreator(TYPES.SHAPE_CONTENT_SET, 'id', 'shapeContent'),
+  shapeContentUpdate    : makeActionCreator(TYPES.SHAPE_CONTENT_UPDATE, 'id', 'shapeContent'),
+  shapeContentRemove    : makeActionCreator(TYPES.SHAPE_CONTENT_REMOVE, 'id'),
 };
 
 export default actions;
