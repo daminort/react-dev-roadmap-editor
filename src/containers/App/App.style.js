@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { THEME } from '../../constants/theme';
+import { HTML_IDS } from '../../constants/layout';
 
 const { bg, size } = THEME;
+const { downloadLink } = HTML_IDS;
 
 export const Wrapper = styled.div`
   display: flex;
@@ -21,5 +23,14 @@ export const Wrapper = styled.div`
   
   .toolbar {
     width: ${size.toolbar};
+  }
+  
+  a#${downloadLink} {
+  	position: absolute;
+  	top: -100px;
+  	left: -100px;
+  	opacity: 0;
+  	width: 0px;
+  	height: 0px;
   }
 `;

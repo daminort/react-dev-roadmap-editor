@@ -15,4 +15,5 @@ export const SIZE_CONTROL_IDS = [
 export const HTML_IDS = {
   ...SIZE_CONTROLS,
   page: 'page',
+  downloadLink: 'downloadLink',
 };

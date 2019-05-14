@@ -8,6 +8,7 @@ import {
 
 import MathUtils from '../../utils/MathUtils';
 import LocalStorageUtils from '../../utils/LocalStorageUtils';
+import DOMUtils from '../../utils/DOMUtils';
 import { cloneDeep, unset } from '../../utils/lodash';
 
 import appActions from '../app/actions';
@@ -17,10 +18,11 @@ import { selectShapes, selectContent, selectShape } from './selectors';
 
 function selectState(state) {
   const { App } = state;
-  const { activeShapeID } = App;
+  const { activeShapeID, page } = App;
 
   return {
     activeShapeID,
+    page,
     activeShape : selectShape(activeShapeID)(state),
     shapes      : selectShapes(state),
     content     : selectContent(state),
@@ -44,12 +46,14 @@ function* diagramRestore() {
 }
 
 function* diagramDownload() {
-  const { shapes, content } = yield select(selectState);
+  const { shapes, content, page } = yield select(selectState);
   const data = {
-    [STORAGE_NAMES.shapes]: shapes,
-    [STORAGE_NAMES.content]: content,
+    [STORAGE_NAMES.shapes]  : shapes,
+    [STORAGE_NAMES.content] : content,
+    [STORAGE_NAMES.page]    : page,
   };
-  console.log('saga.js [52]:', data);
+
+  yield call(DOMUtils.createDownloadLink, data);
 }
 
 // Shapes ------------------------------------------------------------------------------------------

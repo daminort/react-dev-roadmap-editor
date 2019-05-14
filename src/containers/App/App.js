@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Wrapper>
+        <Wrapper id="app">
           <div className="area">
             <Layout />
           </div>

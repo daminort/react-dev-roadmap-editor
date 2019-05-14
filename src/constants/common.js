@@ -7,4 +7,5 @@ export const TYPES = {
 export const STORAGE_NAMES = {
   shapes  : 'shapes',
   content : 'content',
+  page    : 'page',
 };
