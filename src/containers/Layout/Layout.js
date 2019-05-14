@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import { autoSaveInterval } from '../../config';
 
 import diagramActions from '../../redux/diagram/actions';
 import { selectPageData } from '../../redux/app/selectors';
@@ -9,15 +11,24 @@ import { PAGE } from '../../constants/editor';
 import PageSVG from '../PageSVG';
 import { Wrapper } from './Layout.style';
 
-const Layout = ({ width, height, diagramRestore }) => {
+const Layout = ({ width, height, diagramStore, diagramRestore }) => {
 
   const style = {
     width,
     height,
   };
 
+  const ref = useRef({ interval: null });
+
   useEffect(() => {
     diagramRestore();
+    ref.current.interval = setInterval(() => {
+      diagramStore();
+    }, autoSaveInterval);
+
+    return () => {
+      clearInterval(ref.current.interval);
+    };
   }, []);
 
   return (
@@ -30,6 +41,7 @@ const Layout = ({ width, height, diagramRestore }) => {
 Layout.propTypes = {
   width          : PropTypes.number,
   height         : PropTypes.number,
+  diagramStore   : PropTypes.func.isRequired,
   diagramRestore : PropTypes.func.isRequired,
 };
 
@@ -48,6 +60,7 @@ const mapState = (state) => {
 };
 
 const mapActions = {
+  diagramStore   : diagramActions.diagramStore,
   diagramRestore : diagramActions.diagramRestore,
 };
 

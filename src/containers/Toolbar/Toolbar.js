@@ -6,11 +6,13 @@ import ToolbarRow from '../../components/ToolbarRow';
 import { selectActiveShapeID } from '../../redux/app/selectors';
 import { selectShape } from '../../redux/diagram/selectors';
 
-import Page from './Page';
-import Elements from './Elements';
-import Colors from './Colors';
+import Actions from './Actions';
 import Alignment from './Alignment';
+import Colors from './Colors';
 import Content from './Content';
+import Elements from './Elements';
+import Page from './Page';
+
 import { Wrapper } from './Toolbar.style';
 import { TYPES } from '../../constants/common';
 
@@ -32,6 +34,7 @@ class Toolbar extends PureComponent {
 
     return (
       <Wrapper>
+        <ToolbarRow title="Actions"><Actions /></ToolbarRow>
         <ToolbarRow title="Page"><Page /></ToolbarRow>
         <ToolbarRow title="Elements"><Elements /></ToolbarRow>
         {showColors && (<ToolbarRow title="Colors"><Colors /></ToolbarRow>)}

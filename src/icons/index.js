@@ -4,6 +4,7 @@ import AlignRight from './AlignRight';
 import NewBox from './NewBox';
 import NewCircle from './NewCircle';
 import NewLine from './NewLine';
+import Save from './Save';
 import Trash from './Trash';
 
 export {
@@ -13,5 +14,6 @@ export {
   NewBox,
   NewCircle,
   NewLine,
+  Save,
   Trash,
 };

@@ -50,7 +50,6 @@ function* shapeSetColor({ payload }) {
   };
 
   yield put(diagramActions.shapeUpdate(id, resShape));
-  yield put(diagramActions.diagramStore());
 }
 
 function* shapeSetAlignment({ payload }) {
@@ -59,7 +58,6 @@ function* shapeSetAlignment({ payload }) {
   const resShape = { align };
 
   yield put(diagramActions.shapeUpdate(id, resShape));
-  yield put(diagramActions.diagramStore());
 }
 
 function* shapeRemove({ payload }) {
@@ -75,7 +73,6 @@ function* shapeRemove({ payload }) {
 
   yield put(diagramActions.shapesSet(resShapes));
   yield put(diagramActions.contentSet(resContent));
-  yield put(diagramActions.diagramStore());
   yield put(appActions.activeShapeIDSet(''));
 }
 

@@ -49,7 +49,6 @@ function* resizeComplete() {
   };
 
   yield put(diagramActions.shapeUpdate(activeShapeID, resShape));
-  yield put(diagramActions.diagramStore());
   yield put(appActions.resizeDataReset());
 }
 
@@ -81,7 +80,6 @@ function* createComplete({ payload }) {
     yield put(appActions.activeShapeIDSet(shape.id));
   }
 
-  yield put(diagramActions.diagramStore());
   yield put(appActions.createDataReset());
 }
 
@@ -99,7 +97,6 @@ function* createCurveComplete({ payload }) {
 
   yield put(diagramActions.shapeSet(curve.id, curve));
   yield put(appActions.activeShapeIDSet(endShapeID));
-  yield put(diagramActions.diagramStore());
   yield put(appActions.createDataReset());
 }
 
@@ -116,8 +113,6 @@ function* dndComplete({ payload }) {
 
   yield put(diagramActions.shapeUpdate(activeShapeID, resPosition));
   yield call(rebuildTouchedCurves, activeShapeID);
-
-  yield put(diagramActions.diagramStore());
 }
 
 export default function* appSaga() {
