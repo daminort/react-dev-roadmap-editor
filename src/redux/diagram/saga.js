@@ -1,6 +1,6 @@
-import { all, takeEvery, takeLatest, put, call, select } from 'redux-saga/effects';
+import { all, takeLatest, put, call, select } from 'redux-saga/effects';
 
-import { TYPES } from '../../constants/common';
+import { TYPES, STORAGE_NAMES } from '../../constants/common';
 import {
   shapes as defaultShapes,
   content as defaultContent,
@@ -27,6 +27,7 @@ function selectState(state) {
   };
 }
 
+// Diagram -----------------------------------------------------------------------------------------
 function* diagramStore() {
   const { shapes, content } = yield select(selectState);
   yield call(LocalStorageUtils.storeDiagram, shapes, content);
@@ -42,6 +43,16 @@ function* diagramRestore() {
   yield put(diagramActions.shapesSet(shapes));
 }
 
+function* diagramDownload() {
+  const { shapes, content } = yield select(selectState);
+  const data = {
+    [STORAGE_NAMES.shapes]: shapes,
+    [STORAGE_NAMES.content]: content,
+  };
+  console.log('saga.js [52]:', data);
+}
+
+// Shapes ------------------------------------------------------------------------------------------
 function* shapeSetColor({ payload }) {
 
   const { id, color } = payload;
@@ -90,11 +101,13 @@ function* shapeMove({ payload }) {
 
 export default function* diagramSaga() {
   yield all([
-    takeEvery(diagramActions.DIAGRAM_STORE, diagramStore),
-    takeEvery(diagramActions.DIAGRAM_RESTORE, diagramRestore),
-    takeEvery(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
-    takeEvery(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),
-    takeEvery(diagramActions.SHAPE_REMOVE, shapeRemove),
+    takeLatest(diagramActions.DIAGRAM_STORE, diagramStore),
+    takeLatest(diagramActions.DIAGRAM_RESTORE, diagramRestore),
+    takeLatest(diagramActions.DIAGRAM_DOWNLOAD, diagramDownload),
+
+    takeLatest(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
+    takeLatest(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),
+    takeLatest(diagramActions.SHAPE_REMOVE, shapeRemove),
     takeLatest(diagramActions.SHAPE_MOVE, shapeMove),
   ]);
 }

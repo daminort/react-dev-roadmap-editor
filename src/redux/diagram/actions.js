@@ -4,6 +4,8 @@ const prefix = 'Diagram:';
 const TYPES = {
   DIAGRAM_STORE        : `${prefix}diagramStore`,
   DIAGRAM_RESTORE      : `${prefix}diagramRestore`,
+  DIAGRAM_UPLOAD       : `${prefix}diagramUpload`,
+  DIAGRAM_DOWNLOAD     : `${prefix}diagramDownload`,
 
   SHAPES_SET           : `${prefix}shapesSet`,
   SHAPES_RESET         : `${prefix}shapesReset`,
@@ -28,6 +30,8 @@ const actions = {
   ...TYPES,
   diagramStore       : makeActionCreator(TYPES.DIAGRAM_STORE),
   diagramRestore     : makeActionCreator(TYPES.DIAGRAM_RESTORE),
+  diagramUpload      : makeActionCreator(TYPES.DIAGRAM_UPLOAD),
+  diagramDownload    : makeActionCreator(TYPES.DIAGRAM_DOWNLOAD),
 
   shapesSet          : makeActionCreator(TYPES.SHAPES_SET, 'shapes'),
   shapesReset        : makeActionCreator(TYPES.SHAPES_RESET),
