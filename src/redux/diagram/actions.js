@@ -1,6 +1,6 @@
 import { makeActionCreator } from '../utils';
 
-const prefix = 'Diagram:';
+const prefix = 'Diagram: ';
 const TYPES = {
   DIAGRAM_STORE           : `${prefix}diagramStore`,
   DIAGRAM_RESTORE         : `${prefix}diagramRestore`,
@@ -10,6 +10,9 @@ const TYPES = {
 
   DOWNLOAD_DATA_UPDATE    : `${prefix}downloadDataUpdate`,
   DOWNLOAD_START          : `${prefix}downloadStart`,
+
+  UPLOAD_FILE_SELECT      : `${prefix}uploadFileSelect`,
+  UPLOAD_START            : `${prefix}uploadStart`,
 
   SHAPES_SET              : `${prefix}shapesSet`,
   SHAPES_RESET            : `${prefix}shapesReset`,
@@ -40,6 +43,9 @@ const actions = {
 
   downloadDataUpdate    : makeActionCreator(TYPES.DOWNLOAD_DATA_UPDATE, 'downloadData'),
   downloadStart         : makeActionCreator(TYPES.DOWNLOAD_START),
+
+  uploadFileSelect      : makeActionCreator(TYPES.UPLOAD_FILE_SELECT),
+  uploadStart           : makeActionCreator(TYPES.UPLOAD_START, 'file'),
 
   shapesSet             : makeActionCreator(TYPES.SHAPES_SET, 'shapes'),
   shapesReset           : makeActionCreator(TYPES.SHAPES_RESET),

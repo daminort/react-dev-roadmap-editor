@@ -13,7 +13,7 @@ import { cloneDeep, unset } from '../../utils/lodash';
 
 import appActions from '../app/actions';
 import diagramActions from './actions';
-import { rebuildTouchedCurves } from '../generators';
+import { rebuildTouchedCurves, readUploadedFile } from '../generators';
 import { selectShapes, selectContent, selectShape } from './selectors';
 
 function selectState(state) {
@@ -56,13 +56,33 @@ function* diagramDownload() {
   yield put(diagramActions.downloadDataUpdate(data));
 }
 
-function* diagramUpload() {
-  yield call(DOMUtils.createUploadInput, diagramActions.diagramUploadComplete);
-}
-
 // Start / Finish operations -----------------------------------------------------------------------
 function* downloadStart() {
   yield call(DOMUtils.clickDownloadLink);
+}
+
+function* uploadFileSelect() {
+  yield call(DOMUtils.clickUploadInput);
+}
+
+function* uploadStart({ payload }) {
+  const { file } = payload;
+  if (!file) {
+    return;
+  }
+  try {
+    const data    = yield call(readUploadedFile, file);
+    const shapes  = data[STORAGE_NAMES.shapes];
+    const content = data[STORAGE_NAMES.content];
+    const page    = data[STORAGE_NAMES.page];
+
+    yield put(appActions.pageDataSet(page));
+    yield put(diagramActions.contentSet(content));
+    yield put(diagramActions.shapesSet(shapes));
+    
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 // Shapes ------------------------------------------------------------------------------------------
@@ -117,9 +137,10 @@ export default function* diagramSaga() {
     takeLatest(diagramActions.DIAGRAM_STORE, diagramStore),
     takeLatest(diagramActions.DIAGRAM_RESTORE, diagramRestore),
     takeLatest(diagramActions.DIAGRAM_DOWNLOAD, diagramDownload),
-    takeLatest(diagramActions.DIAGRAM_UPLOAD, diagramUpload),
 
     takeLatest(diagramActions.DOWNLOAD_START, downloadStart),
+    takeLatest(diagramActions.UPLOAD_FILE_SELECT, uploadFileSelect),
+    takeLatest(diagramActions.UPLOAD_START, uploadStart),
 
     takeLatest(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
     takeLatest(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),

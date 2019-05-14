@@ -6,8 +6,6 @@ import DiagramUtils from '../utils/DiagramUtils';
 import diagramActions from './diagram/actions';
 import { selectShapes, selectCurves } from './diagram/selectors';
 
-// let timeoutRef = null;
-
 function selectState(state) {
 
   return {
@@ -35,6 +33,24 @@ export function* rebuildTouchedCurves(activeShapeID) {
 
     yield put(diagramActions.shapeSet(resCurve.id, resCurve));
   }
+}
+
+export function readUploadedFile(file) {
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        resolve(data);
+
+      } catch (e) {
+        reject(e);
+      }
+    };
+
+    reader.readAsText(file);
+  });
 }
 
 /*

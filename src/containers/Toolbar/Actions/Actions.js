@@ -7,7 +7,7 @@ import { Save, Upload, Download } from '../../../icons';
 
 import diagramActions from '../../../redux/diagram/actions';
 
-const Actions = ({ diagramStore, diagramUpload, diagramDownload }) => {
+const Actions = ({ diagramStore, diagramUpload, diagramDownload, uploadFileSelect }) => {
 
   return (
     <div className="left-right">
@@ -29,7 +29,7 @@ const Actions = ({ diagramStore, diagramUpload, diagramDownload }) => {
         <ToolbarButton
           id="actionUpload"
           title="Upload Diagram"
-          onClick={() => diagramUpload()}
+          onClick={() => uploadFileSelect()}
         >
           <Upload />
         </ToolbarButton>
@@ -39,15 +39,17 @@ const Actions = ({ diagramStore, diagramUpload, diagramDownload }) => {
 };
 
 Actions.propTypes = {
-  diagramStore    : PropTypes.func.isRequired,
-  diagramUpload   : PropTypes.func.isRequired,
-  diagramDownload : PropTypes.func.isRequired,
+  diagramStore     : PropTypes.func.isRequired,
+  diagramUpload    : PropTypes.func.isRequired,
+  diagramDownload  : PropTypes.func.isRequired,
+  uploadFileSelect : PropTypes.func.isRequired,
 };
 
 const mapActions = {
-  diagramStore    : diagramActions.diagramStore,
-  diagramUpload   : diagramActions.diagramUpload,
-  diagramDownload : diagramActions.diagramDownload,
+  diagramStore     : diagramActions.diagramStore,
+  diagramUpload    : diagramActions.diagramUpload,
+  diagramDownload  : diagramActions.diagramDownload,
+  uploadFileSelect : diagramActions.uploadFileSelect,
 };
 
 export default connect(null, mapActions)(Actions);

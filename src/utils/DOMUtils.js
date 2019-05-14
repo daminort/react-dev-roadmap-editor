@@ -33,27 +33,11 @@ class DOMUtils {
     }
   }
 
-  createUploadInput(onFileSelect) {
-    const inputID = uploadInput;
-    const holder = document.getElementById('app');
-    if (!holder) {
-      console.error('Cannot find main application container (id="app")');
-      return;
+  clickUploadInput() {
+    const input = document.getElementById(uploadInput);
+    if (input) {
+      input.click();
     }
-
-    let input = holder.querySelector(`input#${inputID}`);
-    if (!input) {
-      input = document.createElement('input');
-      input.id     = inputID;
-      input.name   = inputID;
-      input.type   = 'file';
-      input.accept = 'application/json';
-
-      holder.appendChild(input);
-    }
-
-    input.onchange = (e) => onFileSelect(e);
-    input.select();
   }
 }
 

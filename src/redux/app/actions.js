@@ -1,6 +1,6 @@
 import { makeActionCreator } from '../utils';
 
-const prefix = 'App:';
+const prefix = 'App: ';
 const TYPES = {
   LOADING_SET           : `${prefix}loadingSet`,
   ACTIVE_SHAPE_ID_SET   : `${prefix}activeShapeIDSet`,
