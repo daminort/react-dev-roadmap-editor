@@ -20,9 +20,10 @@ const Curve = (props) => {
 
   const { x1, y1, x2, y2, dashed, direction } = shape;
 
-  const style = {
-    cursor: 'pointer',
-  };
+  const style = { cursor: 'pointer' };
+  const color = isSelected ? colorControls : colorLine;
+  const thickness = isSelected ? 2 : 1;
+
   const bezier = DiagramUtils.calculateBezier(x1, y1, x2, y2, direction);
   const { cpx1, cpy1, cpx2, cpy2 } = bezier;
   const path = `M ${x1} ${y1} C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${x2} ${y2}`;
@@ -49,8 +50,9 @@ const Curve = (props) => {
         id={id}
         d={path}
         fill="transparent"
-        stroke={colorLine}
+        stroke={color}
         strokeDasharray={dashed ? 3 : 0}
+        strokeWidth={thickness}
         style={style}
         pointerEvents="all"
       />

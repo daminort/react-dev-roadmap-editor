@@ -1,4 +1,4 @@
-import { all, takeEvery, put, call, fork, select } from 'redux-saga/effects';
+import { all, takeEvery, put, call, select } from 'redux-saga/effects';
 
 import {
   shapes as defaultShapes,
@@ -21,78 +21,63 @@ function selectState(state) {
 }
 
 function* diagramStore() {
-
-  yield takeEvery(diagramActions.DIAGRAM_STORE, function* () {
-    const { shapes, content } = yield select(selectState);
-    yield call(LocalStorageUtils.storeDiagram, shapes, content);
-  });
+  const { shapes, content } = yield select(selectState);
+  yield call(LocalStorageUtils.storeDiagram, shapes, content);
 }
 
 function* diagramRestore() {
 
-  yield takeEvery(diagramActions.DIAGRAM_RESTORE, function* () {
+  const diagram = yield call(LocalStorageUtils.restoreDiagram);
+  const shapes  = diagram ? diagram.shapes  : defaultShapes;
+  const content = diagram ? diagram.content : defaultContent;
 
-    const diagram = yield call(LocalStorageUtils.restoreDiagram);
-    const shapes  = diagram ? diagram.shapes  : defaultShapes;
-    const content = diagram ? diagram.content : defaultContent;
-
-    yield put(diagramActions.contentSet(content));
-    yield put(diagramActions.shapesSet(shapes));
-  });
+  yield put(diagramActions.contentSet(content));
+  yield put(diagramActions.shapesSet(shapes));
 }
 
-function* shapeSetColor() {
+function* shapeSetColor({ payload }) {
 
-  yield takeEvery(diagramActions.SHAPE_SET_COLOR, function* ({ payload }) {
+  const { id, color } = payload;
+  const resShape = {
+    bg: color,
+  };
 
-    const { id, color } = payload;
-    const resShape = {
-      bg: color,
-    };
-
-    yield put(diagramActions.shapeUpdate(id, resShape));
-    yield put(diagramActions.diagramStore());
-  });
+  yield put(diagramActions.shapeUpdate(id, resShape));
+  yield put(diagramActions.diagramStore());
 }
 
-function* shapeSetAlignment() {
+function* shapeSetAlignment({ payload }) {
 
-  yield takeEvery(diagramActions.SHAPE_SET_ALIGNMENT, function* ({ payload }) {
+  const { id, align } = payload;
+  const resShape = { align };
 
-    const { id, align } = payload;
-    const resShape = { align };
-
-    yield put(diagramActions.shapeUpdate(id, resShape));
-    yield put(diagramActions.diagramStore());
-  });
+  yield put(diagramActions.shapeUpdate(id, resShape));
+  yield put(diagramActions.diagramStore());
 }
 
-function* shapeRemove() {
+function* shapeRemove({ payload }) {
 
-  yield takeEvery(diagramActions.SHAPE_REMOVE, function* ({ payload }) {
+  const { id } = payload;
+  const { shapes, content } = yield select(selectState);
 
-    const { id } = payload;
-    const { shapes, content } = yield select(selectState);
+  const resShapes  = cloneDeep(shapes);
+  const resContent = cloneDeep(content);
 
-    const resShapes  = cloneDeep(shapes);
-    const resContent = cloneDeep(content);
+  unset(resShapes, id);
+  unset(resContent, id);
 
-    unset(resShapes, id);
-    unset(resContent, id);
-
-    yield put(diagramActions.shapesSet(resShapes));
-    yield put(diagramActions.contentSet(resContent));
-    yield put(diagramActions.diagramStore());
-    yield put(appActions.activeShapeIDSet(''));
-  });
+  yield put(diagramActions.shapesSet(resShapes));
+  yield put(diagramActions.contentSet(resContent));
+  yield put(diagramActions.diagramStore());
+  yield put(appActions.activeShapeIDSet(''));
 }
 
 export default function* diagramSaga() {
   yield all([
-    fork(diagramStore),
-    fork(diagramRestore),
-    fork(shapeSetColor),
-    fork(shapeSetAlignment),
-    fork(shapeRemove),
+    takeEvery(diagramActions.DIAGRAM_STORE, diagramStore),
+    takeEvery(diagramActions.DIAGRAM_RESTORE, diagramRestore),
+    takeEvery(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
+    takeEvery(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),
+    takeEvery(diagramActions.SHAPE_REMOVE, shapeRemove),
   ]);
 }

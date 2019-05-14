@@ -1,11 +1,10 @@
 import CommonUtils from '../../utils/CommonUtils';
 import { cloneDeep } from '../../utils/lodash';
-import { shapes, content } from '../../resources';
 import actions from './actions';
 
 const initState = {
-  shapes,
-  content,
+  shapes  : [],
+  content : [],
 };
 
 export default function diagramReducer(state = initState, { type, payload }) {
