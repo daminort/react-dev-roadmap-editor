@@ -10,9 +10,14 @@ const lineProps = {
   stroke: commonProps.stroke,
 };
 
-const Line = ({ size, dashed, ...restProps }) => {
+const Line = ({ size, dotted, dashed, ...restProps }) => {
 
-  const strokeDasharray = dashed ? 6 : 0;
+  let strokeDasharray = 0;
+  if (dotted || dashed) {
+    strokeDasharray = dotted ? 4 : 6;
+  }
+
+  const strokeWidth = dotted ? 1 : 3;
 
   return (
     <svg
@@ -20,7 +25,7 @@ const Line = ({ size, dashed, ...restProps }) => {
       {...commonProps}
       width={size}
       height={size}
-      strokeWidth={3}
+      strokeWidth={strokeWidth}
       {...restProps}
     >
       <line {...lineProps} strokeDasharray={strokeDasharray} />
@@ -30,11 +35,13 @@ const Line = ({ size, dashed, ...restProps }) => {
 
 Line.propTypes = {
   size   : PropTypes.number,
+  dotted : PropTypes.bool,
   dashed : PropTypes.bool,
 };
 
 Line.defaultProps = {
   size   : 16,
+  dotted : false,
   dashed : false,
 };
 

@@ -60,7 +60,7 @@ const actions = {
   shapeSetColor         : makeActionCreator(TYPES.SHAPE_SET_COLOR, 'id', 'color'),
   shapeSetAlignment     : makeActionCreator(TYPES.SHAPE_SET_ALIGNMENT, 'id', 'align'),
   shapeSetDashed        : makeActionCreator(TYPES.SHAPE_SET_DASHED, 'id', 'dashed'),
-  shapeSetNoBorder      : makeActionCreator(TYPES.SHAPE_SET_DASHED, 'id', 'noBorder'),
+  shapeSetNoBorder      : makeActionCreator(TYPES.SHAPE_SET_NO_BORDER, 'id', 'noBorder'),
 
   contentSet            : makeActionCreator(TYPES.CONTENT_SET, 'content'),
   contentReset          : makeActionCreator(TYPES.CONTENT_RESET),

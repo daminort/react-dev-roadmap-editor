@@ -3,6 +3,7 @@ import AlignLeft from './AlignLeft';
 import AlignRight from './AlignRight';
 import Download from './Download';
 import LineDashed from './LineDashed';
+import LineDotted from './LineDotted';
 import LineSolid from './LineSolid';
 import NewBox from './NewBox';
 import NewCircle from './NewCircle';
@@ -17,6 +18,7 @@ export {
   AlignRight,
   Download,
   LineDashed,
+  LineDotted,
   LineSolid,
   NewBox,
   NewCircle,

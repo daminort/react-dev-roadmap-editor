@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ToolbarButton from '../../../components/ToolbarButton';
-import { AlignCenter, AlignLeft, AlignRight, LineDashed, LineSolid } from '../../../icons';
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  LineDashed,
+  LineDotted,
+  LineSolid,
+} from '../../../icons';
 
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
@@ -16,7 +23,7 @@ const Alignments = (props) => {
     isCurve,
     shapeSetAlignment,
     shapeSetDashed,
-    //shapeSetNoBorder,
+    shapeSetNoBorder,
   } = props;
 
   const onClickAlign = (id) => {
@@ -27,8 +34,13 @@ const Alignments = (props) => {
     shapeSetDashed(activeShapeID, dashed);
   };
 
+  const onClickBorder = (noBorder) => {
+    shapeSetNoBorder(activeShapeID, noBorder);
+  };
+
   const showAlignment = isBox;
   const showLines     = isCurve;
+  const showBorders   = isBox;
 
   return (
     <div className="left-right">
@@ -58,21 +70,39 @@ const Alignments = (props) => {
             </ToolbarButton>
           </>
         )}
+        {showBorders && (
+          <>
+            <ToolbarButton
+              id="borderSolid"
+              title="Border: Solid"
+              onClick={() => onClickBorder(false)}
+            >
+              <LineSolid />
+            </ToolbarButton>
+            <ToolbarButton
+              id="borderNo"
+              title="Border: No"
+              onClick={() => onClickBorder(true)}
+            >
+              <LineDotted />
+            </ToolbarButton>
+          </>
+        )}
         {showLines && (
           <>
             <ToolbarButton
-              id="lineDashed"
-              title="Line: dashed"
-              onClick={() => onClickLine(true)}
-            >
-              <LineDashed />
-            </ToolbarButton>
-            <ToolbarButton
               id="lineSolid"
-              title="Line: solid"
+              title="Line: Solid"
               onClick={() => onClickLine(false)}
             >
               <LineSolid />
+            </ToolbarButton>
+            <ToolbarButton
+              id="lineDashed"
+              title="Line: Dashed"
+              onClick={() => onClickLine(true)}
+            >
+              <LineDashed />
             </ToolbarButton>
           </>
         )}

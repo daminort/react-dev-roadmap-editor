@@ -21,13 +21,19 @@ const Box = (props) => {
     activeControl,
   } = props;
 
-  const { x, y, width, height, bg } = shape;
+  const { x, y, width, height, bg, noBorder } = shape;
   const { title } = shapeContent;
 
-  const radius      = DiagramUtils.calculateBorderRadius(width, height);
-  const textX       = x + width / 2;
-  const textY       = y + height / 2;
-  const strokeColor = isSelected ? colorActive : colorInert;
+  const radius       = DiagramUtils.calculateBorderRadius(width, height);
+  const textX        = x + width / 2;
+  const textY        = y + height / 2;
+  const strokeColor  = isSelected ? colorActive : colorInert;
+
+  let strokeWidth = 1;
+  if (noBorder && !isSelected) {
+    strokeWidth = 0;
+  }
+
   const style = {
     cursor: isSelected ? 'pointer' : 'default',
   };
@@ -42,6 +48,7 @@ const Box = (props) => {
         height={height}
         fill={bg}
         stroke={strokeColor}
+        strokeWidth={strokeWidth}
         rx={radius}
         ry={radius}
         style={style}
