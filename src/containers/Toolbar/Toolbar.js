@@ -7,7 +7,7 @@ import { selectActiveShapeID } from '../../redux/app/selectors';
 import { selectShape } from '../../redux/diagram/selectors';
 
 import Actions from './Actions';
-import Alignment from './Alignment';
+import Appearance from './Appearance';
 import Colors from './Colors';
 import Content from './Content';
 import Elements from './Elements';
@@ -26,11 +26,11 @@ class Toolbar extends PureComponent {
   }
 
   render() {
-    const { isShapeSelected, isBox } = this.props;
+    const { isShapeSelected, isBox, isCurve } = this.props;
 
-    const showColors    = (isShapeSelected && isBox);
-    const showAlignment = (isShapeSelected && isBox);
-    const showContent   = (isShapeSelected && isBox);
+    const showColors     = (isShapeSelected && isBox);
+    const showAppearance = (isShapeSelected && (isBox || isCurve));
+    const showContent    = (isShapeSelected && isBox);
 
     return (
       <Wrapper>
@@ -38,7 +38,14 @@ class Toolbar extends PureComponent {
         <ToolbarRow title="Page"><Page /></ToolbarRow>
         <ToolbarRow title="Elements"><Elements /></ToolbarRow>
         {showColors && (<ToolbarRow title="Colors"><Colors /></ToolbarRow>)}
-        {showAlignment && (<ToolbarRow title="Alignment"><Alignment /></ToolbarRow>)}
+        {showAppearance && (
+          <ToolbarRow title="Appearance">
+            <Appearance
+              isBox={isBox}
+              isCurve={isCurve}
+            />
+          </ToolbarRow>
+        )}
         {showContent && (<ToolbarRow title="Content" noBorder><Content /></ToolbarRow>)}
       </Wrapper>
     );

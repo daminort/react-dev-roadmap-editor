@@ -1,19 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const svgProps = {
-  xmlns   : 'http://www.w3.org/2000/svg',
-  viewBox : '0 0 24 24',
-  fill    : 'none',
-};
-
-const defaultProps = {
-  color     : 'currentColor',
-  thickness : 3,
-  ends      : 'round',
-  joins     : 'round',
-  className : null,
-};
+import { svgProps, commonProps } from './props';
 
 const iconClassName = 'feather feather-curve-new';
 
@@ -22,12 +9,10 @@ const NewLine = ({ size, ...restProps }) => {
   return (
     <svg
       {...svgProps}
+      {...commonProps}
       width={size}
       height={size}
-      stroke={defaultProps.color}
-      strokeWidth={defaultProps.thickness}
-      strokeLinecap={defaultProps.ends}
-      strokeLinejoin={defaultProps.joins}
+      strokeWidth={3}
       className={iconClassName}
       {...restProps}
     >

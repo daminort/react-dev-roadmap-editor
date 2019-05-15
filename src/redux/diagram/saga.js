@@ -108,6 +108,22 @@ function* shapeSetAlignment({ payload }) {
   yield put(diagramActions.shapeUpdate(id, resShape));
 }
 
+function* shapeSetDashed({ payload }) {
+
+  const { id, dashed } = payload;
+  const resShape = { dashed };
+
+  yield put(diagramActions.shapeUpdate(id, resShape));
+}
+
+function* shapeSetNoBorder({ payload }) {
+
+  const { id, noBorder } = payload;
+  const resShape = { noBorder };
+
+  yield put(diagramActions.shapeUpdate(id, resShape));
+}
+
 function* shapeRemove({ payload }) {
 
   const { id } = payload;
@@ -148,6 +164,9 @@ export default function* diagramSaga() {
 
     takeLatest(diagramActions.SHAPE_SET_COLOR, shapeSetColor),
     takeLatest(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),
+    takeLatest(diagramActions.SHAPE_SET_DASHED, shapeSetDashed),
+    takeLatest(diagramActions.SHAPE_SET_NO_BORDER, shapeSetNoBorder),
+
     takeLatest(diagramActions.SHAPE_REMOVE, shapeRemove),
     takeLatest(diagramActions.SHAPE_MOVE, shapeMove),
   ]);

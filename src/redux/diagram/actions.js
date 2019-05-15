@@ -24,6 +24,8 @@ const TYPES = {
 
   SHAPE_SET_COLOR         : `${prefix}shapeSetColor`,
   SHAPE_SET_ALIGNMENT     : `${prefix}shapeSetAlignment`,
+  SHAPE_SET_DASHED        : `${prefix}shapeSetDashed`,
+  SHAPE_SET_NO_BORDER     : `${prefix}shapeSetNoBorder`,
 
   CONTENT_SET             : `${prefix}contentSet`,
   CONTENT_RESET           : `${prefix}contentReset`,
@@ -57,6 +59,8 @@ const actions = {
 
   shapeSetColor         : makeActionCreator(TYPES.SHAPE_SET_COLOR, 'id', 'color'),
   shapeSetAlignment     : makeActionCreator(TYPES.SHAPE_SET_ALIGNMENT, 'id', 'align'),
+  shapeSetDashed        : makeActionCreator(TYPES.SHAPE_SET_DASHED, 'id', 'dashed'),
+  shapeSetNoBorder      : makeActionCreator(TYPES.SHAPE_SET_DASHED, 'id', 'noBorder'),
 
   contentSet            : makeActionCreator(TYPES.CONTENT_SET, 'content'),
   contentReset          : makeActionCreator(TYPES.CONTENT_RESET),

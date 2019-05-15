@@ -2,6 +2,8 @@ import AlignCenter from './AlignCenter';
 import AlignLeft from './AlignLeft';
 import AlignRight from './AlignRight';
 import Download from './Download';
+import LineDashed from './LineDashed';
+import LineSolid from './LineSolid';
 import NewBox from './NewBox';
 import NewCircle from './NewCircle';
 import NewLine from './NewLine';
@@ -14,6 +16,8 @@ export {
   AlignLeft,
   AlignRight,
   Download,
+  LineDashed,
+  LineSolid,
   NewBox,
   NewCircle,
   NewLine,
