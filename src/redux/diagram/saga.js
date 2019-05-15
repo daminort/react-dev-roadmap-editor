@@ -31,16 +31,20 @@ function selectState(state) {
 
 // Diagram -----------------------------------------------------------------------------------------
 function* diagramStore() {
-  const { shapes, content } = yield select(selectState);
-  yield call(LocalStorageUtils.storeDiagram, shapes, content);
+  const { shapes, content, page } = yield select(selectState);
+  yield call(LocalStorageUtils.storeDiagram, shapes, content, page);
 }
 
 function* diagramRestore() {
 
+  const { page: defaultPage } = yield select(selectState);
+
   const diagram = yield call(LocalStorageUtils.restoreDiagram);
   const shapes  = diagram ? diagram.shapes  : defaultShapes;
   const content = diagram ? diagram.content : defaultContent;
+  const page    = diagram ? diagram.page    : defaultPage;
 
+  yield put(appActions.pageDataSet(page));
   yield put(diagramActions.contentSet(content));
   yield put(diagramActions.shapesSet(shapes));
 }
