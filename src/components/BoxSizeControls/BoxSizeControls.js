@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SizeControlsUtils from '../../utils/SizeControlsUtils';
 import { SIZE_CONTROLS } from '../../constants/layout';
 
-const SizeControls = ({ shape, activeControl }) => {
+const BoxSizeControls = ({ shape, activeControl }) => {
 
   const controls = SizeControlsUtils.makeControls(shape, activeControl);
   const { colors, sizes, radius, styles, positions } = controls;
@@ -35,7 +35,7 @@ const SizeControls = ({ shape, activeControl }) => {
   );
 };
 
-SizeControls.propTypes = {
+BoxSizeControls.propTypes = {
   activeControl: PropTypes.string.isRequired,
   shape: PropTypes.shape({
     x      : PropTypes.number,
@@ -45,4 +45,4 @@ SizeControls.propTypes = {
   }).isRequired,
 };
 
-export default SizeControls;
+export default BoxSizeControls;
