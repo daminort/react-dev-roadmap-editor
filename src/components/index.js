@@ -1,5 +1,7 @@
-import SizeControls from './SizeControls';
+import BoxSizeControls from './BoxSizeControls';
+import CurveSizeControls from './CurveSizeControls';
 
 export {
-  SizeControls,
+  BoxSizeControls,
+  CurveSizeControls,
 };

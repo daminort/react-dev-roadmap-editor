@@ -5,11 +5,11 @@ import SizeControlsUtils from '../../utils/SizeControlsUtils';
 import { TYPES } from '../../constants/common';
 import { SIZE_CONTROLS } from '../../constants/layout';
 
-const availableKeys = ['top', 'bottom', 'left', 'right'];
+const availableKeys = ['start', 'end'];
 
-const BoxSizeControls = ({ shape, activeControl }) => {
+const CurveSizeControls = ({ shape, activeControl }) => {
 
-  const controls = SizeControlsUtils.makeControls(TYPES.box, shape, activeControl);
+  const controls = SizeControlsUtils.makeControls(TYPES.curve, shape, activeControl);
   const { colors, sizes, radius, styles, positions } = controls;
 
   const elements = availableKeys.map(key => {
@@ -38,14 +38,14 @@ const BoxSizeControls = ({ shape, activeControl }) => {
   );
 };
 
-BoxSizeControls.propTypes = {
+CurveSizeControls.propTypes = {
   activeControl: PropTypes.string.isRequired,
   shape: PropTypes.shape({
-    x      : PropTypes.number,
-    y      : PropTypes.number,
-    width  : PropTypes.number,
-    height : PropTypes.number,
+    x1 : PropTypes.number,
+    y1 : PropTypes.number,
+    x2 : PropTypes.number,
+    y2 : PropTypes.number,
   }).isRequired,
 };
 
-export default BoxSizeControls;
+export default CurveSizeControls;

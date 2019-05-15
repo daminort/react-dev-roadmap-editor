@@ -1,3 +1,4 @@
+import { TYPES } from '../constants/common';
 import { SIZE_CONTROLS } from '../constants/layout';
 import { THEME } from '../constants/theme';
 import { invert } from './lodash';
@@ -7,35 +8,73 @@ const ivertedControls = invert(SIZE_CONTROLS);
 
 class SizeControlsUtils {
 
-  createColors = () => ({
-    top    : sizeControls.inactive,
-    bottom : sizeControls.inactive,
-    left   : sizeControls.inactive,
-    right  : sizeControls.inactive,
-  });
+  createCurveDefault = (value) => {
+    return {
+      start : value,
+      end   : value,
+    };
+  }
 
-  createSizes = () => ({
-    top    : 4,
-    bottom : 4,
-    left   : 4,
-    right  : 4,
-  });
+  createBoxDefault = (value) => {
+    return {
+      top    : value,
+      bottom : value,
+      left   : value,
+      right  : value,
+    };
+  }
 
-  createRadius = () => ({
-    top    : 0,
-    bottom : 0,
-    left   : 0,
-    right  : 0,
-  });
+  createColors = (shapeType) => {
+    return shapeType === TYPES.curve
+      ? this.createCurveDefault(sizeControls.inactive)
+      : this.createBoxDefault(sizeControls.inactive);
+  };
 
-  createStyles = () => ({
-    top    : { cursor: 'ns-resize' },
-    bottom : { cursor: 'ns-resize' },
-    left   : { cursor: 'ew-resize' },
-    right  : { cursor: 'ew-resize' },
-  });
+  createSizes = (shapeType) => {
+    return shapeType === TYPES.curve
+      ? this.createCurveDefault(4)
+      : this.createBoxDefault(4);
+  };
 
-  createPosition = (shape, sizes) => {
+  createRadius = (shapeType) => {
+    return shapeType === TYPES.curve
+      ? this.createCurveDefault(0)
+      : this.createBoxDefault(0);
+  };
+
+  createStyles = (shapeType) => {
+    switch (shapeType) {
+      case TYPES.curve:
+        return {
+          start : { cursor: 'crosshair' },
+          end   : { cursor: 'crosshair' },
+        };
+      default:
+        return {
+          top    : { cursor: 'ns-resize' },
+          bottom : { cursor: 'ns-resize' },
+          left   : { cursor: 'ew-resize' },
+          right  : { cursor: 'ew-resize' },
+        };
+    }
+  }
+
+  createCurvePosition = (shape, sizes) => {
+    const { x1, y1, x2, y2 } = shape;
+    const { start, end } = sizes;
+
+    const startX = x1 - (start / 2);
+    const startY = y1 - (start / 2);
+    const endX   = x2 - (end / 2);
+    const endY   = y2 - (end / 2);
+
+    return {
+      start : { x: startX, y: startY },
+      end   : { x: endX, y: endY },
+    };
+  }
+
+  createBoxPosition = (shape, sizes) => {
     const { x, y, width, height } = shape;
     const { top, bottom, left, right } = sizes;
 
@@ -56,15 +95,21 @@ class SizeControlsUtils {
     };
   }
 
+  createPosition = (shapeType, shape, sizes) => {
+    return shapeType === TYPES.curve
+      ? this.createCurvePosition(shape, sizes)
+      : this.createBoxPosition(shape, sizes);
+  }
+
   detectActiveKey = (activeControl = '') => {
     return ivertedControls[activeControl];
   }
 
-  makeControls = (shape, activeControl = '') => {
-    const colors    = this.createColors();
-    const sizes     = this.createSizes();
-    const radius    = this.createRadius();
-    const styles    = this.createStyles();
+  makeControls = (shapeType, shape, activeControl = '') => {
+    const colors    = this.createColors(shapeType);
+    const sizes     = this.createSizes(shapeType);
+    const radius    = this.createRadius(shapeType);
+    const styles    = this.createStyles(shapeType);
     const activeKey = this.detectActiveKey(activeControl);
 
     if (activeKey) {
@@ -73,7 +118,7 @@ class SizeControlsUtils {
       radius[activeKey] = 1.5;
     }
 
-    const positions = this.createPosition(shape, sizes);
+    const positions = this.createPosition(shapeType, shape, sizes);
 
     return {
       colors,

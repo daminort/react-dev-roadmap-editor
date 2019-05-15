@@ -9,7 +9,7 @@ import { SIZE } from '../../constants/editor';
 import { selectShape, selectShapeContent } from '../../redux/diagram/selectors';
 import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
 
-import SizeControls from '../../components/SizeControls';
+import { BoxSizeControls } from '../../components';
 
 const colorInert  = THEME.bg.black;
 const colorActive = THEME.bg.blue;
@@ -71,7 +71,7 @@ const Box = (props) => {
         {title}
       </text>
       {isSelected && (
-        <SizeControls
+        <BoxSizeControls
           shape={shape}
           activeControl={activeControl}
         />

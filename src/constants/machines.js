@@ -1,7 +1,8 @@
 export const STATES = {
   calmness      : 'calmness',
   shapeSelected : 'shapeSelected',
-  resizing      : 'resizing',
+  resizingBox   : 'resizingBox',
+  resizingCurve : 'resizingCurve',
   creating      : 'creating',
   creatingCurve : 'creatingCurve',
 };

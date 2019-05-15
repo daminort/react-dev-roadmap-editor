@@ -13,12 +13,9 @@ const initState = {
   },
 
   resize: {
-    shapeID    : '',
-    controlID  : '',
-    initX      : 0,
-    initY      : 0,
-    initWidth  : 0,
-    initHeight : 0,
+    shapeID     : '',
+    controlID   : '',
+    originShape : null,
   },
 
   create: {
