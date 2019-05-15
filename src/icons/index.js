@@ -1,6 +1,7 @@
 import AlignCenter from './AlignCenter';
 import AlignLeft from './AlignLeft';
 import AlignRight from './AlignRight';
+import ClearAll from './ClearAll';
 import Download from './Download';
 import LineDashed from './LineDashed';
 import LineDotted from './LineDotted';
@@ -16,6 +17,7 @@ export {
   AlignCenter,
   AlignLeft,
   AlignRight,
+  ClearAll,
   Download,
   LineDashed,
   LineDotted,

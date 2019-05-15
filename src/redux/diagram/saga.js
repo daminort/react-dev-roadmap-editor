@@ -1,10 +1,7 @@
 import { all, takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { TYPES, STORAGE_NAMES } from '../../constants/common';
-import {
-  shapes as defaultShapes,
-  content as defaultContent,
-} from '../../resources';
+import { defaultPage } from '../../constants/editor';
 
 import MathUtils from '../../utils/MathUtils';
 import LocalStorageUtils from '../../utils/LocalStorageUtils';
@@ -37,11 +34,9 @@ function* diagramStore() {
 
 function* diagramRestore() {
 
-  const { page: defaultPage } = yield select(selectState);
-
   const diagram = yield call(LocalStorageUtils.restoreDiagram);
-  const shapes  = diagram ? diagram.shapes  : defaultShapes;
-  const content = diagram ? diagram.content : defaultContent;
+  const shapes  = diagram ? diagram.shapes  : {};
+  const content = diagram ? diagram.content : {};
   const page    = diagram ? diagram.page    : defaultPage;
 
   yield put(appActions.pageDataSet(page));
@@ -58,6 +53,12 @@ function* diagramDownload() {
   };
 
   yield put(diagramActions.downloadDataUpdate(data));
+}
+
+function* diagramReset() {
+  yield put(appActions.activeShapeIDSet(''));
+  yield put(diagramActions.contentSet({}));
+  yield put(diagramActions.shapesSet({}));
 }
 
 // Start / Finish operations -----------------------------------------------------------------------
@@ -157,6 +158,7 @@ export default function* diagramSaga() {
     takeLatest(diagramActions.DIAGRAM_STORE, diagramStore),
     takeLatest(diagramActions.DIAGRAM_RESTORE, diagramRestore),
     takeLatest(diagramActions.DIAGRAM_DOWNLOAD, diagramDownload),
+    takeLatest(diagramActions.DIAGRAM_RESET, diagramReset),
 
     takeLatest(diagramActions.DOWNLOAD_START, downloadStart),
     takeLatest(diagramActions.UPLOAD_FILE_SELECT, uploadFileSelect),

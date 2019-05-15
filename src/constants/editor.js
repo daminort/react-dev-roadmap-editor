@@ -22,3 +22,5 @@ export const PAGE = {
   height : 1170,
   scale  : 1,
 };
+
+export const defaultPage = { ...PAGE };

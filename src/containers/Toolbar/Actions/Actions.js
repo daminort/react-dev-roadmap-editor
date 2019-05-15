@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ToolbarButton from '../../../components/ToolbarButton';
-import { Save, Upload, Download } from '../../../icons';
+import { Save, Upload, Download, ClearAll } from '../../../icons';
 
 import diagramActions from '../../../redux/diagram/actions';
 
-const Actions = ({ diagramStore, diagramUpload, diagramDownload, uploadFileSelect }) => {
+const Actions = ({ diagramStore, diagramDownload, diagramReset, uploadFileSelect }) => {
 
   return (
     <div className="left-right">
@@ -34,21 +34,31 @@ const Actions = ({ diagramStore, diagramUpload, diagramDownload, uploadFileSelec
           <Upload />
         </ToolbarButton>
       </div>
+      <div className="right">
+        <ToolbarButton
+          id="actionClearAll"
+          title="Clear diagram"
+          className="last red"
+          onClick={() => diagramReset()}
+        >
+          <ClearAll />
+        </ToolbarButton>
+      </div>
     </div>
   );
 };
 
 Actions.propTypes = {
   diagramStore     : PropTypes.func.isRequired,
-  diagramUpload    : PropTypes.func.isRequired,
   diagramDownload  : PropTypes.func.isRequired,
+  diagramReset     : PropTypes.func.isRequired,
   uploadFileSelect : PropTypes.func.isRequired,
 };
 
 const mapActions = {
   diagramStore     : diagramActions.diagramStore,
-  diagramUpload    : diagramActions.diagramUpload,
   diagramDownload  : diagramActions.diagramDownload,
+  diagramReset     : diagramActions.diagramReset,
   uploadFileSelect : diagramActions.uploadFileSelect,
 };
 

@@ -5,8 +5,7 @@ const TYPES = {
   DIAGRAM_STORE           : `${prefix}diagramStore`,
   DIAGRAM_RESTORE         : `${prefix}diagramRestore`,
   DIAGRAM_DOWNLOAD        : `${prefix}diagramDownload`,
-  DIAGRAM_UPLOAD          : `${prefix}diagramUpload`,
-  DIAGRAM_UPLOAD_COMPLETE : `${prefix}diagramUploadComplete`,
+  DIAGRAM_RESET           : `${prefix}diagramReset`,
 
   DOWNLOAD_DATA_UPDATE    : `${prefix}downloadDataUpdate`,
   DOWNLOAD_START          : `${prefix}downloadStart`,
@@ -40,8 +39,7 @@ const actions = {
   diagramStore          : makeActionCreator(TYPES.DIAGRAM_STORE),
   diagramRestore        : makeActionCreator(TYPES.DIAGRAM_RESTORE),
   diagramDownload       : makeActionCreator(TYPES.DIAGRAM_DOWNLOAD),
-  diagramUpload         : makeActionCreator(TYPES.DIAGRAM_UPLOAD),
-  diagramUploadComplete : makeActionCreator(TYPES.DIAGRAM_UPLOAD_COMPLETE, 'uploadData'),
+  diagramReset          : makeActionCreator(TYPES.DIAGRAM_RESET),
 
   downloadDataUpdate    : makeActionCreator(TYPES.DOWNLOAD_DATA_UPDATE, 'downloadData'),
   downloadStart         : makeActionCreator(TYPES.DOWNLOAD_START),

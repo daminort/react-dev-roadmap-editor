@@ -50,6 +50,7 @@ function* resizeComplete() {
 
   yield put(diagramActions.shapeUpdate(activeShapeID, resShape));
   yield put(appActions.resizeDataReset());
+  yield call(rebuildTouchedCurves, activeShapeID);
 }
 
 function* createComplete({ payload }) {
