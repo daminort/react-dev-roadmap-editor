@@ -10,13 +10,15 @@ import {
   LineDashed,
   LineDotted,
   LineSolid,
+  TextBold,
+  TextSize,
 } from '../../../icons';
 
 import diagramActions from '../../../redux/diagram/actions';
 import { selectActiveShapeID } from '../../../redux/app/selectors';
 import { ALIGN } from '../../../constants/editor';
 
-const Alignments = (props) => {
+const Appearance = (props) => {
   const {
     activeShapeID,
     isBox,
@@ -24,6 +26,8 @@ const Alignments = (props) => {
     shapeSetAlignment,
     shapeSetDashed,
     shapeSetNoBorder,
+    shapeSetTextBold,
+    shapeSetTextSize,
   } = props;
 
   const onClickAlign = (id) => {
@@ -47,6 +51,20 @@ const Alignments = (props) => {
       <div className="left">
         {showAlignment && (
           <>
+            <ToolbarButton
+              id="textBold"
+              title="Text weight: Normal/Bold"
+              onClick={() => shapeSetTextBold(activeShapeID)}
+            >
+              <TextBold />
+            </ToolbarButton>
+            <ToolbarButton
+              id="TextSize"
+              title="Text size: sm / md / lg"
+              onClick={() => shapeSetTextSize(activeShapeID)}
+            >
+              <TextSize />
+            </ToolbarButton>
             <ToolbarButton
               id={ALIGN.left}
               title="Left"
@@ -111,13 +129,15 @@ const Alignments = (props) => {
   );
 };
 
-Alignments.propTypes = {
+Appearance.propTypes = {
   activeShapeID     : PropTypes.string.isRequired,
   isBox             : PropTypes.bool.isRequired,
   isCurve           : PropTypes.bool.isRequired,
   shapeSetAlignment : PropTypes.func.isRequired,
   shapeSetDashed    : PropTypes.func.isRequired,
   shapeSetNoBorder  : PropTypes.func.isRequired,
+  shapeSetTextBold  : PropTypes.func.isRequired,
+  shapeSetTextSize  : PropTypes.func.isRequired,
 };
 
 const mapState = (state) => {
@@ -130,6 +150,8 @@ const mapActions = {
   shapeSetAlignment : diagramActions.shapeSetAlignment,
   shapeSetDashed    : diagramActions.shapeSetDashed,
   shapeSetNoBorder  : diagramActions.shapeSetNoBorder,
+  shapeSetTextBold  : diagramActions.shapeSetTextBold,
+  shapeSetTextSize  : diagramActions.shapeSetTextSize,
 };
 
-export default connect(mapState, mapActions)(Alignments);
+export default connect(mapState, mapActions)(Appearance);

@@ -34,6 +34,6 @@ export const THEME = {
     hint  : '11px',
   },
   size: {
-    toolbar: '280px',
+    toolbar: '320px',
   },
 };

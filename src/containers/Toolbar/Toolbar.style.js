@@ -1,18 +1,20 @@
 import styled from 'styled-components';
 import { THEME } from '../../constants/theme';
 
-const { bg } = THEME;
+const { bg, size } = THEME;
 
 export const Wrapper = styled.div`
   position: fixed;
   top: 0px;
   right: 0px;
-  width: 280px;
+  width: ${size.toolbar};
   height: 100vh;
   display: block;
   padding: 0 8px;
   background-color: ${bg.white};
   box-shadow: -2px 0px 3px 1px ${bg.grey};
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .left-right {
     display: flex;

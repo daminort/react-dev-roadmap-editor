@@ -4,11 +4,16 @@ export const ALIGN = {
   right  : 'right',
 };
 
-export const POSITION = {
-  top    : 'top',
-  bottom : 'bottom',
-  left   : 'left',
-  right  : 'right',
+export const SIZE = {
+  sm : 'sm',
+  md : 'md',
+  lg : 'lg',
+};
+
+export const TEXT_SIZE = {
+  sm : '10px',
+  md : '12px',
+  lg : '14px',
 };
 
 export const DIRECTION = {

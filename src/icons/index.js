@@ -10,6 +10,8 @@ import NewBox from './NewBox';
 import NewCircle from './NewCircle';
 import NewLine from './NewLine';
 import Save from './Save';
+import TextBold from './TextBold';
+import TextSize from './TextSize';
 import Trash from './Trash';
 import Upload from './Upload';
 
@@ -26,6 +28,8 @@ export {
   NewCircle,
   NewLine,
   Save,
+  TextBold,
+  TextSize,
   Trash,
   Upload,
 };

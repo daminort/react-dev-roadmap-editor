@@ -25,6 +25,8 @@ const TYPES = {
   SHAPE_SET_ALIGNMENT     : `${prefix}shapeSetAlignment`,
   SHAPE_SET_DASHED        : `${prefix}shapeSetDashed`,
   SHAPE_SET_NO_BORDER     : `${prefix}shapeSetNoBorder`,
+  SHAPE_SET_TEXT_BOLD     : `${prefix}shapeSetTextBold`,
+  SHAPE_SET_TEXT_SIZE     : `${prefix}shapeSetTextSize`,
 
   CONTENT_SET             : `${prefix}contentSet`,
   CONTENT_RESET           : `${prefix}contentReset`,
@@ -59,6 +61,8 @@ const actions = {
   shapeSetAlignment     : makeActionCreator(TYPES.SHAPE_SET_ALIGNMENT, 'id', 'align'),
   shapeSetDashed        : makeActionCreator(TYPES.SHAPE_SET_DASHED, 'id', 'dashed'),
   shapeSetNoBorder      : makeActionCreator(TYPES.SHAPE_SET_NO_BORDER, 'id', 'noBorder'),
+  shapeSetTextBold      : makeActionCreator(TYPES.SHAPE_SET_TEXT_BOLD, 'id'),
+  shapeSetTextSize      : makeActionCreator(TYPES.SHAPE_SET_TEXT_SIZE, 'id'),
 
   contentSet            : makeActionCreator(TYPES.CONTENT_SET, 'content'),
   contentReset          : makeActionCreator(TYPES.CONTENT_RESET),

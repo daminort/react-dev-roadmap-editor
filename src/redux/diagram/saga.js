@@ -1,6 +1,7 @@
 import { all, takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { TYPES, STORAGE_NAMES } from '../../constants/common';
+import { SIZE } from '../../constants/editor';
 import { defaultPage } from '../../constants/editor';
 
 import MathUtils from '../../utils/MathUtils';
@@ -125,6 +126,34 @@ function* shapeSetNoBorder({ payload }) {
   yield put(diagramActions.shapeUpdate(id, resShape));
 }
 
+function* shapeSetTextBold({ payload }) {
+
+  const { id } = payload;
+  const { activeShape } = yield select(selectState);
+
+  const resShape = {
+    textBold: !activeShape.textBold,
+  };
+
+  yield put(diagramActions.shapeUpdate(id, resShape));
+}
+
+function* shapeSetTextSize({ payload }) {
+
+  const { id } = payload;
+  const { activeShape } = yield select(selectState);
+  const { textSize } = activeShape;
+
+  let resTextSize = SIZE.md;
+  if (textSize === SIZE.md) { resTextSize = SIZE.sm; }
+  if (textSize === SIZE.sm) { resTextSize = SIZE.lg; }
+  if (textSize === SIZE.lg) { resTextSize = SIZE.md; }
+
+  const resShape = { textSize: resTextSize };
+
+  yield put(diagramActions.shapeUpdate(id, resShape));
+}
+
 function* shapeRemove({ payload }) {
 
   const { id } = payload;
@@ -168,6 +197,8 @@ export default function* diagramSaga() {
     takeLatest(diagramActions.SHAPE_SET_ALIGNMENT, shapeSetAlignment),
     takeLatest(diagramActions.SHAPE_SET_DASHED, shapeSetDashed),
     takeLatest(diagramActions.SHAPE_SET_NO_BORDER, shapeSetNoBorder),
+    takeLatest(diagramActions.SHAPE_SET_TEXT_BOLD, shapeSetTextBold),
+    takeLatest(diagramActions.SHAPE_SET_TEXT_SIZE, shapeSetTextSize),
 
     takeLatest(diagramActions.SHAPE_REMOVE, shapeRemove),
     takeLatest(diagramActions.SHAPE_MOVE, shapeMove),

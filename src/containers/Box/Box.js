@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 
 import DiagramUtils from '../../utils/DiagramUtils';
 import { THEME } from '../../constants/theme';
+import { SIZE } from '../../constants/editor';
 import { selectShape, selectShapeContent } from '../../redux/diagram/selectors';
 import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
 
@@ -21,12 +23,12 @@ const Box = (props) => {
     activeControl,
   } = props;
 
-  const { x, y, width, height, bg, noBorder } = shape;
+  const { x, y, width, height, bg, noBorder, textBold, textSize } = shape;
   const { title } = shapeContent;
 
-  const radius       = DiagramUtils.calculateBorderRadius(width, height);
-  const textX        = x + width / 2;
-  const textY        = y + height / 2;
+  const radius    = DiagramUtils.calculateBorderRadius(width, height);
+  const textProps = DiagramUtils.determineBoxTextPosition(shape, radius);
+
   const strokeColor  = isSelected ? colorActive : colorInert;
 
   let strokeWidth = 1;
@@ -34,9 +36,16 @@ const Box = (props) => {
     strokeWidth = 0;
   }
 
-  const style = {
-    cursor: isSelected ? 'pointer' : 'default',
-  };
+  const boxClassName = classnames('svg-box', {
+    'selected': isSelected,
+  });
+  const textClassName = classnames('svg-text', {
+    'selected'  : isSelected,
+    'text-sm'   : textSize === SIZE.sm,
+    'text-md'   : textSize === SIZE.md,
+    'text-lg'   : textSize === SIZE.lg,
+    'text-bold' : textBold,
+  });
 
   return (
     <g transform="translate(0.5, 0.5)" id={id}>
@@ -51,16 +60,13 @@ const Box = (props) => {
         strokeWidth={strokeWidth}
         rx={radius}
         ry={radius}
-        style={style}
+        className={boxClassName}
         pointerEvents="all"
       />
       <text
         id={id}
-        x={textX}
-        y={textY}
-        style={style}
-        alignmentBaseline="middle"
-        textAnchor="middle"
+        className={textClassName}
+        {...textProps}
       >
         {title}
       </text>

@@ -1,7 +1,7 @@
 import { getShapesCount } from '../redux/utils';
 import { THEME } from '../constants/theme';
 import { TYPES } from '../constants/common';
-import { ALIGN, DIRECTION } from '../constants/editor';
+import { ALIGN, DIRECTION, SIZE } from '../constants/editor';
 
 import MathUtils from './MathUtils';
 
@@ -10,14 +10,16 @@ const { bg } = THEME;
 class DiagramUtils {
 
   constructor() {
-    this.generateShapeID       = this.generateShapeID.bind(this);
-    this.createBox             = this.createBox.bind(this);
-    this.createCircle          = this.createCircle.bind(this);
-    this.createCurve           = this.createCurve.bind(this);
-    this.createShapeContent    = this.createShapeContent.bind(this);
+    this.generateShapeID          = this.generateShapeID.bind(this);
+    this.createBox                = this.createBox.bind(this);
+    this.createCircle             = this.createCircle.bind(this);
+    this.createCurve              = this.createCurve.bind(this);
+    this.createShapeContent       = this.createShapeContent.bind(this);
 
-    this.calculateBorderRadius = this.calculateBorderRadius.bind(this);
-    this.calculateBezier       = this.calculateBezier.bind(this);
+    this.calculateBorderRadius    = this.calculateBorderRadius.bind(this);
+    this.calculateBezier          = this.calculateBezier.bind(this);
+
+    this.determineBoxTextPosition = this.determineBoxTextPosition.bind(this);
 
     this.radiuses = {};
   }
@@ -39,6 +41,8 @@ class DiagramUtils {
       bg       : bg.grey,
       align    : ALIGN.center,
       noBorder : false,
+      textBold : false,
+      textSize : SIZE.md,
     };
   }
 
@@ -126,6 +130,34 @@ class DiagramUtils {
       cpy1 : cpy1,
       cpx2 : cpx2,
       cpy2 : cpy2,
+    };
+  }
+
+  // Determining -----------------------------------------------------------------------------------
+  determineBoxTextPosition(shape, radius = 0) {
+    const { x, y, width, height, align } = shape;
+
+    const centerY = y + height / 2;
+    const centerX = x + width / 2;
+    const leftX   = x + radius;
+    const rightX  = x + width - radius;
+
+    let resultX = centerX;
+    let textAnchor = 'middle';
+    if (align === ALIGN.left) {
+      resultX = leftX;
+      textAnchor = 'start';
+    }
+    if (align === ALIGN.right) {
+      resultX = rightX;
+      textAnchor = 'end';
+    }
+
+    return {
+      x: resultX,
+      y: centerY,
+      alignmentBaseline: 'middle',
+      textAnchor,
     };
   }
 }
