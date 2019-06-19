@@ -1,5 +1,6 @@
 {
   "name": "react-dev-roadmap-editor",
+  "homepage": "https://daminort.github.io/react-dev-roadmap-editor/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -25,7 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint:fix": "npx eslint --fix src/"
+    "eslint:fix": "npx eslint --fix src/",
+    "predeploy": "npm run build",
+    "deploy": "npx gh-pages -d build"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
@@ -33,6 +36,7 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
+    "gh-pages": "^2.0.1",
     "redux-devtools": "^3.5.0"
   },
   "browserslist": [
