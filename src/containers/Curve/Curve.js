@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 
 import { THEME } from '../../constants/theme';
 import { selectShape } from '../../redux/diagram/selectors';
-import { selectActiveShapeID, /*selectResizeData*/ } from '../../redux/app/selectors';
+import { selectActiveShapeID, selectResizeData } from '../../redux/app/selectors';
+
+import { CurveSizeControls } from '../../components';
 
 const colorLine     = THEME.bg.black;
 const colorControls = THEME.sizeControls.inactive;
@@ -14,7 +16,7 @@ const Curve = (props) => {
     id,
     shape,
     isSelected,
-    // activeControl,
+    activeControl,
   } = props;
 
   const { x1, y1, x2, y2, cpx1, cpy1, cpx2, cpy2, dashed } = shape;
@@ -24,22 +26,6 @@ const Curve = (props) => {
   const thickness = isSelected ? 2 : 1;
 
   const path = `M ${x1} ${y1} C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${x2} ${y2}`;
-
-  const controlCoords = [
-    { x: x1, y: y1 },
-    { x: x2, y: y2 },
-  ];
-
-  const controls = controlCoords.map(item => (
-    <circle
-      key={`control:${item.x}-${item.y}`}
-      cx={item.x}
-      cy={item.y}
-      r={2}
-      stroke={colorControls}
-      fill={colorControls}
-    />
-  ));
 
   return (
     <g transform="translate(0, 0)" id={id}>
@@ -54,9 +40,10 @@ const Curve = (props) => {
         pointerEvents="all"
       />
       {isSelected && (
-        <>
-          {controls}
-        </>
+        <CurveSizeControls
+          shape={shape}
+          activeControl={activeControl}
+        />
       )}
     </g>
   );
@@ -80,13 +67,13 @@ Curve.propTypes = {
 const mapState = (state, props) => {
   const { id } = props;
   const shape         = selectShape(id)(state);
-  // const resize        = selectResizeData(state);
+  const resize        = selectResizeData(state);
   const activeShapeID = selectActiveShapeID(state);
 
   return {
     shape,
     isSelected: (id === activeShapeID),
-    activeControl: '', // resize.controlID,
+    activeControl: resize.controlID,
   };
 };
 

@@ -1,7 +1,11 @@
 import { TYPES } from '../../constants/common';
 import { STATES, EVENTS } from '../../constants/machines';
-import { HTML_IDS, SIZE_CONTROL_IDS } from '../../constants/layout';
-import MathUtils from '../MathUtils';
+import {
+  HTML_IDS,
+  BOX_SIZE_CONTROL_IDS,
+  CURVE_SIZE_CONTROL_IDS,
+} from '../../constants/layout';
+
 import DOMUtils from '../DOMUtils';
 
 class PageMachine {
@@ -54,16 +58,18 @@ class PageMachine {
             return;
           }
 
-          if (SIZE_CONTROL_IDS.includes(id)) {
+          // go to resize
+          if (BOX_SIZE_CONTROL_IDS.includes(id) || CURVE_SIZE_CONTROL_IDS.includes(id)) {
             actions.resizeDataSet({
-              shapeID    : activeShape.id,
-              controlID  : id,
-              initX      : activeShape.x,
-              initY      : activeShape.y,
-              initWidth  : activeShape.width,
-              initHeight : activeShape.height,
+              shapeID     : activeShape.id,
+              controlID   : id,
+              originShape : { ...activeShape },
             });
-            this.setState(STATES.resizing);
+            const nextState = CURVE_SIZE_CONTROL_IDS.includes(id)
+              ? STATES.resizingCurve
+              : STATES.resizingBox;
+
+            this.setState(nextState);
             return;
           }
 
@@ -99,17 +105,32 @@ class PageMachine {
         },
       },
 
-      // Resizing
-      [STATES.resizing]: {
-        [EVENTS.onMouseMove]: (event, activeShape, resizeControlID) => {
+      // Resizing Box
+      [STATES.resizingBox]: {
+        [EVENTS.onMouseMove]: (event, activeShape, controlID) => {
           const { movementX, movementY } = event;
-          const newPosition = MathUtils.calculateResize(activeShape, movementX, movementY, resizeControlID);
-
-          actions.shapeUpdate(activeShape.id, newPosition);
+          actions.shapeResize(activeShape.id, movementX, movementY, controlID);
         },
         [EVENTS.onMouseUp]: () => {
           actions.resizeComplete();
           this.setState(STATES.shapeSelected);
+        },
+        [EVENTS.onPressESC]: () => {
+          // TODO: give back all to initial state before start resize
+          //actions.activeShapeIDSet('');
+          //this.setState(STATES.calmness);
+        },
+      },
+
+      // Resizing Curve
+      [STATES.resizingCurve]: {
+        [EVENTS.onMouseMove]: (event, activeShape, controlID) => {
+          const { movementX, movementY } = event;
+          actions.curveResize(activeShape.id, movementX, movementY, controlID);
+        },
+        [EVENTS.onMouseUp]: () => {
+          //actions.resizeComplete();
+          //this.setState(STATES.shapeSelected);
         },
         [EVENTS.onPressESC]: () => {
           // TODO: give back all to initial state before start resize

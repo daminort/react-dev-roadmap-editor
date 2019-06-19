@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SizeControlsUtils from '../../utils/SizeControlsUtils';
+import { TYPES } from '../../constants/common';
 import { SIZE_CONTROLS } from '../../constants/layout';
 
-const SizeControls = ({ shape, activeControl }) => {
+const availableKeys = ['start', 'end'];
 
-  const controls = SizeControlsUtils.makeControls(shape, activeControl);
+const CurveSizeControls = ({ shape, activeControl }) => {
+
+  const controls = SizeControlsUtils.makeControls(TYPES.curve, shape, activeControl);
   const { colors, sizes, radius, styles, positions } = controls;
 
-  const elements = Object.keys(SIZE_CONTROLS).map(key => {
+  const elements = availableKeys.map(key => {
     return (
       <rect
         key={key}
@@ -35,14 +38,14 @@ const SizeControls = ({ shape, activeControl }) => {
   );
 };
 
-SizeControls.propTypes = {
+CurveSizeControls.propTypes = {
   activeControl: PropTypes.string.isRequired,
   shape: PropTypes.shape({
-    x      : PropTypes.number,
-    y      : PropTypes.number,
-    width  : PropTypes.number,
-    height : PropTypes.number,
+    x1 : PropTypes.number,
+    y1 : PropTypes.number,
+    x2 : PropTypes.number,
+    y2 : PropTypes.number,
   }).isRequired,
 };
 
-export default SizeControls;
+export default CurveSizeControls;

@@ -182,6 +182,18 @@ function* shapeMove({ payload }) {
   }
 }
 
+function* shapeResize({ payload }) {
+  const { id, movementX, movementY, controlID } = payload;
+  const { activeShape } = yield select(selectState);
+
+  const newPosition = MathUtils.calculateResize(activeShape, movementX, movementY, controlID);
+  yield put(diagramActions.shapeUpdate(id, newPosition));
+
+  if (activeShape.type === TYPES.box) {
+    yield call(rebuildTouchedCurves, id);
+  }
+}
+
 export default function* diagramSaga() {
   yield all([
     takeLatest(diagramActions.DIAGRAM_STORE, diagramStore),
@@ -202,5 +214,6 @@ export default function* diagramSaga() {
 
     takeLatest(diagramActions.SHAPE_REMOVE, shapeRemove),
     takeLatest(diagramActions.SHAPE_MOVE, shapeMove),
+    takeLatest(diagramActions.SHAPE_RESIZE, shapeResize),
   ]);
 }
